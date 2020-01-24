@@ -1,7 +1,7 @@
 export const preLogin = {
 	parse_mode: 'Markdown',
 	reply_markup: {
-		keyboard: [['Sí'], ['No']],
+		keyboard: [['Sí', 'No'], ['📊 FAQ 📊']],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},

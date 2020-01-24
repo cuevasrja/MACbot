@@ -1,6 +1,7 @@
 import bot from '../settings/app';
 import * as keyboard from './keyboards';
 import * as usersModel from '../models/usersModel';
+import * as messages from '../messages/general';
 
 require('dotenv').config();
 
@@ -68,27 +69,19 @@ bot.on('message', msg => {
 		}
 
 		if (msg.text.indexOf('Sí') === 0) {
-			bot.sendMessage(
-				fromID,
-				`*¡Perfectisísimo!*\n\nAhora solo toca esperar relajadamente hasta el día de la primera reunión que será el miércoles de semana 4 *(29/01/2020)* en hora 7 *(14:00)*.\n\nSi por alguna razón que se te escapa de la manos no puedes asistir, comunícalo lo más pronto posible para considerar tu caso. Te esperamos ansiosamente, ¡No faltes!`,
-				{ parse_mode: 'Markdown' }
-			);
+			bot.sendMessage(fromID, messages.yes, keyboard.preLogin);
 		}
 
 		if (msg.text.indexOf('¿Ahora qué?') === 0) {
-			bot.sendMessage(
-				fromID,
-				'Sencillo, asistir a la reunión y justo después de que termine dicha reunión yo mismo te escribiré para darte las proximas instrucciones. Para algo soy un bot, ¿No crees?',
-				{ parse_mode: 'Markdown' }
-			);
+			bot.sendMessage(fromID, messages.ahora_que, keyboard.preLogin);
 		}
 
 		if (msg.text.indexOf('No') === 0) {
-			bot.sendMessage(
-				fromID,
-				`*¡¿Cómo que no?! ¡¿Y qué estás esperando?!*\n\nNo seas tímido y acércate a *MYS-018* para que podamos conocerte a profundidad ( ͡° ͜ʖ ͡°).\n\nRecuerda que si no has sido entrevistado antes del martes de semana 4 *(28/01/2019)* no podrás formalizar tu inscripción en el proceso de admisión.`,
-				{ parse_mode: 'Markdown' }
-			);
+			bot.sendMessage(fromID, messages.no, keyboard.preLogin);
+		}
+
+		if (msg.text.indexOf('📊 FAQ 📊') === 0) {
+			bot.sendMessage(fromID, messages.faq, keyboard.preLogin);
 		}
 	}
 });
