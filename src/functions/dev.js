@@ -17,14 +17,3 @@ bot.onText(/^\/hostname/, msg => {
 		});
 	}
 });
-
-bot.onText(/^\/enlace/, function(msg) {
-	var chatId = msg.chat.id;
-	var messageId = msg.message_id;
-	var chatTitle = msg.chat.title;
-
-	bot.exportChatInviteLink(ADMISION_ID).then(function(enlace) {
-		bot.deleteMessage(chatId, messageId);
-		bot.sendMessage(chatId, 'Enlace del grupo ' + chatTitle + '\n' + enlace);
-	});
-});

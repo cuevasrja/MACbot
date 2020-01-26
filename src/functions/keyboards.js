@@ -1,3 +1,7 @@
+require('dotenv').config();
+
+const ADMISION_URL = process.env.ADMISION_URL || undefined;
+
 export const preLogin = {
 	parse_mode: 'Markdown',
 	reply_markup: {
@@ -10,7 +14,7 @@ export const preLogin = {
 export const yes_preLogin = {
 	parse_mode: 'Markdown',
 	reply_markup: {
-		keyboard: [['¿Ahora qué?', 'Atrás']],
+		keyboard: [['Ya asistí a la reunión, ¿Ahora qué?'], ['No', '📊 FAQ 📊']],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
@@ -19,7 +23,7 @@ export const yes_preLogin = {
 export const login = {
 	parse_mode: 'Markdown',
 	reply_markup: {
-		keyboard: [['💳 Carnet']],
+		keyboard: [['Iniciar sesión']],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
@@ -30,4 +34,18 @@ export const replyOpts = {
 	reply_markup: JSON.stringify({
 		force_reply: true,
 	}),
+};
+
+export const inlineURL = {
+	parse_mode: 'Markdown',
+	reply_markup: {
+		inline_keyboard: [
+			[
+				{
+					text: 'Unirse al grupo',
+					url: ADMISION_URL,
+				},
+			],
+		],
+	},
 };
