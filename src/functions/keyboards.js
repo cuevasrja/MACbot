@@ -23,7 +23,7 @@ export const yes_preLogin = {
 export const login = {
 	parse_mode: 'Markdown',
 	reply_markup: {
-		keyboard: [['Iniciar sesión']],
+		keyboard: [['Iniciar sesión'], ['Atrás']],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},

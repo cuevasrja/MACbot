@@ -53,41 +53,21 @@ bot.on('message', msg => {
 				parseInt(day) > 29 ||
 				(parseInt(month) > 1 && parseInt(day) > 0)
 			) {
-				bot.sendMessage(
-					fromID,
-					'Introduce tu número de carnet con el siguiente formato:\n\n_00_*-*_0000_',
-					keyboard.replyOpts
-				)
+				bot.sendMessage(fromID, messages.iniciar_sesion, keyboard.replyOpts)
 					.then(sended => {
 						// Escucha la solicitud del carnet.
 						bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
 							let regex = msg.text.match(/^[0-9]{2}-[0-9]{5}$/g);
 							if (regex === null) {
-								bot.sendMessage(
-									fromID,
-									'Introdujiste tu número de carnet mal, asegurate que lo estás escribiendo bien con el formato solicitado.\n\nY vuelve a presionar el botón, no tengo problema en pasar todo el dia aquí en este loop infinito.',
-									keyboard.login
-								);
+								bot.sendMessage(fromID, messages.fallback_iniciar_session, keyboard.login);
 							} else {
-								bot.sendMessage(
-									fromID,
-									`Perfecto ${msg.text}, ahora introduce la clave que te dimos en la reunión.`,
-									keyboard.replyOpts
-								).then(sended => {
+								bot.sendMessage(fromID, messages.auth_session, keyboard.replyOpts).then(sended => {
 									bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
 										let checkPassword = msg.text;
 										if (checkPassword == LOGIN_PASSWORD) {
-											bot.sendMessage(
-												fromID,
-												`Perfecto, no te equivocaste escribiendo la clave.\n\nPara ingresar al grupo presiona el botón que tienes abajo de este mensaje.`,
-												keyboard.inlineURL
-											);
+											bot.sendMessage(fromID, messages.sucess, keyboard.inlineURL);
 										} else {
-											bot.sendMessage(
-												fromID,
-												`Eres un poco lento, te tienes que avispar amigo. Colocaste la contraseña mal.`,
-												keyboard.login
-											);
+											bot.sendMessage(fromID, messages.fallback_auth_session, keyboard.login);
 										}
 									});
 								});
@@ -99,11 +79,7 @@ bot.on('message', msg => {
 						throw new Error('Hubo un problema al momento de presionar el botón de Iniciar sesión.', err);
 					});
 			} else {
-				bot.sendMessage(
-					fromID,
-					'Mentiroso, espera a que en la reunión te digan como iniciar sesión.',
-					keyboard.preLogin
-				);
+				bot.sendMessage(fromID, messages.liar, keyboard.preLogin);
 			}
 		}
 
@@ -121,6 +97,10 @@ bot.on('message', msg => {
 
 		if (msg.text.indexOf('📊 FAQ 📊') === 0) {
 			bot.sendMessage(fromID, messages.faq, keyboard.preLogin);
+		}
+
+		if (msg.text.indexOf('Atrás') === 0) {
+			bot.sendMessage(fromID, '... Ok ...', keyboard.preLogin);
 		}
 	}
 });

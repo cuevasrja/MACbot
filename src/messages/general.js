@@ -19,7 +19,9 @@ export const yes = `*¡Perfectisísimo!*
 
 Ahora solo toca esperar relajadamente hasta el día de la primera reunión que será el miércoles de semana 4 *(29/01/2020)* en hora 7 *(14:00)*.
 
-Si por alguna razón que se te escapa de la manos no puedes asistir, comunícalo lo más pronto posible para considerar tu caso. Te esperamos ansiosamente, ¡No faltes!`;
+Si por alguna razón que se te escapa de la manos no puedes asistir, comunícalo lo más pronto posible para considerar tu caso. Te esperamos ansiosamente, ¡No faltes!
+
+PD: Recuerda llegar temprano y ponerte ropa interior limpia.`;
 
 export const no = `*¡¿Cómo que no?! ¡¿Y qué estás esperando?!*
 
@@ -27,4 +29,22 @@ No seas tímido y acércate a *MYS-018* para que podamos conocerte a profundidad
 
 Recuerda que si no has sido entrevistado antes del martes de semana 4 *(28/01/2019)* no podrás formalizar tu inscripción en el proceso de admisión.`;
 
-export const ahora_que = `Sencillo, asistir a la reunión y justo después de que termine dicha reunión yo mismo te escribiré para darte las proximas instrucciones. Para algo soy un bot, ¿No crees?`;
+export const ahora_que = `Una vez finalizada la reunión, y si es que realmente asististe, ya sabrás que hacer.
+
+Igual, solo es un botón que tienes que presionar, más trivial no te lo puedo poner.`;
+
+export const iniciar_sesion = `Por favor, introduce tu número de carnet *(USBID)* con el formato XX*-*XXXXX _(Por ejemplo: vamos, no es tan difícil; tú puedes hacerlo)_`;
+
+export const fallback_iniciar_session = `Bueno... parece que me equivoqué, eres bastante tarado después de todo. Recuerda introducir el carnet con el formato solicitado _(¿En serio necesitabas el ejemplo?)_.
+
+Vuelve a presionar el botón para reintentarlo, aunque si me vas a tener todo el día aquí al menos bríndame una arepa.`;
+
+export const liar = `Sereno moreno, te me estás adelantando un pelo. Sabemos que estás emocionado por la admisión, pero debes esperar hasta el día de la reunión para poder seguir jugando conmigo.`;
+
+export const auth_session = `Empezamos bien. Ahora quiero que coloques la clave que se te fue confiada durante la reunión. Pero si quieres poner alguna clave bancaria no me molestaría en lo absoluto.`;
+
+export const fallback_auth_session = `Pero bueno chico, que pasa. Estás como caído de la mata. Vuelve a introducir la contraseña antes de que te meta un coquito por gafo.`;
+
+export const sucess = `¡Felicidades, sabes seguir indicaciones! Ahora eres oficialmente un pre-nuevo _(Shi sheñol)_. Para unirte al grupo de la admisión _(el nido de pre-nuevos)_ pulsa el botón de aquí abajito.
+
+Eso es todo... por ahora.`;
