@@ -6,7 +6,7 @@ require('dotenv').config();
 const TELEMAC_ID = process.env.TELEMAC_ID || undefined;
 
 bot.on('message', async msg => {
-	if (msg.chat.type == 'group' && msg.chat.id == TELEMAC_ID) {
+	if (msg.chat.id == TELEMAC_ID) {
 		let guard = await preparadorModel.verifyTelegramID(msg.from.id);
 
 		if (guard) {
