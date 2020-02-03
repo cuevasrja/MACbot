@@ -10,8 +10,22 @@ import './settings/timezone';
 // ---------------------------------------------------------------------------------------------------- //
 import './functions/start';
 import './functions/basics';
-import './functions/echo';
-import './functions/preparadores';
-import './functions/admission';
+
+// ---------------------------------------------------------------------------------------------------- //
+// Admission.
+// ---------------------------------------------------------------------------------------------------- //
+import './functions/admission/admission';
+import './functions/admission/prenuevos';
+
+// ---------------------------------------------------------------------------------------------------- //
+// Private.
+// ---------------------------------------------------------------------------------------------------- //
+import './functions/private/taquilla';
+import './functions/private/preparadores';
+// import './functions/private/deprecated_echo';
+import './functions/private/echo';
+
+// ---------------------------------------------------------------------------------------------------- //
+// Development.
+// ---------------------------------------------------------------------------------------------------- //
 import './functions/dev';
-import './functions/taquilla';

@@ -48,3 +48,13 @@ export const fallback_auth_session = `Pero bueno chico, que pasa. Estás como ca
 export const sucess = `¡Felicidades, sabes seguir indicaciones! Ahora eres oficialmente un pre-nuevo _(Shi sheñol)_. Para unirte al grupo de la admisión _(el nido de pre-nuevos)_ pulsa el botón de aquí abajito.
 
 Eso es todo... por ahora.`;
+
+export const too_late = `Emmm, creo que llegaste un poco tarde. Algunos días/semanas/meses tarde, de hecho. 
+
+Pero no te desanimes, amiguito. Si aún te quedan algunos trimestres por graduarte (o tirar la toalla) todavía tienes la oportunidad de formar parte del MAC. Estate atento a cualquier novedad hasta el año próximo. *¡Nos vemos allá!*`;
+
+export const yes_tooLate = `Si realmente estas haciendo admisión ya sabes que hacer.`;
+
+export const idk = `El proceso de admisión ya está corriendo, y ya es muy tarde para ingresar.
+
+Pero no te desanimes, amiguito. Si aún te quedan algunos trimestres por graduarte (o tirar la toalla) todavía tienes la oportunidad de formar parte del MAC. Estate atento a cualquier novedad hasta el año próximo. *¡Nos vemos allá!*`;

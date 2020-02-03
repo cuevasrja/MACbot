@@ -1,5 +1,6 @@
 import bot from './app';
 
-bot.on('polling_error', err => {
-	console.log(err);
-});
+// ---------------------------------------------------------------------------------------------------- //
+// Display console errors related to the Telegram API.
+// ---------------------------------------------------------------------------------------------------- //
+bot.on('polling_error', err => console.log(err));

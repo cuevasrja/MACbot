@@ -1,20 +1,32 @@
 import bot from '../settings/app';
+import fs from 'fs';
 
+// ---------------------------------------------------------------------------------------------------- //
+// Environment variables.
+// ---------------------------------------------------------------------------------------------------- //
 require('dotenv').config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
 
-// Show chat id.
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /id command and sends a message with the chat id.
+// ---------------------------------------------------------------------------------------------------- //
 bot.onText(/^\/id/, msg => {
-	bot.sendMessage(msg.chat.id, msg.chat.id);
+	let chatID = msg.chat.id;
+
+	bot.sendMessage(chatID, chatID);
 });
 
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the command /enlace and sends a message with the link to the admission group.
+// ---------------------------------------------------------------------------------------------------- //
 bot.onText(/^\/enlace/, msg => {
 	let chatType = msg.chat.type;
+	let chatID = msg.chat.id;
 
-	if (chatType == 'private') {
+	if (chatType !== 'private') {
 		bot.sendMessage(
-			msg.chat.id,
+			chatID,
 			`Para ingresar al grupo que te corresponde para esta admision tienes que presionar el botón de abajo.`,
 			{
 				parse_mode: 'Markdown',
@@ -31,4 +43,16 @@ bot.onText(/^\/enlace/, msg => {
 			}
 		);
 	}
+});
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /hostname command and sends a message with the hostname of the server.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/hostname/, msg => {
+	let chatID = msg.chat.id;
+
+	fs.readFile('/etc/hostname', 'utf8', (err, data) => {
+		if (err) throw err;
+		bot.sendMessage(chatID, `El servidor donde se está corriendo este bot es en ${data}.`);
+	});
 });

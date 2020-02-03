@@ -1,16 +1,16 @@
 import pool from './connection';
 
 // ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM preparadores WHERE telegram_id = ###.
+// SELECT * FROM prenuevos WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function verifyTelegramID(telegram_id) {
-	console.log(`**Query 'verifyTelegramID' in preparadoresModel.`);
+	console.log(`**Query 'verifyTelegramID' in prenuevosModel.`);
 
-	let sql = `select * from preparadores where telegram_id = ${telegram_id}`;
+	let sql = `select * from prenuevos where telegram_id = ${telegram_id}`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
-			`There was an error in the user registration query with the telegram_id: ${telegram_id} - 'preparadoresModel'`,
+			`There was an error in the user registration query with the telegram_id: ${telegram_id} - 'prenuevosModel'`,
 			err
 		);
 	});
@@ -24,21 +24,21 @@ export async function verifyTelegramID(telegram_id) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO preparadores(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
+// INSERT INTO prenuevos(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function registerTelegramData(telegramData) {
-	console.log(`**Query 'registerTelegramID' in preparadoresModel.`);
+	console.log(`**Query 'registerTelegramID' in prenuevosModel.`);
 
 	let telegram_id = telegramData.id || undefined;
 	let telegram_firstname = telegramData.first_name || undefined;
 	let telegram_lastname = telegramData.last_name || undefined;
 	let telegram_username = telegramData.username || undefined;
 
-	let sql = `insert into preparadores(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
+	let sql = `insert into prenuevos(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
 
 	await pool.query(sql).catch(err => {
 		throw new Error(
-			`There was an error writing the user's table with the telegram_id: ${telegram_id} - 'preparadoresModel'`,
+			`There was an error writing the user's table with the telegram_id: ${telegram_id} - 'prenuevosModel'`,
 			err
 		);
 	});

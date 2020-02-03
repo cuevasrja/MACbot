@@ -1,7 +1,13 @@
+// ---------------------------------------------------------------------------------------------------- //
+// Environment variables.
+// ---------------------------------------------------------------------------------------------------- //
 require('dotenv').config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
 
+// ---------------------------------------------------------------------------------------------------- //
+// This file stores all the keyboards shown on the telegram board.
+// ---------------------------------------------------------------------------------------------------- //
 export const preLogin = {
 	parse_mode: 'Markdown',
 	reply_markup: {
@@ -24,6 +30,15 @@ export const login = {
 	parse_mode: 'Markdown',
 	reply_markup: {
 		keyboard: [['Iniciar sesión'], ['Atrás']],
+		resize_keyboard: true,
+		one_time_keyboard: false,
+	},
+};
+
+export const stupidLogin = {
+	parse_mode: 'Markdown',
+	reply_markup: {
+		keyboard: [['Iniciar sesión', 'No sé que hacer'], ['📊 FAQ 📊']],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},

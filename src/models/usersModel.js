@@ -9,7 +9,10 @@ export async function searchCarnet(carnet) {
 	let sql = `select * from users where carnet = '${carnet}'`;
 
 	let resultado = await pool.query(sql).catch(err => {
-		throw new Error(`There was an error in the user's query with the student credential: ${carnet} - 'usersModel'`, err);
+		throw new Error(
+			`There was an error in the user's query with the student credential: ${carnet} - 'usersModel'`,
+			err
+		);
 	});
 
 	//	The function 'searchCarnet' must return:
@@ -38,9 +41,9 @@ export async function verifyTelegramID(telegram_id) {
 	});
 
 	// The function 'verifyTelegramID' must return:
-	// [Boolean] { 
+	// [Boolean] {
 	//				- If the row count is 0, it returns a true expression.
-	//				- If the row count is greater than or equal to 1, it returns a true expression.
+	//				- If the row count is greater than or equal to 1, it returns a false expression.
 	//			 }
 	return resultado.rowCount === 0 ? true : false;
 }
