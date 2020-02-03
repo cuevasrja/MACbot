@@ -1,6 +1,6 @@
 {
 	"name": "macbot",
-	"version": "1.0.0",
+	"version": "1.5.0",
 	"main": "index.js",
 	"dependencies": {
 		"@babel/polyfill": "^7.8.3",
@@ -37,9 +37,13 @@
 		"url": "git+https://github.com/MaEscalanteHe/MACbot.git"
 	},
 	"author": "Manuel Escalante",
-	"license": "GPL-3.0",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/MaEscalanteHe/MACbot/issues"
 	},
-	"homepage": "https://github.com/MaEscalanteHe/MACbot#readme"
+	"homepage": "https://github.com/MaEscalanteHe/MACbot#readme",
+	"engines": {
+		"node": "13.7",
+		"npm": "6.13.6"
+	}
 }

@@ -19,7 +19,7 @@ bot.onText(/^\/taquilla/, async msg => {
 
 	// Check if the user writes the command in the TeleMAC group, this makes the command
 	// not work in other groups.
-	if (chatID === TELEMAC_ID) {
+	if (chatID == TELEMAC_ID) {
 		// Variables that establish the day of the week and the date corresponding to that day.
 		let tz = timezone();
 		let day = tz.day();
@@ -56,7 +56,7 @@ bot.onText(/^\/taquilla/, async msg => {
 
 			// If the query is made on a weekend, a message is sent by fucking the person who requested the schedules.
 			if (response.length === 0) {
-				response = `Hoy es ${days[day]} hoy no se cubre taquilla. Al menos que seas especial, *${firstName}*`;
+				response = `Hoy es ${days[day]} hoy no se cubre taquilla. A menos que seas especial, *${firstName}*`;
 			}
 
 			// The message is sent with the built message.
