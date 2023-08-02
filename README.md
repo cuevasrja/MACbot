@@ -2,15 +2,15 @@
 
 <div align="center">
 
-[![MACbot](https://img.shields.io/badge/MACbot-v1.5-0088cc?style=flat-square&logo=github)](https://telegram.me/thed10sbot)
+[![MACbot](https://img.shields.io/badge/MACbot-v2.0-0088cc?style=flat-square&logo=github)](https://telegram.me/thed10sbot)
 
-[![Bot API](https://img.shields.io/badge/Bot%20API-v4.6-0088cc?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
-[![Node.js](https://img.shields.io/badge/Node.js-v13.7.0-6cc24a?style=flat-square)](https://nodejs.org/en/)
-[![npm](https://img.shields.io/badge/npm-v6.13.6-cb3837?style=flat-square&logo=npm)](https://www.npmjs.com/)
+[![Bot API](https://img.shields.io/badge/Bot%20API-v6.7-0088cc?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
+[![Node.js](https://img.shields.io/badge/Node.js-v18.17.0-6cc24a?style=flat-square)](https://nodejs.org/en/)
+[![npm](https://img.shields.io/badge/npm-v9.6.7-cb3837?style=flat-square&logo=npm)](https://www.npmjs.com/)
 
 </div>
 
-Este bot en la confiable herramienta de bolsillo que todo Mackenzie debe tener. Él te mantendrá al tanto de tus responsabilidades como miembro de la agrupación (y también como futuro miembro).
+Este bot es la nueva y mejorada herramienta de bolsillo que todo Mackienzie debe tener. Él te mantendrá al tanto de tus responsabilidades como miembro de la agrupación (y también como futuro miembro).
 
 <h2 align='center'>Install</h2>
 
@@ -22,12 +22,12 @@ Tienes que llenar todas las variables de entorno para que el proyecto funcione.
 git clone https://github.com/MAC-USB/MACbot.git
 cd MACbot
 npm install
-mv .env-example .env
+cp .env-example .env
 ```
 
 ### **Database**
 
-No seas estúpido y crea una contraseña segura para la base de datos.
+Crea una contraseña segura para la base de datos.
 
 ```sql
 CREATE DATABASE macbot;
