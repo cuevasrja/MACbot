@@ -1,7 +1,8 @@
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
 

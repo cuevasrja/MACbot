@@ -1,31 +1,31 @@
 // ---------------------------------------------------------------------------------------------------- //
 // Bot Management.
 // ---------------------------------------------------------------------------------------------------- //
-import './settings/app';
-import './settings/log_error';
-import './settings/timezone';
+import './settings/app.js';
+import './settings/log_error.js';
+import './settings/timezone.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Functionalities
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/start';
-import './functions/basics';
+import './functions/basics.js';
+import './functions/start.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Admission.
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/admission/admission';
-import './functions/admission/prenuevos';
+import './functions/admission/admission.js';
+import './functions/admission/prenuevos.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Private.
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/private/taquilla';
-import './functions/private/preparadores';
+import './functions/private/preparadores.js';
+import './functions/private/taquilla.js';
 // import './functions/private/deprecated_echo';
-import './functions/private/echo';
+import './functions/private/echo.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Development.
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/dev';
+import './functions/dev.js';

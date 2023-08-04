@@ -2,6 +2,7 @@
 	"name": "macbot",
 	"version": "2.0.0",
 	"main": "dist/index.js",
+	"type": "module",
 	"dependencies": {
 		"@babel/polyfill": "^7.12.1",
 		"@babel/runtime": "^7.22.6",
@@ -41,9 +42,5 @@
 	"bugs": {
 		"url": "https://github.com/MAC-USB/MACbot/issues"
 	},
-	"homepage": "https://github.com/MAC-USB/MACbot#readme",
-	"engines": {
-		"node": "18.17.0",
-		"npm": "9.6.7"
-	}
+	"homepage": "https://github.com/MAC-USB/MACbot#readme"
 }

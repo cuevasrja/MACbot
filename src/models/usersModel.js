@@ -1,4 +1,4 @@
-import pool from './connection';
+import pool from './connection.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // SELECT * FROM users WHERE carnet = ###.

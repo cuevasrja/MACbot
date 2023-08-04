@@ -1,12 +1,13 @@
-import bot from '../../settings/app';
-import timezone from '../../settings/timezone';
-import { googleSpreadsheet } from '../../google/connection';
-import { readTaquilla } from '../../google/readTaquilla';
+import { googleSpreadsheet } from '../../google/connection.js';
+import { readTaquilla } from '../../google/readTaquilla.js';
+import bot from '../../settings/app.js';
+import timezone from '../../settings/timezone.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const TELEMAC_ID = process.env.TELEMAC_ID || undefined;
 
