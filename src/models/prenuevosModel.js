@@ -1,12 +1,12 @@
 import pool from './connection.js';
 
 // ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM prenuevos WHERE telegram_id = ###.
+// SELECT * FROM "prenuevo" WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function verifyTelegramID(telegram_id) {
 	console.log(`**Query 'verifyTelegramID' in prenuevosModel.`);
 
-	let sql = `select * from prenuevos where telegram_id = ${telegram_id}`;
+	let sql = `select * from "prenuevo" where telegram_id = ${telegram_id}`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
@@ -24,7 +24,7 @@ export async function verifyTelegramID(telegram_id) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO prenuevos(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
+// INSERT INTO "prenuevo" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function registerTelegramData(telegramData) {
 	console.log(`**Query 'registerTelegramID' in prenuevosModel.`);
@@ -34,7 +34,7 @@ export async function registerTelegramData(telegramData) {
 	let telegram_lastname = telegramData.last_name || undefined;
 	let telegram_username = telegramData.username || undefined;
 
-	let sql = `insert into prenuevos(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
+	let sql = `insert into "prenuevo" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
 
 	await pool.query(sql).catch(err => {
 		throw new Error(

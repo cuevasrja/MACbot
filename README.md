@@ -2,11 +2,14 @@
 
 <div align="center">
 
-[![MACbot](https://img.shields.io/badge/MACbot-v2.0-0088cc?style=flat-square&logo=github)](https://telegram.me/thed10sbot)
+[![MACbot](https://img.shields.io/badge/MACbot-v2.0-0088cc?style=flat-square&logo=github)](https://telegram.me/mac_usb_bot)
 
 [![Bot API](https://img.shields.io/badge/Bot%20API-v6.7-0088cc?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
-[![Node.js](https://img.shields.io/badge/Node.js-v18.17.0-6cc24a?style=flat-square)](https://nodejs.org/en/)
-[![npm](https://img.shields.io/badge/npm-v9.6.7-cb3837?style=flat-square&logo=npm)](https://www.npmjs.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-v18-43853D?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/es/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v15-336791?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://github.com/docker/compose)
+[![License](https://img.shields.io/badge/License-MIT-0088cc?style=flat-square&logo=github)](https://github.com/MAC-USB/MACbot/blob/master/LICENSE)
 
 </div>
 
@@ -21,28 +24,16 @@ Tienes que llenar todas las variables de entorno para que el proyecto funcione.
 ```bash
 git clone https://github.com/MAC-USB/MACbot.git
 cd MACbot
-npm install
 cp .env-example .env
 ```
 
-### **Database**
+### **Docker compose**
 
-Crea una contraseña segura para la base de datos.
-
-```sql
-CREATE DATABASE macbot;
-
-CREATE USER macbot_user PASSWORD 'macbot_password';
-
-GRANT ALL PRIVILEGES ON DATABASE macbot TO macbot_user;
-
-ALTER DATABASE macbot OWNER TO macbot_user;
-```
-
-No olvides de inicializar la base de datos.
+Después de llenar las variables de entorno, puedes iniciar el proyecto con [_Docker-compose_](https://github.com/docker/compose).
 
 ```bash
-psql -U macbot_user macbot < database/tables.sql
+docker-compose build
+docker-compose up -d
 ```
 
 ### **Google Sheet API credentials**
