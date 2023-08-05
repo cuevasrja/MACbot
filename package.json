@@ -1,29 +1,30 @@
 {
 	"name": "macbot",
-	"version": "1.5.0",
-	"main": "index.js",
+	"version": "2.0.0",
+	"main": "dist/index.js",
+	"type": "module",
 	"dependencies": {
-		"@babel/polyfill": "^7.8.7",
-		"@babel/runtime": "^7.9.2",
-		"core-js": "^3.6.5",
-		"dotenv": "^8.2.0",
-		"googleapis": "^39.2.0",
-		"moment-timezone": "^0.5.28",
-		"node-telegram-bot-api": "^0.40.0",
-		"pg": "^7.18.2"
+		"@babel/polyfill": "^7.12.1",
+		"@babel/runtime": "^7.22.6",
+		"core-js": "^3.32.0",
+		"dotenv": "^16.3.1",
+		"googleapis": "^123.0.0",
+		"moment-timezone": "^0.5.43",
+		"node-telegram-bot-api": "^0.61.0",
+		"pg": "^8.11.2"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.8.4",
-		"@babel/core": "^7.9.0",
-		"@babel/node": "^7.8.7",
-		"@babel/plugin-transform-runtime": "^7.9.0",
-		"@babel/preset-env": "^7.9.5",
+		"@babel/cli": "^7.22.9",
+		"@babel/core": "^7.22.9",
+		"@babel/node": "^7.22.6",
+		"@babel/plugin-transform-runtime": "^7.22.9",
+		"@babel/preset-env": "^7.22.9",
 		"babel-eslint": "^10.1.0",
-		"eslint": "^6.8.0",
-		"eslint-config-prettier": "^6.10.1",
-		"eslint-plugin-prettier": "^3.1.2",
-		"nodemon": "^2.0.3",
-		"prettier": "^1.19.1"
+		"eslint": "^8.46.0",
+		"eslint-config-prettier": "^8.9.0",
+		"eslint-plugin-prettier": "^5.0.0",
+		"nodemon": "^3.0.1",
+		"prettier": "^3.0.0"
 	},
 	"scripts": {
 		"start": "node dist/index.js",
@@ -34,16 +35,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MaEscalanteHe/MACbot.git"
+		"url": "https://github.com/MAC-USB/MACbot.git"
 	},
-	"author": "Manuel Escalante",
+	"author": "MAC (labf-ldac)",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/MaEscalanteHe/MACbot/issues"
+		"url": "https://github.com/MAC-USB/MACbot/issues"
 	},
-	"homepage": "https://github.com/MaEscalanteHe/MACbot#readme",
-	"engines": {
-		"node": "13.7",
-		"npm": "6.13.6"
-	}
+	"homepage": "https://github.com/MAC-USB/MACbot#readme"
 }

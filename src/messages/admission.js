@@ -49,7 +49,7 @@ export const sucess = `¡Felicidades, sabes seguir indicaciones! Ahora eres ofic
 
 Eso es todo... por ahora.`;
 
-export const too_late = `Emmm, creo que llegaste un poco tarde. Algunos días/semanas/meses tarde, de hecho. 
+export const too_late = `Emmm, creo que llegaste un poco tarde. Algunos días/semanas/meses tarde, de hecho.
 
 Pero no te desanimes, amiguito. Si aún te quedan algunos trimestres por graduarte (o tirar la toalla) todavía tienes la oportunidad de formar parte del MAC. Estate atento a cualquier novedad hasta el año próximo. *¡Nos vemos allá!*`;
 

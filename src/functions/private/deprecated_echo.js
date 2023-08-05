@@ -11,7 +11,8 @@
 // // ---------------------------------------------------------------------------------------------------- //
 // // Environment variables.
 // // ---------------------------------------------------------------------------------------------------- //
-// require('dotenv').config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 // const ME_ID = process.env.ME_ID || undefined;
 // const JZ_ID = process.env.JZ_ID || undefined;

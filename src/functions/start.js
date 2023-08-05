@@ -1,6 +1,6 @@
-import bot from '../settings/app';
-import * as usersModel from '../models/usersModel';
-import * as messages from '../messages/start';
+import * as messages from '../messages/start.js';
+import * as usersModel from '../models/usersModel.js';
+import bot from '../settings/app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /start command.

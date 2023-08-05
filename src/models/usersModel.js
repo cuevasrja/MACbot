@@ -1,12 +1,12 @@
-import pool from './connection';
+import pool from './connection.js';
 
 // ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM users WHERE carnet = ###.
+// SELECT * FROM "user" WHERE carnet = ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function searchCarnet(carnet) {
 	console.log(`**Query 'searchCarnet' in usersModel.`);
 
-	let sql = `select * from users where carnet = '${carnet}'`;
+	let sql = `select * from "user" where carnet = '${carnet}'`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
@@ -26,12 +26,12 @@ export async function searchCarnet(carnet) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM users WHERE telegram_id = ###.
+// SELECT * FROM "user" WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function verifyTelegramID(telegram_id) {
 	console.log(`**Query 'verifyTelegramID' in usersModel.`);
 
-	let sql = `select * from users where telegram_id = ${telegram_id}`;
+	let sql = `select * from "user" where telegram_id = ${telegram_id}`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
@@ -49,7 +49,7 @@ export async function verifyTelegramID(telegram_id) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO users(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
+// INSERT INTO "user" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function registerTelegramData(telegramData) {
 	console.log(`**Query 'registerTelegramID' in usersModel.`);
@@ -59,7 +59,7 @@ export async function registerTelegramData(telegramData) {
 	let telegram_lastname = telegramData.last_name || undefined;
 	let telegram_username = telegramData.username || undefined;
 
-	let sql = `insert into users(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
+	let sql = `insert into "user" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
 
 	await pool.query(sql).catch(err => {
 		throw new Error(

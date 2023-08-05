@@ -1,13 +1,14 @@
-import bot from '../../settings/app';
-import timezone from '../../settings/timezone';
-import * as keyboard from '../keyboards';
-import * as usersModel from '../../models/usersModel';
-import * as messages from '../../messages/admission';
+import * as messages from '../../messages/admission.js';
+import * as usersModel from '../../models/usersModel.js';
+import bot from '../../settings/app.js';
+import timezone from '../../settings/timezone.js';
+import * as keyboard from '../keyboards.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const TELEMAC_ID = process.env.TELEMAC_ID || undefined;
 const LOGIN_PASSWORD = process.env.LOGIN_PASSWORD || undefined;
