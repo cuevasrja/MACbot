@@ -4,7 +4,7 @@ FROM node:18-bookworm-slim
 WORKDIR /app
 
 # Copy package.json, .env and project_runner.sh
-COPY package*.json .env project_runner.sh ./
+COPY package.json .env project_runner.sh ./
 
 # Copy src folder
 COPY src/ src/

@@ -1,11 +1,9 @@
 {
 	"name": "macbot",
 	"version": "2.0.0",
-	"main": "dist/index.js",
+	"main": "src/index.js",
 	"type": "module",
 	"dependencies": {
-		"@babel/polyfill": "^7.12.1",
-		"@babel/runtime": "^7.22.6",
 		"core-js": "^3.32.0",
 		"dotenv": "^16.3.1",
 		"googleapis": "^123.0.0",
@@ -14,12 +12,6 @@
 		"pg": "^8.11.2"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.22.9",
-		"@babel/core": "^7.22.9",
-		"@babel/node": "^7.22.6",
-		"@babel/plugin-transform-runtime": "^7.22.9",
-		"@babel/preset-env": "^7.22.9",
-		"babel-eslint": "^10.1.0",
 		"eslint": "^8.46.0",
 		"eslint-config-prettier": "^8.9.0",
 		"eslint-plugin-prettier": "^5.0.0",
@@ -27,10 +19,8 @@
 		"prettier": "^3.0.0"
 	},
 	"scripts": {
-		"start": "node dist/index.js",
-		"build": "babel src --out-dir dist",
+		"start": "node src/index.js",
 		"dev": "nodemon src/index.js --exec babel-node",
-		"psql": "psql -U macbot_user macbot",
 		"eslint": "npx eslint ."
 	},
 	"repository": {
