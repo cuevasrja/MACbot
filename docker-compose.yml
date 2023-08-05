@@ -25,6 +25,8 @@ services:
         image: macbot:2.0
         ports:
             - '8080:8080'
+        volumes:
+            - ./src:/app/src
         depends_on:
             - postgres
         networks:

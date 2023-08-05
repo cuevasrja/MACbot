@@ -111,3 +111,6 @@ temp/
 
 # Credentials
 credentials/
+
+# Package-lock
+package-lock.json

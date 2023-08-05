@@ -27,7 +27,7 @@ cd MACbot
 cp .env-example .env
 ```
 
-### **Docker compose**
+### **Running the bot with Docker**
 
 Después de llenar las variables de entorno, puedes iniciar el proyecto con [_Docker-compose_](https://github.com/docker/compose).
 
@@ -35,6 +35,28 @@ Después de llenar las variables de entorno, puedes iniciar el proyecto con [_Do
 docker-compose build
 docker-compose up -d
 ```
+
+Para ver los logs del bot puedes usar el siguiente comando:
+
+```bash
+docker-compose logs -f
+```
+
+Finalmente, para detener el bot puedes usar el siguiente comando:
+
+```bash
+docker-compose down
+```
+
+### **Development**
+
+Si quieres contribuir al proyecto, si es necesario que tengas instalado [_Node.js_](https://nodejs.org/es/) y hacer la instalación de las dependencias.
+
+```bash
+npm install
+```
+
+Esto para que puedan cargarse las configuraciones de [_ESLint_](https://eslint.org/) y [_Prettier_](https://prettier.io/).
 
 ### **Google Sheet API credentials**
 
