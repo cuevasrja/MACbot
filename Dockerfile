@@ -3,11 +3,14 @@ FROM node:18-bookworm-slim
 # Set working directory
 WORKDIR /app
 
-# Copy .env and project_runner.sh
-COPY .env project_runner.sh ./
+# Copy docker-json folder
+COPY docker-json ./docker-json
 
-# Copy package.json for the docker container (without most of the devDependencies)
-COPY docker-package.json package.json
+# Copy the entrypoint script
+COPY bot-runner.sh .
+
+# Update npm
+RUN npm install -g npm@latest
 
 # Run the bash script for building and starting the bot
-ENTRYPOINT [ "/bin/bash", "project_runner.sh" ]
+ENTRYPOINT [ "/bin/bash", "bot-runner.sh" ]

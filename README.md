@@ -31,6 +31,10 @@ cp .env-example .env
 
 Después de llenar las variables de entorno, puedes iniciar el proyecto con [_Docker-compose_](https://github.com/docker/compose).
 
+NOTA: Si no tienes instalado Docker, puedes seguir la guía de instalación [_aquí_](https://docs.docker.com/get-docker/).
+
+Puedes correr el bot en el entorno de desarrollo o en el de producción. Simplemente especifica el entorno en la variable de entorno `NODE_ENV` en el archivo `.env`. Para correr el bot en el entorno de desarrollo, debes especificar `development` y para el de producción, `production`.
+
 ```bash
 docker-compose build
 docker-compose up -d

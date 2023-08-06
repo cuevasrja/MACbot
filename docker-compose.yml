@@ -1,5 +1,4 @@
 version: '3'
-
 services:
     postgres:
         image: postgres:15-bookworm
@@ -27,6 +26,7 @@ services:
             - '8080:8080'
         volumes:
             - ./src:/app/src
+            - .env:/app/.env
         depends_on:
             - postgres
         networks:
