@@ -54,6 +54,6 @@ bot.onText(/^\/hostname/, msg => {
 
 	fs.readFile('/etc/hostname', 'utf8', (err, data) => {
 		if (err) throw err;
-		bot.sendMessage(chatID, `El servidor donde se está corriendo este bot es en ${data}.`);
+		bot.sendMessage(chatID, `El servidor donde se está corriendo este bot es en ${data}`);
 	});
 });

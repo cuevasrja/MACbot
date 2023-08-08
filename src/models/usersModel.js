@@ -45,7 +45,8 @@ export async function verifyTelegramID(telegram_id) {
 	//				- If the row count is 0, it returns a true expression.
 	//				- If the row count is greater than or equal to 1, it returns a false expression.
 	//			 }
-	return resultado.rowCount === 0 ? true : false;
+	// It returns true if the user has not written to the bot before. By default, it returns false.
+	return resultado.rowCount === 0;
 }
 
 // ---------------------------------------------------------------------------------------------------- //

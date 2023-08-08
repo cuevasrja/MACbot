@@ -1,3 +1,4 @@
+import { PRIVATE_CHAT } from '../../constants/botSettings.js';
 import * as messages from '../../messages/admission.js';
 import * as usersModel from '../../models/usersModel.js';
 import bot from '../../settings/app.js';
@@ -31,7 +32,7 @@ bot.onText(/^\/admision/, async msg => {
 	}
 
 	// Check if the user writes to the bot in private, this causes the command not to work in groups.
-	if (chatType === 'private') {
+	if (chatType === PRIVATE_CHAT) {
 		bot.sendMessage(
 			chatID,
 			`Hola ${chatFirstname}, bienvenido al proceso de admisión del MAC 2020. ¿Ya sabes que hacer?`,
@@ -50,7 +51,7 @@ bot.on('message', msg => {
 	let chatType = msg.chat.type;
 
 	// Check if the user writes to the bot in private, this causes the command not to work in groups.
-	if (chatType === 'private') {
+	if (chatType === PRIVATE_CHAT) {
 		// If the user presses Log in, the process of data verification begins
 		// (which does not verify anything anywhere xD).
 		if (msg.text.indexOf('Iniciar sesión') === 0) {

@@ -1,3 +1,5 @@
+import { PARSE } from '../constants/botSettings.js';
+import { ALREADY_ASSISTED, BACK, DONT_KNOW, FAQ, JOIN_GROUP, LOGIN, NO, YES } from '../constants/responses.js';
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
@@ -10,55 +12,55 @@ const ADMISION_URL = process.env.ADMISION_URL || undefined;
 // This file stores all the keyboards shown on the telegram board.
 // ---------------------------------------------------------------------------------------------------- //
 export const preLogin = {
-	parse_mode: 'Markdown',
+	parse_mode: PARSE,
 	reply_markup: {
-		keyboard: [['Sí', 'No'], ['📊 FAQ 📊']],
+		keyboard: [[YES, NO], [FAQ]],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
 };
 
 export const yes_preLogin = {
-	parse_mode: 'Markdown',
+	parse_mode: PARSE,
 	reply_markup: {
-		keyboard: [['Ya asistí a la reunión, ¿Ahora qué?'], ['No', '📊 FAQ 📊']],
+		keyboard: [[ALREADY_ASSISTED], [NO, FAQ]],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
 };
 
 export const login = {
-	parse_mode: 'Markdown',
+	parse_mode: PARSE,
 	reply_markup: {
-		keyboard: [['Iniciar sesión'], ['Atrás']],
+		keyboard: [[LOGIN], [BACK]],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
 };
 
 export const stupidLogin = {
-	parse_mode: 'Markdown',
+	parse_mode: PARSE,
 	reply_markup: {
-		keyboard: [['Iniciar sesión', 'No sé que hacer'], ['📊 FAQ 📊']],
+		keyboard: [[LOGIN, DONT_KNOW], [FAQ]],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
 };
 
 export const replyOpts = {
-	parse_mode: 'Markdown',
+	parse_mode: PARSE,
 	reply_markup: JSON.stringify({
 		force_reply: true,
 	}),
 };
 
 export const inlineURL = {
-	parse_mode: 'Markdown',
+	parse_mode: PARSE,
 	reply_markup: {
 		inline_keyboard: [
 			[
 				{
-					text: 'Unirse al grupo',
+					text: JOIN_GROUP,
 					url: ADMISION_URL,
 				},
 			],
