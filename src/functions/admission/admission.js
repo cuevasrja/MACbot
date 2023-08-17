@@ -1,4 +1,6 @@
 import { PRIVATE_CHAT } from '../../constants/botSettings.js';
+import { ALREADY_ASSISTED, BACK, DONT_KNOW, FAQ, LOGIN, NO, YES } from '../../constants/responses.js';
+import { admissionDate } from '../../constants/infoAdmision.js';
 import * as messages from '../../messages/admission.js';
 import * as usersModel from '../../models/usersModel.js';
 import bot from '../../settings/app.js';
@@ -35,7 +37,7 @@ bot.onText(/^\/admision/, async msg => {
 	if (chatType === PRIVATE_CHAT) {
 		bot.sendMessage(
 			chatID,
-			`Hola ${chatFirstname}, bienvenido al proceso de admisión del MAC 2020. ¿Ya sabes que hacer?`,
+			`Hola ${chatFirstname}, bienvenido al proceso de admisión del MAC ${admissionDate.year}. ¿Ya sabes que hacer?`,
 			keyboard.preLogin
 		);
 	}
@@ -54,11 +56,12 @@ bot.on('message', msg => {
 	if (chatType === PRIVATE_CHAT) {
 		// If the user presses Log in, the process of data verification begins
 		// (which does not verify anything anywhere xD).
-		if (msg.text.indexOf('Iniciar sesión') === 0) {
+		if (msg.text.indexOf(LOGIN) === 0) {
 			// Variables that establish the day of the week and the date corresponding to that day.
 			let tz = timezone();
 			let day = tz.format('DD');
 			let month = tz.format('MM');
+			// let year = tz.format('YYYY');
 			let hour = tz.format('h a');
 
 			// Check if the date is after the day of the first meeting towards the prenuevos.
@@ -112,28 +115,28 @@ bot.on('message', msg => {
 		}
 
 		// Other buttons and their actions (Needless to explain, it's quite intuitive).
-		if (msg.text.toString().toLowerCase() === 'sí') {
+		if (msg.text.toString().toLowerCase() === YES.toLowerCase()) {
 			bot.sendMessage(fromID, messages.yes_tooLate, keyboard.login);
 		}
 
-		if (msg.text.toString().toLowerCase() === 'no') {
+		if (msg.text.toString().toLowerCase() === NO.toLowerCase()) {
 			bot.sendMessage(fromID, messages.too_late, keyboard.preLogin);
 		}
 
-		if (msg.text.toString().toLowerCase() === 'atrás') {
+		if (msg.text.toString().toLowerCase() === BACK.toLowerCase()) {
 			bot.sendMessage(fromID, '... Ok ...\n\nEspero no estés perdido.', keyboard.stupidLogin);
 		}
 
-		if (msg.text.toString().toLowerCase() === 'no sé que hacer') {
+		if (msg.text.toString().toLowerCase() === DONT_KNOW.toLowerCase()) {
 			bot.sendMessage(fromID, messages.idk, keyboard.stupidLogin);
 		}
 
 		// Deprecated.
-		if (msg.text.indexOf('Ya asistí a la reunión, ¿Ahora qué?') === 0) {
+		if (msg.text.indexOf(ALREADY_ASSISTED) === 0) {
 			bot.sendMessage(fromID, messages.ahora_que, keyboard.login);
 		}
 
-		if (msg.text.indexOf('📊 FAQ 📊') === 0) {
+		if (msg.text.indexOf(FAQ) === 0) {
 			bot.sendMessage(fromID, messages.faq, keyboard.preLogin);
 		}
 	}
