@@ -28,7 +28,7 @@ const preparersOfTheDay = (response) => {
     // First, we get the day of the week. It has to be between 0 and 4.
     const day = weekDays[new Date().getDay() - 1];
     // We get the initials of the preparers of the day.
-    const preparers = new Set(...response.results.map(result => result.properties[day].rich_text[0].plain_text));
+    const preparers = [...new Set(...response.results.map(result => result.properties[day].rich_text[0].plain_text))];
     // We create an object with the initials of the preparers as keys and an empty array as value.
     const preparersOfTheDay = {};
     // We fill the array with the hours that the preparer is in taquilla.
