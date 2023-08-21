@@ -5,6 +5,14 @@ import dotenv from "dotenv"
 dotenv.config()
 const NOTION_DB_ID = process.env.NOTION_MAS_DB_ID
 
+/**
+    Formato de la base de datos:
+    - Iniciales: Titulo
+    - Equipo: select
+    - Recibe: rich_text, iniciales del preparador
+    - Sugerencias: rich_text
+*/
+
 const findPreparer = async (initials) => {
     const response = await notion.databases.query({
         database_id: NOTION_DB_ID,

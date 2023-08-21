@@ -28,13 +28,13 @@ const preparersOfTheDay = (response) => {
     // First, we get the day of the week. It has to be between 0 and 4.
     const day = weekDays[new Date().getDay() - 1];
     // We get the initials of the preparers of the day.
-    const preparers = new Set(...response.results.map(result => result.properties[day].rich_text.plain_text));
+    const preparers = new Set(...response.results.map(result => result.properties[day].rich_text[0].plain_text));
     // We create an object with the initials of the preparers as keys and an empty array as value.
     const preparersOfTheDay = {};
     // We fill the array with the hours that the preparer is in taquilla.
     preparers.forEach(preparer => preparersOfTheDay[preparer] = []);
     response.results.forEach(result => {
-        const preparer = result.properties[day].rich_text.plain_text;
+        const preparer = result.properties[day].rich_text[0].plain_text;
         preparersOfTheDay[preparer].push(result.properties[BLOCK].title[0].plain_text);
     }
     );
@@ -47,6 +47,7 @@ const preparersOfTheDay = (response) => {
  * @returns {Object} Object with the initials of the preparers of the day.
  */
 export const taquillaSchedule = async () => {
+    // First, we get the day of the week. It has to be between 0 and 4.
     const day = weekDays[new Date().getDay() - 1];
     const response = await notion.databases.query({
         database_id: NOTION_DB_ID,
