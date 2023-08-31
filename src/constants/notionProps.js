@@ -16,3 +16,5 @@ export const BLOCKS_HOURS = [
     "2:00 pm - 3:00 pm",
     "3:00 pm - 4:00 pm",
 ]
+
+export const weekDays = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"];
