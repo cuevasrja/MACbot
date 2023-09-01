@@ -21,6 +21,6 @@ bot.onText(/^\/start/, async msg => {
 			await usersModel.registerTelegramData(msg.from);
 		}
 
-		bot.sendMessage(chatID, messages.wellcome, { parse_mode: PARSE });
+		bot.sendMessage(chatID, messages.welcome, { parse_mode: PARSE });
 	}
 });

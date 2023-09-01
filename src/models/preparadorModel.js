@@ -24,17 +24,12 @@ export async function verifyTelegramID(telegram_id) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO "preparador" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
+// INSERT INTO "preparador" (telegram_id, initials) values ###.
 // ---------------------------------------------------------------------------------------------------- //
-export async function registerTelegramData(telegramData) {
+export async function registerTelegramData(telegram_id, initials) {
 	console.log(`**Query 'registerTelegramID' in preparadoresModel.`);
 
-	let telegram_id = telegramData.id || undefined;
-	let telegram_firstname = telegramData.first_name || undefined;
-	let telegram_lastname = telegramData.last_name || undefined;
-	let telegram_username = telegramData.username || undefined;
-
-	let sql = `insert into "preparador" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
+	let sql = `insert into "preparador" (telegram_id, initials) values (${telegram_id}, '${initials}')`;
 
 	await pool.query(sql).catch(err => {
 		throw new Error(
@@ -42,4 +37,32 @@ export async function registerTelegramData(telegramData) {
 			err
 		);
 	});
+}
+
+export async function registerAllPreparadores(PREPARADORES) {
+	console.log(`**Query 'registerAllPreparadores' in preparadoresModel.`);
+
+	let sql = `insert into "preparador" (telegram_id, initials) values `;
+
+	for (let [key, value] of PREPARADORES) {
+		if (key === undefined) continue;
+		sql += `(${key}, '${value}'),`;
+	}
+
+	sql = sql.slice(0, -1);
+
+	await pool.query(sql).catch(err => {
+		throw new Error(`There was an error registering all preparadores - 'preparadoresModel'`, err);
+	});
+}
+
+// This function returns all the preparadores registered in the database.
+export async function getAllPreparadores() {
+	let sql = `select * from "preparador"`;
+
+	let resultado = await pool.query(sql).catch(err => {
+		throw new Error(`There was an error getting all preparadores - 'preparadoresModel'`, err);
+	});
+
+	return resultado.rows;
 }

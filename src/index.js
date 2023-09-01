@@ -20,10 +20,9 @@ import './functions/admission/prenuevos.js';
 // ---------------------------------------------------------------------------------------------------- //
 // Private.
 // ---------------------------------------------------------------------------------------------------- //
+import './functions/private/echo.js';
 import './functions/private/preparadores.js';
 import './functions/private/taquilla.js';
-// import './functions/private/deprecated_echo';
-import './functions/private/echo.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Development.

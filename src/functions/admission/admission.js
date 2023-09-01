@@ -11,7 +11,6 @@ import * as keyboard from '../keyboards.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const TELEMAC_ID = process.env.TELEMAC_ID || undefined;
 const LOGIN_PASSWORD = process.env.LOGIN_PASSWORD || undefined;
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -21,7 +20,7 @@ bot.onText(/^\/admision/, async msg => {
 	let chatID = msg.chat.id;
 	let chatType = msg.chat.type;
 	let fromID = msg.from.id;
-	let chatFirstname = msg.from.first_name;
+	let chatFirstName = msg.from.first_name;
 
 	// Guard that is responsible for verifying if the person has already written to the bot before.
 	// If so, it does nothing, if it is the first time you write it, it records it in the database.
@@ -35,13 +34,13 @@ bot.onText(/^\/admision/, async msg => {
 	if (chatType === PRIVATE_CHAT) {
 		bot.sendMessage(
 			chatID,
-			`Hola ${chatFirstname}, bienvenido al proceso de admisión del MAC 2020. ¿Ya sabes que hacer?`,
+			`Hola ${chatFirstName}, bienvenido al proceso de admisión del MAC 2024. ¿Ya sabes qué hacer?`,
 			keyboard.preLogin
 		);
 	}
 	// If they try to place the command in the main group (teleMAC) the bot will warn them that it cannot be given that it is only available in private chat.
-	else if (chatID == TELEMAC_ID) {
-		bot.sendMessage(chatID, `Mira ${fromID}, no quiero hacer spam en este grupo. Así que escribeme en privado.`);
+	else {
+		bot.sendMessage(chatID, `${chatFirstName}, por grupos não não. Así que escríbeme en privado.`);
 	}
 });
 
@@ -86,7 +85,7 @@ bot.on('message', msg => {
 
 										// If the password is correct, the bot sends the invitation link to the admission group.
 										if (checkPassword == LOGIN_PASSWORD) {
-											bot.sendMessage(fromID, messages.sucess, keyboard.inlineURL);
+											bot.sendMessage(fromID, messages.success, keyboard.inlineURL);
 										}
 										// If this is incorrect, it tells you that it is stupid.
 										else {
@@ -100,14 +99,14 @@ bot.on('message', msg => {
 					.catch(err => {
 						bot.sendMessage(
 							fromID,
-							'Hubo un problema en enviarte algún mensaje. Por favor contacta con mi creador @MaEscalanteHe.'
+							'Hubo un problema en enviarte algún mensaje. Por favor contacta con uno de mis creadores: @lmisea o @zambra_shunior.'
 						);
 						throw new Error('Hubo un problema al momento de presionar el botón de Iniciar sesión.', err);
 					});
 			}
-			// If the person tries to log in before the meeting, the bot tells him that he is a liar.
+			// If the person tries to log in before the meeting, the bot tells them to hold on.
 			else {
-				bot.sendMessage(fromID, messages.liar, keyboard.preLogin);
+				bot.sendMessage(fromID, messages.holdOn, keyboard.preLogin);
 			}
 		}
 
@@ -121,11 +120,11 @@ bot.on('message', msg => {
 		}
 
 		if (msg.text.toString().toLowerCase() === 'atrás') {
-			bot.sendMessage(fromID, '... Ok ...\n\nEspero no estés perdido.', keyboard.stupidLogin);
+			bot.sendMessage(fromID, '... Ok ...\n\nEspero no te hayas perdido.', keyboard.badLogin);
 		}
 
 		if (msg.text.toString().toLowerCase() === 'no sé que hacer') {
-			bot.sendMessage(fromID, messages.idk, keyboard.stupidLogin);
+			bot.sendMessage(fromID, messages.idk, keyboard.badLogin);
 		}
 
 		// Deprecated.

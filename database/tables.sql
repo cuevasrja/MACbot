@@ -19,11 +19,7 @@ CREATE TABLE "user" (
 CREATE TABLE "preparador" (
     user_id SERIAL NOT NULL UNIQUE,
     telegram_id BIGINT UNIQUE,
-    telegram_firstname VARCHAR(50),
-    telegram_lastname VARCHAR(50),
-    telegram_username VARCHAR(50),
-    initials VARCHAR(2),
-    carnet VARCHAR(10),
+    initials VARCHAR(2) UNIQUE,
     PRIMARY KEY (telegram_id)
 );
 

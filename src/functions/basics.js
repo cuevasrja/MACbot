@@ -28,7 +28,7 @@ bot.onText(/^\/enlace/, msg => {
 	if (chatType !== 'private') {
 		bot.sendMessage(
 			chatID,
-			`Para ingresar al grupo que te corresponde para esta admision tienes que presionar el botón de abajo.`,
+			`Para ingresar al grupo que te corresponde para esta admisión tienes que presionar el botón de abajo.`,
 			{
 				parse_mode: 'Markdown',
 				reply_markup: {

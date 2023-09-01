@@ -38,7 +38,7 @@ export const login = {
 	},
 };
 
-export const stupidLogin = {
+export const badLogin = {
 	parse_mode: PARSE,
 	reply_markup: {
 		keyboard: [[LOGIN, DONT_KNOW], [FAQ]],

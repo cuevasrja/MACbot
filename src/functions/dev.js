@@ -5,3 +5,5 @@ import bot from '../settings/app.js';
 // ---------------------------------------------------------------------------------------------------- //
 import dotenv from 'dotenv';
 dotenv.config();
+
+// This file is for functions that are still in development.
