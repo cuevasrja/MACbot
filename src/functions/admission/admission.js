@@ -123,11 +123,11 @@ bot.on('message', msg => {
 		}
 
 		if (msg.text.toString().toLowerCase() === BACK.toLowerCase()) {
-			bot.sendMessage(fromID, '... Ok ...\n\nEspero no estés perdido.', keyboard.stupidLogin);
+			bot.sendMessage(fromID, '... Ok ...\n\nEspero no estés perdido.', keyboard.badLogin);
 		}
 
 		if (msg.text.toString().toLowerCase() === DONT_KNOW.toLowerCase()) {
-			bot.sendMessage(fromID, messages.idk, keyboard.stupidLogin);
+			bot.sendMessage(fromID, messages.idk, keyboard.badLogin);
 		}
 
 		// Deprecated.
