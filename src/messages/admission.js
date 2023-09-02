@@ -9,8 +9,8 @@ La estructura del MAC es lineal, todos los preparadores tenemos el mismo rango. 
 📍*¿En el MAC voy a aprender a programar?*
 Si bien no es nuestro objetivo principal, estar sumergido en el mundo de la computación siempre hará que aprendas a programar. Normalmente tenemos varios proyectos internos durante los trimestres que implican programar y sería un excelente punto para aprender a hacerlo.
 
-📍*¿Necesito ser computista para participar en la admisión del MAC?*
-Absolutamente no. Hemos tenido numerosos miembros de varias carreras de la universidad. Actualmente contamos con estudiantes de Telecomunicaciones 📡, Matemática 🧮, Física 🔎 y, por supuesto, Computación 💻.
+📍*¿Necesito ser computosti para participar en la admisión del MAC?*
+Absolutamente no. Hemos tenido numerosos miembros de varias carreras de la universidad, como estudiantes de Telecomunicaciones 📡, Matemática 🧮, Física 🔎 y, por supuesto, Computación 💻.
 
 📍*¿Necesito tener conocimientos previos para hacer admisión en el MAC?*
 No. La admisión del MAC es el mejor lugar para obtener conocimientos en el área de administración de sistemas. Si completas todo el proceso obtendrás conocimientos que no se dan ni siquiera en las materias más avanzadas de la carrera, ¡Además de ser la oportunidad perfecta para hacer nuevos amigos! 🥳`;
@@ -23,7 +23,7 @@ Si por alguna razón que se te escapa de la manos no puedes asistir, comunícalo
 
 PD: Recuerda llegar temprano y ponerte ropa interior limpia.`;
 
-export const no = `*¡¿Cómo que no?! ¡¿Y qué estás esperando?!*
+export const no = `*¡¿Cómo que no mi lind@?! ¡¿Qué estás esperando?!*
 
 No seas tímido y acércate a *MYS-018* para que podamos conocerte a profundidad ( ͡° ͜ʖ ͡°).
 
@@ -31,11 +31,11 @@ Recuerda que si no has sido entrevistado antes del martes de semana 4 *(28/01/20
 
 export const ahora_que = `Una vez finalizada la reunión, y si es que realmente asististe, ya sabrás que hacer.
 
-Igual, solo es un botón que tienes que presionar, más trivial no te lo puedo poner.`;
+Igual, solo es un botón que tienes que presionar, tu puedes mi caraqueñita.`;
 
 export const iniciar_sesion = `Por favor, introduce tu número de carnet *(USBID)* con el formato XX*-*XXXXX _(Por ejemplo: vamos, no es tan difícil; tú puedes hacerlo)_`;
 
-export const fallback_iniciar_session = `Bueno... parece que me equivoqué, eres bastante tarado después de todo. Recuerda introducir el carnet con el formato solicitado _(¿En serio necesitabas el ejemplo?)_.
+export const fallback_iniciar_session = `Bueno... parece que me equivoqué, pero el primer error es aceptable después de todo. Recuerda introducir el carnet con el formato solicitado _(Ya te lo di, ¿qué mas quieres?¿un pan?)_.
 
 Vuelve a presionar el botón para reintentarlo, aunque si me vas a tener todo el día aquí al menos bríndame una arepa.`;
 
@@ -43,7 +43,7 @@ export const liar = `Sereno moreno, te me estás adelantando un pelo. Sabemos qu
 
 export const auth_session = `Empezamos bien. Ahora quiero que coloques la clave que se te fue confiada durante la reunión. Pero si quieres poner alguna clave bancaria no me molestaría en lo absoluto.`;
 
-export const fallback_auth_session = `Pero bueno chico, que pasa. Estás como caído de la mata. Vuelve a introducir la contraseña antes de que te meta un coquito por gafo.`;
+export const fallback_auth_session = `Pensando en pajaritos, que pasa. Estás como caído de la mata. Vuelve a introducir la contraseña antes de que te haga subir al pino 15 veces.`;
 
 export const sucess = `¡Felicidades, sabes seguir indicaciones! Ahora eres oficialmente un pre-nuevo _(Shi sheñol)_. Para unirte al grupo de la admisión _(el nido de pre-nuevos)_ pulsa el botón de aquí abajito.
 

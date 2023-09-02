@@ -4,15 +4,14 @@ DROP TABLE IF EXISTS "preparador";
 
 DROP TABLE IF EXISTS "prenuevo";
 
+DROP TABLE IF EXISTS "invitado_mas";
+
 CREATE TABLE "user" (
     user_id SERIAL NOT NULL UNIQUE,
     telegram_id BIGINT UNIQUE,
     telegram_firstname VARCHAR(50),
     telegram_lastname VARCHAR(50),
     telegram_username VARCHAR(50),
-    name VARCHAR(50),
-    carnet VARCHAR(10),
-    phone INT,
     PRIMARY KEY (telegram_id)
 );
 
@@ -29,6 +28,17 @@ CREATE TABLE "prenuevo" (
     telegram_firstname VARCHAR(50),
     telegram_lastname VARCHAR(50),
     telegram_username VARCHAR(50),
+    name VARCHAR(50),
     carnet VARCHAR(10),
     PRIMARY KEY (telegram_id)
-)
+);
+
+CREATE TABLE "invitado_mas" (
+    user_id SERIAL NOT NULL UNIQUE,
+    telegram_id BIGINT UNIQUE,
+    telegram_firstname VARCHAR(50),
+    telegram_lastname VARCHAR(50),
+    telegram_username VARCHAR(50),
+    name VARCHAR(50),
+    PRIMARY KEY (telegram_id)
+);

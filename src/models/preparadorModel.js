@@ -42,14 +42,20 @@ export async function registerTelegramData(telegram_id, initials) {
 export async function registerAllPreparadores(PREPARADORES) {
 	console.log(`**Query 'registerAllPreparadores' in preparadoresModel.`);
 
-	let sql = `insert into "preparador" (telegram_id, initials) values `;
+	let sql = 'DO $$ BEGIN ';
 
 	for (let [key, value] of PREPARADORES) {
+		// Comprobamos que el telegram_id no sea undefined
 		if (key === undefined) continue;
-		sql += `(${key}, '${value}'),`;
+
+		// Comprobar si el registro ya existe
+		sql += `IF NOT EXISTS (SELECT 1 FROM "preparador" WHERE telegram_id = ${key} AND initials = '${value}') THEN `;
+		// Insertar el registro si no existe
+		sql += `INSERT INTO "preparador" (telegram_id, initials) VALUES (${key}, '${value}'); `;
+		sql += 'END IF; ';
 	}
 
-	sql = sql.slice(0, -1);
+	sql += 'END $$;';
 
 	await pool.query(sql).catch(err => {
 		throw new Error(`There was an error registering all preparadores - 'preparadoresModel'`, err);
@@ -58,7 +64,7 @@ export async function registerAllPreparadores(PREPARADORES) {
 
 // This function returns all the preparadores registered in the database.
 export async function getAllPreparadores() {
-	let sql = `select * from "preparador"`;
+	let sql = `SELECT * from "preparador"`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(`There was an error getting all preparadores - 'preparadoresModel'`, err);

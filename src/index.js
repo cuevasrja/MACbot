@@ -28,3 +28,16 @@ import './functions/private/taquilla.js';
 // Development.
 // ---------------------------------------------------------------------------------------------------- //
 import './functions/dev.js';
+
+// ---------------------------------------------------------------------------------------------------- //
+// Intentar registrar los preparadores en la base de datos.
+// ---------------------------------------------------------------------------------------------------- //
+
+import { PREPARADORES } from './constants/preparadores.js';
+import { registerAllPreparadores } from './models/preparadorModel.js';
+
+try {
+	registerAllPreparadores(PREPARADORES);
+} catch (err) {
+	console.log(err);
+}
