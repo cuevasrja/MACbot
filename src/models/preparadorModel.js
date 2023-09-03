@@ -20,7 +20,7 @@ export async function verifyTelegramID(telegram_id) {
 	//				- If the row count is 0, it returns a true expression.
 	//				- If the row count is greater than or equal to 1, it returns a false expression.
 	//			 }
-	return resultado.rowCount === 0 ? true : false;
+	return resultado.rowCount === 0;
 }
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -62,7 +62,9 @@ export async function registerAllPreparadores(PREPARADORES) {
 	});
 }
 
-// This function returns all the preparadores registered in the database.
+// ---------------------------------------------------------------------------------------------------- //
+// SELECT * FROM "preparador"
+// ---------------------------------------------------------------------------------------------------- //
 export async function getAllPreparadores() {
 	let sql = `SELECT * from "preparador"`;
 
@@ -70,5 +72,32 @@ export async function getAllPreparadores() {
 		throw new Error(`There was an error getting all preparadores - 'preparadoresModel'`, err);
 	});
 
+	// The function 'getAllPreparadores' must return an array of objects:
+	//	[Object] '{ preparador_id: #intValue,
+	//	 			telegram_id: #intValue,
+	//				initials: #stringValue,
+	//	 		 }'
+
 	return resultado.rows;
+}
+
+// ---------------------------------------------------------------------------------------------------- //
+// SELECT * FROM "preparador" WHERE telegram_id = ###.
+// ---------------------------------------------------------------------------------------------------- //
+export async function getPreparadorByTelegramID(telegram_id) {
+	let sql = `SELECT * from "preparador" WHERE telegram_id = ${telegram_id}`;
+
+	let resultado = await pool.query(sql).catch(err => {
+		throw new Error(
+			`There was an error getting the preparador with the telegram_id: ${telegram_id} - 'preparadoresModel'`,
+			err
+		);
+	});
+
+	// The function 'getPreparadorByTelegramID' must return an object:
+	//	[Object] '{ preparador_id: #intValue,
+	//	 			telegram_id: #intValue,
+	//				initials: #stringValue,
+	//	 		 }'
+	return resultado.rows[0];
 }
