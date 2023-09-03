@@ -3,8 +3,8 @@ import pool from './connection.js';
 // ---------------------------------------------------------------------------------------------------- //
 // SELECT * FROM "preparador" WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
-export async function verifyTelegramID(telegram_id) {
-	console.log(`**Query 'verifyTelegramID' in preparadoresModel.`);
+export async function verifyPreparadorID(telegram_id) {
+	console.log(`**Query 'verifyPreparadorID' in preparadoresModel.`);
 
 	let sql = `select * from "preparador" where telegram_id = ${telegram_id}`;
 
@@ -15,7 +15,7 @@ export async function verifyTelegramID(telegram_id) {
 		);
 	});
 
-	// The function 'verifyTelegramID' must return:
+	// The function 'verifyPreparadorID' must return:
 	// [Boolean] {
 	//				- If the row count is 0, it returns a true expression.
 	//				- If the row count is greater than or equal to 1, it returns a false expression.
@@ -95,7 +95,8 @@ export async function getPreparadorByTelegramID(telegram_id) {
 	});
 
 	// The function 'getPreparadorByTelegramID' must return an object:
-	//	[Object] '{ preparador_id: #intValue,
+	//	[Object] '{ 
+	//				user_id: #intValue,
 	//	 			telegram_id: #intValue,
 	//				initials: #stringValue,
 	//	 		 }'

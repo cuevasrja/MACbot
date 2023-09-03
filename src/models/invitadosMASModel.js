@@ -3,8 +3,8 @@ import pool from './connection.js';
 // ---------------------------------------------------------------------------------------------------- //
 // SELECT * FROM "invitado_mas" WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
-export async function verifyTelegramID(telegram_id) {
-    console.log(`**Query 'verifyTelegramID' in invitadosMASModel.`);
+export async function verifyInvitadoID(telegram_id) {
+    console.log(`**Query 'verifyInvitadoID' in invitadosMASModel.`);
 
     let sql = `select * from "invitado_mas" where telegram_id = ${telegram_id}`;
 
@@ -15,7 +15,7 @@ export async function verifyTelegramID(telegram_id) {
         );
     });
 
-    // The function 'verifyTelegramID' must return:
+    // The function 'verifyInvitadoID' must return:
     // [Boolean] {
     //				- If the row count is 0, it returns a true expression.
     //				- If the row count is greater than or equal to 1, it returns a false expression.
@@ -24,12 +24,12 @@ export async function verifyTelegramID(telegram_id) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO "invitado_mas" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
+// INSERT INTO "invitado_mas" (telegram_id, name) values ###.
 // ---------------------------------------------------------------------------------------------------- //
-export async function registerTelegramData(telegramData) {
-    console.log(`**Query 'registerTelegramData' in invitadosMASModel.`);
+export async function registerInvitado(telegramData) {
+    console.log(`**Query 'registerInvitado' in invitadosMASModel.`);
 
-    let sql = `insert into "invitado_mas" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegramData.telegram_id}, '${telegramData.telegram_firstname}', '${telegramData.telegram_lastname}', '${telegramData.telegram_username}')`;
+    let sql = `insert into "invitado_mas" (telegram_id, name) values (${telegramData.telegram_id}, '${telegramData.name}')`;
 
     await pool.query(sql).catch(err => {
         throw new Error(
@@ -57,9 +57,8 @@ export async function searchTelegramID(telegram_firstname) {
     // The function 'searchTelegramID' must return: 
     // [Object] {
     //				- telegram_id
-    //				- telegram_firstname
-    //				- telegram_lastname
-    //				- telegram_username
+    //				- user_id
+    //				- name
     //			 }
 
     return resultado.rows[0]
@@ -87,9 +86,8 @@ export async function showAllInvitados() {
     //				- Each object has the following properties:
     //              [Object] {
     //					- telegram_id
-    //					- telegram_firstname
-    //					- telegram_lastname
-    //					- telegram_username 
+    //					- user_id
+    //					- name
     //              }
     //			 }
     return resultado.rows;
