@@ -1,36 +1,10 @@
-import notion from "./connection";
-import { INITIALS, RECEIVE, SUGGESTION, TEAM } from "../constants/notionProps";
+import notion from "./connection.js";
+import { INITIALS, RECEIVE, SUGGESTION, TEAM } from "../constants/notionProps.js";
 import dotenv from "dotenv";
-import { getParticipantsMAS } from "./readMAS";
+import { showAllInvitados } from "../models/invitadosMASModel.js";
 dotenv.config();
 
 const NOTION_DB_ID = process.env.NOTION_MAS_DB_ID;
-
-/**
- * isParticipantInDB()
- * This function checks if the participant with the given initials is in the database.
- * @param {String} initials . Initials of the participant.
- * @returns {Boolean}
- */
-export const isParticipantInDB = async (initials) => {
-    try {
-        // We get the participant with the given initials.
-        const response = await notion.databases.query({
-            database_id: NOTION_DB_ID,
-            filter: {
-                property: INITIALS,
-                title: {
-                    equals: initials,
-                },
-            },
-        });
-        // We check if the participant is in the database.
-        return response.results.length > 0;
-    } catch (error) {
-        console.log("Error en isParticipantInDB");
-        console.error(error);
-    }
-}
 
 /**
  * addParticipant()
@@ -85,6 +59,29 @@ export const addParticipant = async (initials) => {
     }
 }
 
+export const deleteParticipant = async (initials) => {
+    try {
+        // We get the participant with the given initials.
+        const participant = await notion.databases.query({
+            database_id: NOTION_DB_ID,
+            filter: {
+                property: INITIALS,
+                title: {
+                    equals: initials,
+                },
+            },
+        });
+        // We archive the participant.
+        await notion.pages.update({
+            page_id: participant.results[0].id,
+            archived: true,
+        });
+    } catch (error) {
+        console.log("Error en deleteParticipant");
+        console.error(error);
+    }
+}
+
 /**
  * deletePagesInDB()
  * This function deletes all the pages in the database.
@@ -126,11 +123,11 @@ const randomSort = (arr) => {
  */
 export const startMAS = async () => {
     try {
+        // We clean the database before starting the assignment.
+        await deletePagesInDB();
         // We need a list of participants. This list has to have an even number of elements.
-        const participantsObj = getParticipantsMAS();
-        const participants = participantsObj.map(participant => participant[INITIALS].title[0].plain_text);
-        // // We clean the database before starting the assignment.
-        // deletePagesInDB();
+        const participantsOrdered = (await showAllInvitados()).map((invitado) => invitado.name);
+        const participants = randomSort(participantsOrdered);
         // We create two empty arrays to store the two teams.
         const teamA = [];
         const teamB = [];
@@ -159,8 +156,10 @@ export const startMAS = async () => {
                 * [RECIEVE]: Is a String property. It is the initials of the participant that the current participant has to give to.
                 * [SUGGESTION]: Is a String property. It is the suggestion that the participant has to give to the participant that they have to give to.
             */
-            await notion.pages.update({
-                page_id: participantsObj[i].id,
+            await notion.pages.create({
+                parent: {
+                    database_id: NOTION_DB_ID,
+                },
                 properties: {
                     [INITIALS]: {
                         title: [
@@ -194,13 +193,13 @@ export const startMAS = async () => {
                             },
                         ],
                     },
-                }
-            });
+                },
+            })
         }
         // We return an object with two arrays, one for each team.
         return {
-            teamA: assignedParticipants.slice(0, assignedParticipants.length / 2),
-            teamB: assignedParticipants.slice(assignedParticipants.length / 2)
+            teamA: teamA,
+            teamB: teamB,
         }
     } catch (error) {
         console.log("Error en startMAS");

@@ -1,4 +1,4 @@
-import { INITIALS, RECEIVE, TEAM } from "../constants/notionProps.js";
+import { INITIALS, RECEIVE, SUGGESTION, TEAM } from "../constants/notionProps.js";
 import notion from "./connection.js";
 import dotenv from "dotenv"
 
@@ -12,6 +12,32 @@ const NOTION_DB_ID = process.env.NOTION_MAS_DB_ID
     - Recibe: rich_text, iniciales del preparador
     - Sugerencias: rich_text
 */
+
+/**
+ * isParticipantInDB()
+ * This function checks if the participant with the given initials is in the database.
+ * @param {String} initials . Initials of the participant.
+ * @returns {Boolean}
+ */
+export const isParticipantInDB = async (initials) => {
+    try {
+        // We get the participant with the given initials.
+        const response = await notion.databases.query({
+            database_id: NOTION_DB_ID,
+            filter: {
+                property: INITIALS,
+                title: {
+                    equals: initials
+                }
+            }
+        })
+        // We check if the participant is in the database.
+        return response.results.length === 0
+    } catch (error) {
+        console.log("Error en isParticipantInDB")
+        console.error(error)
+    }
+}
 
 /**
  * findPreparer()
@@ -85,6 +111,25 @@ export const preparerGivesTo = async (initials) => {
         return receiver
     } catch (error) {
         console.log("Error en preparerGivesTo")
+        console.error(error)
+    }
+}
+
+/**
+ * getSuggestions()
+ * This function returns the suggestions of the preparer with the given initials.
+ * @param {String} initials . Initials of the preparer.
+ * @returns {String} . Suggestions of the preparer with the given initials.
+ */
+export const getSuggestions = async (initials) => {
+    try {
+        // We get the preparer with the given initials.
+        const preparer = await findPreparer(initials)
+        // We get the suggestions of the preparer.
+        const suggestions = preparer.properties[SUGGESTION].rich_text
+        return suggestions
+    } catch (error) {
+        console.log("Error en getSuggestions")
         console.error(error)
     }
 }

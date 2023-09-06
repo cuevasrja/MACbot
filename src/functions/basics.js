@@ -6,11 +6,12 @@ import bot from '../settings/app.js';
 // ---------------------------------------------------------------------------------------------------- //
 import dotenv from 'dotenv';
 import { PARSE, PRIVATE_CHAT } from '../constants/botSettings.js';
-import { preparerGivesTo, showTeamMembers } from '../notion/readMAS.js';
+import { getSuggestions, isParticipantInDB, preparerGivesTo, showTeamMembers } from '../notion/readMAS.js';
 import { BLOCKS_HOURS, weekDays } from '../constants/notionProps.js';
 import { taquillaSchedule } from '../notion/readTaquilla.js';
 import { getAllPreparadores, getPreparadorByTelegramID, verifyPreparadorID } from '../models/preparadorModel.js';
-import { registerInvitado } from '../models/invitadosMASModel.js';
+import { getInvitadoByTelegramID, registerInvitado, removeInvitado, searchTelegramID } from '../models/invitadosMASModel.js';
+import { startMAS } from '../notion/modifyMAS.js';
 dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
@@ -64,6 +65,14 @@ bot.onText(/^\/hostname/, msg => {
 	});
 });
 
+const MASMesssage = async (name) => {
+	const teamMembers = await showTeamMembers(name)
+	const givesTo = await preparerGivesTo(name)
+	let response = `El equipo de ${name} está conformado por: ${teamMembers.join(", ")}. \n`
+	response += `${name}, te toca regalarle a: ${givesTo} \n`
+	return response
+}
+
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /MAS command and sends a message with the team members of MAS.
 // ---------------------------------------------------------------------------------------------------- //
@@ -71,17 +80,50 @@ bot.onText(/^\/MAS/, async msg => {
 	const chatID = msg.chat.id
 	// We check if the user is a preparador or an invitado
 	// If the user is not a preparador or an invitado, we send a message and cancel the function
-	if (await verifyPreparadorID(chatID) && await verifyInvitadoID(chatID)) {
-		bot.sendMessage(chatID, "No eres preparador ni invitado, no puedes usar este comando")
+	if (await verifyInvitadoID(chatID)) {
+		bot.sendMessage(chatID, "No eres invitado, no puedes usar este comando")
 		return
 	}
-	// ? Participan todos los preparadores o solo los que están en el equipo de MAS?
-	// TODO: Enviar mensaje con los miembros del equipo de MAS, la persona a la que le regala y el regalo sugerido
+	const name = (await getInvitadoByTelegramID(chatID)).name
 
-	// const teamMembers = await showTeamMembers("JC")
-	// const givesTo = await preparerGivesTo("JC")
-	// const response = `El equipo de JC está conformado por: ${teamMembers.join(", ")}. Y JC le regala a ${givesTo}`
-	// bot.sendMessage(chatID, response)
+	if (await isParticipantInDB(name)) {
+		bot.sendMessage(chatID, "No estás registrado en la base de datos de MAS")
+		return
+	}
+
+	const suggestions = await getSuggestions(name)
+	let response = await MASMesssage(name)
+	response += `Te recomiendo regalarle: ${suggestions.length === 0 ? "Nada en particular" : suggestions}`
+	bot.sendMessage(chatID, response)
+})
+
+const teamMessage = async (team, teamName) => {
+	team.forEach(async (member) => {
+		const memberID = await searchTelegramID(member).telegram_id
+		let response = `Bienvenido al equipo ${teamName} de MAS. \n\n`
+		response += await MASMesssage(member) + "\n\n"
+		response += "Recuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
+		bot.sendMessage(memberID, response)
+	})
+}
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /MAS:start command and sends a message with the team members of MAS.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/MAS:start/, async msg => {
+	const chatID = msg.chat.id
+	// We check if the user is the jefe
+	const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === "JZ").telegram_id
+	// If the user is not the jefe, we send a message and cancel the function
+	if (chatID !== jefeChatID) {
+		bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+		return
+	}
+	const { teamA, teamB } = await startMAS()
+	console.log("Se ha iniciado el sorteo de MAS")
+	teamMessage(teamA, "A")
+	teamMessage(teamB, "B")
+	console.log("Se ha enviado el mensaje a los equipos")
 })
 
 let isMASActive = false
@@ -118,6 +160,24 @@ bot.onText(/^\/MAS:add (.+)/, async (msg, match) => {
 	// We register the new member in the database
 	registerInvitado({ telegram_id: chatID, name })
 	bot.sendMessage(chatID, `Se ha registrado a ${name} como miembro de MAS`)
+})
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /MAS:remove command and removes a member from the list of members of MAS with the telegram id.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/MAS:remove/, async msg => {
+	const chatID = msg.chat.id
+	// We check if MAS registration is active
+	if (!isMASActive) {
+		bot.sendMessage(chatID, "El registro de MAS está inactivo")
+		return
+	}
+	// We get the name of the member
+	const name = (await getInvitadoByTelegramID(chatID)).name
+	// We remove the member from the database
+	removeInvitado(chatID)
+	bot.sendMessage(chatID, `Se ha eliminado a ${name} de la lista de miembros de MAS`)
+	console.log(`Se ha eliminado a ${name} de la lista de miembros de MAS`)
 })
 
 const taquillaScheduleMessage = async () => {

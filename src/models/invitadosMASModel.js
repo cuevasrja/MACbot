@@ -40,21 +40,61 @@ export async function registerInvitado(telegramData) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "invitado_mas" WHERE telegram_firstname = ###.
+// REMOVE FROM "invitado_mas" WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
-export async function searchTelegramID(telegram_firstname) {
+export async function removeInvitado(telegram_id) {
+    console.log(`**Query 'removeInvitado' in invitadosMASModel.`);
+    let sql = `delete from "invitado_mas" where telegram_id = ${telegram_id}`;
+
+    await pool.query(sql).catch(err => {
+        throw new Error(
+            `There was an error in the user registration query with the telegram_id: ${telegram_id} - 'invitadosMASModel'`,
+            err
+        );
+    });
+}
+
+// ---------------------------------------------------------------------------------------------------- //
+// SELECT * FROM "invitado_mas" WHERE name = ###.
+// ---------------------------------------------------------------------------------------------------- //
+export async function searchTelegramID(name) {
     console.log(`**Query 'searchTelegramID' in invitadosMASModel.`);
 
-    let sql = `select * from "invitado_mas" where telegram_firstname = '${telegram_firstname}'`;
+    let sql = `select * from "invitado_mas" where name = '${name}'`;
 
     let resultado = await pool.query(sql).catch(err => {
         throw new Error(
-            `There was an error in the user registration query with the telegram_firstname: ${telegram_firstname} - 'invitadosMASModel'`,
+            `There was an error in the user registration query with the name: ${name} - 'invitadosMASModel'`,
             err
         );
     });
 
     // The function 'searchTelegramID' must return: 
+    // [Object] {
+    //				- telegram_id
+    //				- user_id
+    //				- name
+    //			 }
+
+    return resultado.rows[0]
+}
+
+// ---------------------------------------------------------------------------------------------------- //
+// SELECT * FROM "invitado_mas" WHERE telegram_id = ###.
+// ---------------------------------------------------------------------------------------------------- //
+export async function getInvitadoByTelegramID(telegram_id) {
+    console.log(`**Query 'getInvitadoByTelegramID' in invitadosMASModel.`);
+
+    let sql = `select * from "invitado_mas" where telegram_id = ${telegram_id}`;
+
+    let resultado = await pool.query(sql).catch(err => {
+        throw new Error(
+            `There was an error in the user registration query with the telegram_id: ${telegram_id} - 'invitadosMASModel'`,
+            err
+        );
+    });
+
+    // The function 'getInvitadoByTelegramID' must return: 
     // [Object] {
     //				- telegram_id
     //				- user_id
