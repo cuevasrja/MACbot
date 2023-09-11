@@ -36,20 +36,20 @@ NOTA: Si no tienes instalado Docker, puedes seguir la guía de instalación [_aq
 Puedes correr el bot en el entorno de desarrollo o en el de producción. Simplemente especifica el entorno en la variable de entorno `NODE_ENV` en el archivo `.env`. Para correr el bot en el entorno de desarrollo, debes especificar `development` y para el de producción, `production`.
 
 ```bash
-docker-compose build
-docker-compose up -d
+docker compose build
+docker compose up -d
 ```
 
 Para ver los logs del bot puedes usar el siguiente comando:
 
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 Finalmente, para detener el bot puedes usar el siguiente comando:
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### **Development**
