@@ -29,9 +29,9 @@ bot.onText(/^\/MAS/, async msg => {
 let isMASPlaying = false
 
 // ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS:start command and sends a message with the team members of MAS.
+// The bot listens to the /MAS@start command and sends a message with the team members of MAS.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS:start/, async msg => {
+bot.onText(/^\/MAS@start/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
     // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
@@ -49,9 +49,9 @@ bot.onText(/^\/MAS:start/, async msg => {
 })
 
 // ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS:stop command and sends a message with the team members of MAS.
+// The bot listens to the /MAS@stop command and sends a message with the team members of MAS.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS:stop/, async msg => {
+bot.onText(/^\/MAS@stop/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
     // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
@@ -68,9 +68,9 @@ bot.onText(/^\/MAS:stop/, async msg => {
 let isMASActive = false
 
 // ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS:switch command and switches the MAS state.
+// The bot listens to the /MAS@switch command and switches the MAS state.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS:switch/, async msg => {
+bot.onText(/^\/MAS@switch/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
     // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
@@ -85,9 +85,9 @@ bot.onText(/^\/MAS:switch/, async msg => {
 })
 
 // ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS:add [name] command and adds a new member to the list of members of MAS.
+// The bot listens to the /MAS@add [name] command and adds a new member to the list of members of MAS.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS:add (.+)/, async (msg, match) => {
+bot.onText(/^\/MAS@add (.+)/, async (msg, match) => {
     const chatID = msg.chat.id
     // We check if MAS registration is active
     if (!isMASActive) {
@@ -123,9 +123,9 @@ bot.onText(/^\/MAS:add (.+)/, async (msg, match) => {
 })
 
 // ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS:remove command and removes a member from the list of members of MAS with the telegram id.
+// The bot listens to the /MAS@remove command and removes a member from the list of members of MAS with the telegram id.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS:remove/, async msg => {
+bot.onText(/^\/MAS@remove/, async msg => {
     const chatID = msg.chat.id
     // We check if MAS registration is active
     if (!isMASActive) {

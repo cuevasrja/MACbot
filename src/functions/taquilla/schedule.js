@@ -34,9 +34,9 @@ const taquillaScheduleMessage = async () => {
 let isTaquillaActive = true
 
 // ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /taquilla:switch command and switches the taquilla state.
+// The bot listens to the /taquilla@switch command and switches the taquilla state.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/taquilla:switch/, async msg => {
+bot.onText(/^\/taquilla@switch/, async msg => {
     const chatID = msg.chat.id
     console.log("Se va a ejecutar el comando /taquilla:switch")
     // We check if the user is the jefe

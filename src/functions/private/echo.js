@@ -1,3 +1,4 @@
+import { PARSE, PRIVATE_CHAT } from '../../constants/botSettings.js';
 import bot from '../../settings/app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -23,14 +24,14 @@ bot.onText(/^\/echo@admision (.+)/, async (msg, match) => {
 	let response = match[1];
 
 	// Check if the user writes to the bot in private, this causes the command not to work in groups.
-	if (chatType == 'private') {
+	if (chatType == PRIVATE_CHAT) {
 		if (fromID == ME_ID || fromID == AL_ID || fromID == JZ_ID) {
 			// Notify the preparer that the message will be sent after 5 seconds.
 			bot.sendMessage(
 				chatID,
 				`El siguiente mensaje será enviado dentro de *5 segundos* al grupo de *Admision MAC 2020*:\n\n${response}`,
 				{
-					parse_mode: 'Markdown',
+					parse_mode: PARSE,
 				}
 			);
 
@@ -47,7 +48,7 @@ bot.onText(/^\/echo@admision (.+)/, async (msg, match) => {
 				chatID,
 				`Lo siento, pero no tienes permisos para mandar un mensaje para Admision MAC 2020.`,
 				{
-					parse_mode: 'Markdown',
+					parse_mode: PARSE,
 				}
 			);
 		}
@@ -65,14 +66,14 @@ bot.onText(/^\/echo@telemac (.+)/, async (msg, match) => {
 	let response = match[1];
 
 	// Check if the user writes to the bot in private, this causes the command not to work in groups.
-	if (chatType == 'private') {
+	if (chatType == PRIVATE_CHAT) {
 		if (fromID == ME_ID) {
 			// Notify the preparer that the message will be sent after 5 seconds.
 			bot.sendMessage(
 				chatID,
 				`El siguiente mensaje será enviado dentro de *5 segundos* al grupo de *TeleMAC*:\n\n${response}`,
 				{
-					parse_mode: 'Markdown',
+					parse_mode: PARSE,
 				}
 			);
 
@@ -86,7 +87,7 @@ bot.onText(/^\/echo@telemac (.+)/, async (msg, match) => {
 		// message to the selected group.
 		else {
 			bot.sendMessage(chatID, `Lo siento, pero no tienes permisos para mandar un mensaje para TeleMAC.`, {
-				parse_mode: 'Markdown',
+				parse_mode: PARSE,
 			});
 		}
 	}

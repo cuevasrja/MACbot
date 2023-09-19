@@ -19,12 +19,11 @@ import './functions/start.js';
 import './functions/admission/admission.js';
 import './functions/admission/prenuevos.js';
 
-// // ---------------------------------------------------------------------------------------------------- //
-// // Private.
-// // ---------------------------------------------------------------------------------------------------- //
-// import './functions/private/echo.js';
-// import './functions/private/preparadores.js';
-// import './functions/private/taquilla.js';
+// ---------------------------------------------------------------------------------------------------- //
+// Private.
+// ---------------------------------------------------------------------------------------------------- //
+import './functions/private/echo.js';
+import './functions/private/preparadores.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Taquilla.
