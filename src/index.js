@@ -5,6 +5,8 @@ import './settings/app.js';
 import './settings/log_error.js';
 import './settings/timezone.js';
 
+// ! CADA VEZ QUE SE CREE UN ARCHIVO EN /src/functions PARA MANEJAR UNA FUNCIONALIDAD, SE TIENE QUE IMPORTAR AQUI
+
 // ---------------------------------------------------------------------------------------------------- //
 // Functionalities
 // ---------------------------------------------------------------------------------------------------- //
@@ -17,12 +19,22 @@ import './functions/start.js';
 import './functions/admission/admission.js';
 import './functions/admission/prenuevos.js';
 
+// // ---------------------------------------------------------------------------------------------------- //
+// // Private.
+// // ---------------------------------------------------------------------------------------------------- //
+// import './functions/private/echo.js';
+// import './functions/private/preparadores.js';
+// import './functions/private/taquilla.js';
+
 // ---------------------------------------------------------------------------------------------------- //
-// Private.
+// Taquilla.
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/private/echo.js';
-import './functions/private/preparadores.js';
-import './functions/private/taquilla.js';
+import './functions/taquilla/schedule.js';
+
+// ---------------------------------------------------------------------------------------------------- //
+// MAS.
+// ---------------------------------------------------------------------------------------------------- //
+import './functions/MAS/basicsMAS.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Development.

@@ -28,3 +28,5 @@ export const PREPARADORES = new Map([
 	[MO_ID, 'MO'],
 	[RL_ID, 'RL'],
 ]);
+
+export const JEFE = 'JZ';

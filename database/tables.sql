@@ -37,5 +37,9 @@ CREATE TABLE "invitado_mas" (
     user_id SERIAL NOT NULL UNIQUE,
     telegram_id BIGINT UNIQUE,
     name VARCHAR(50) UNIQUE,
+    checked BOOLEAN DEFAULT false,
+    team VARCHAR(50),
+    suggestion VARCHAR(200),
+    receive VARCHAR(50),
     PRIMARY KEY (telegram_id)
 );
