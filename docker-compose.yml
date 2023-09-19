@@ -1,6 +1,7 @@
 version: '3'
 services:
     postgres:
+        container_name: db_MACbot
         image: postgres:15-bookworm
         restart: always
         environment:
@@ -16,7 +17,8 @@ services:
         networks:
             - default
 
-    app:
+    macbot:
+        container_name: MACbot
         build:
             context: .
             dockerfile: Dockerfile
@@ -27,6 +29,7 @@ services:
         volumes:
             - ./src:/app/src
             - .env:/app/.env
+            - /etc/hostname:/etc/hostname
         depends_on:
             - postgres
         networks:
