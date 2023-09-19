@@ -295,6 +295,22 @@ export async function switchChecked(telegram_id) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
+// UPDATE "invitado_mas" SET checked = not checked WHERE name = ###.
+// ---------------------------------------------------------------------------------------------------- //
+export async function switchCheckedByName(name) {
+    console.log(`**Query 'switchCheckedByName' in invitadosMASModel.`);
+
+    let sql = `update "invitado_mas" set checked = not checked where name = '${name}'`;
+
+    await pool.query(sql).catch(err => {
+        throw new Error(
+            `There was an error in the user registration query with the name: ${name} - 'invitadosMASModel'`,
+            err
+        );
+    });
+}
+
+// ---------------------------------------------------------------------------------------------------- //
 // SELECT * FROM "invitado_mas" WHERE checked = ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function getCheckedInvitados(checked) {

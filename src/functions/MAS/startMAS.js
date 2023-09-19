@@ -1,4 +1,4 @@
-import { TEAM_A, TEAM_B } from "../../constants/infoMAS.js";
+import { TEAM_A, TEAM_B, questTime } from "../../constants/infoMAS.js";
 import { getInvitadoByName, showAllInvitados, updateRecieveAndTeamByName } from "../../models/invitadosMASModel.js";
 import bot from "../../settings/app.js";
 import { MASMesssage } from "./readMAS.js";
@@ -87,4 +87,31 @@ export const sendTeamMessage = async (team, teamName) => {
         response += "Recuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
         bot.sendMessage(memberID, response)
     })
+}
+
+const randomTrueFalse = () => {
+    return Math.random() < 0.5
+}
+
+export const MASQuest = async () => {
+    const invitados = await showAllInvitados()
+    const unchecked = invitados.filter(invitado => !invitado.checked)
+    const randomsUnchecked = randomSort(unchecked).slice(0, 3)
+    randomsUnchecked.forEach(async (invitado) => {
+        const name = invitado.name
+        const givesTo = await getInvitadoByName(invitado.recieve)
+        const desition = randomTrueFalse()
+        let oppositeTeam = randomSort(invitados.filter(opposite => opposite.team !== invitado.team))
+        if (!desition) {
+            oppositeTeam = oppositeTeam.filter(opposite => opposite.name !== givesTo.name)
+        }
+        const [first, second, third] = oppositeTeam.slice(0, 3)
+        bot.sendMessage(invitado.telegram_id, `¿Quién crees que es tu amigo invisible? (Selecciona una opción)`)
+        // TODO: Enviar botones con los tres posibles
+
+        switchCheckedByName(name)
+    })
+    setInterval(async () => {
+        await MASQuest()
+    }, questTime)
 }
