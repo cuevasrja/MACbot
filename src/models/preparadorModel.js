@@ -6,7 +6,7 @@ import pool from './connection.js';
 export async function verifyPreparadorID(telegram_id) {
 	console.log(`**Query 'verifyPreparadorID' in preparadoresModel.`);
 
-	let sql = `select * from "preparador" where telegram_id = ${telegram_id}`;
+	const sql = `select * from "preparador" where telegram_id = ${telegram_id}`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
@@ -29,7 +29,7 @@ export async function verifyPreparadorID(telegram_id) {
 export async function registerTelegramData(telegram_id, initials) {
 	console.log(`**Query 'registerTelegramID' in preparadoresModel.`);
 
-	let sql = `insert into "preparador" (telegram_id, initials) values (${telegram_id}, '${initials}')`;
+	const sql = `insert into "preparador" (telegram_id, initials) values (${telegram_id}, '${initials}')`;
 
 	await pool.query(sql).catch(err => {
 		throw new Error(
@@ -66,7 +66,7 @@ export async function registerAllPreparadores(PREPARADORES) {
 // SELECT * FROM "preparador"
 // ---------------------------------------------------------------------------------------------------- //
 export async function getAllPreparadores() {
-	let sql = `SELECT * from "preparador"`;
+	const sql = `SELECT * from "preparador"`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(`There was an error getting all preparadores - 'preparadoresModel'`, err);
@@ -85,7 +85,7 @@ export async function getAllPreparadores() {
 // SELECT * FROM "preparador" WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function getPreparadorByTelegramID(telegram_id) {
-	let sql = `SELECT * from "preparador" WHERE telegram_id = ${telegram_id}`;
+	const sql = `SELECT * from "preparador" WHERE telegram_id = ${telegram_id}`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
@@ -96,6 +96,28 @@ export async function getPreparadorByTelegramID(telegram_id) {
 
 	// The function 'getPreparadorByTelegramID' must return an object:
 	//	[Object] '{ 
+	//				user_id: #intValue,
+	//	 			telegram_id: #intValue,
+	//				initials: #stringValue,
+	//	 		 }'
+	return resultado.rows[0];
+}
+
+// ---------------------------------------------------------------------------------------------------- //
+// SELECT * FROM "preparador" WHERE initials = ###.
+// ---------------------------------------------------------------------------------------------------- //
+export async function getPreparadorByInitials(initials) {
+	const sql = `SELECT * from "preparador" WHERE initials = '${initials}'`;
+
+	let resultado = await pool.query(sql).catch(err => {
+		throw new Error(
+			`There was an error getting the preparador with the initials: ${initials} - 'preparadoresModel'`,
+			err
+		);
+	});
+
+	// The function 'getPreparadorByInitials' must return an object:
+	//	[Object] '{
 	//				user_id: #intValue,
 	//	 			telegram_id: #intValue,
 	//				initials: #stringValue,

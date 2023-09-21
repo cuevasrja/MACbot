@@ -1,6 +1,7 @@
 import { TEAM_A, TEAM_B, questTime } from "../../constants/infoMAS.js";
 import { getInvitadoByName, showAllInvitados, updateRecieveAndTeamByName } from "../../models/invitadosMASModel.js";
 import bot from "../../settings/app.js";
+import { MASPlayingStatus } from "./basicsMAS.js";
 import { MASMesssage } from "./readMAS.js";
 
 /**
@@ -79,6 +80,12 @@ export const teamMessage = (teamA, teamB) => {
     }
 }
 
+/**
+ * sendTeamMessage()
+ * This function sends a message to each participant with the team they are in and the participant they have to give a gift to.
+ * @param {String[]} team . Array of strings with the names of the participants in the team.
+ * @param {String} teamName . String with the name of the team.
+ */
 export const sendTeamMessage = async (team, teamName) => {
     team.forEach(async (member) => {
         const memberID = await getInvitadoByName(member).telegram_id
@@ -89,11 +96,18 @@ export const sendTeamMessage = async (team, teamName) => {
     })
 }
 
+/**
+ * randomTrueFalse()
+ * This function returns a random boolean.
+ * @returns {Boolean}
+ */
 const randomTrueFalse = () => {
     return Math.random() < 0.5
 }
 
 export const MASQuest = async () => {
+    // We check if the MAS is active
+    if (!MASPlayingStatus()) return
     const invitados = await showAllInvitados()
     const unchecked = invitados.filter(invitado => !invitado.checked)
     const randomsUnchecked = randomSort(unchecked).slice(0, 3)
@@ -106,8 +120,9 @@ export const MASQuest = async () => {
             oppositeTeam = oppositeTeam.filter(opposite => opposite.name !== givesTo.name)
         }
         const [first, second, third] = oppositeTeam.slice(0, 3)
+
+        // TODO: Enviar botones con los tres posibles nombres
         bot.sendMessage(invitado.telegram_id, `¿Quién crees que es tu amigo invisible? (Selecciona una opción)`)
-        // TODO: Enviar botones con los tres posibles
 
         switchCheckedByName(name)
     })

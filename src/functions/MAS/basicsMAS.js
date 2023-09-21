@@ -7,29 +7,9 @@ import bot from "../../settings/app.js"
 import { MASMesssage, getTeams } from "./readMAS.js"
 import { MASQuest, sendTeamMessage, startMAS } from "./startMAS.js"
 
-// ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS command and sends a message with the team members of MAS.
-// ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS/, async msg => {
-    const chatID = msg.chat.id
-    // We check if the user is a preparador or an invitado
-    // If the user is not a preparador or an invitado, we send a message and cancel the function
-    if (await verifyInvitadoID(chatID)) {
-        bot.sendMessage(chatID, "No eres invitado, no puedes usar este comando")
-        return
-    }
-    const invitado = await getInvitadoByTelegramID(chatID)
-    const name = invitado.name
-    const givesTo = invitado.recieve
-    const suggestions = (await getInvitadoByName(givesTo)).suggestion
-    let response = await MASMesssage(name)
-    response += `Te recomiendo regalarle: ${suggestions.length === 0 ? "Nada en particular" : suggestions}`
-    response += `\n\nA ti te gustaria que te regalen: ${invitado.suggestion.length === 0 ? "Nada en particular" : invitado.suggestion}`
-    response += "\n\nRecuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
-    bot.sendMessage(chatID, response)
-})
-
 let isMASPlaying = false
+
+export const MASPlayingStatus = () => isMASPlaying
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /MAS@start command and sends a message with the team members of MAS.
@@ -55,10 +35,12 @@ bot.onText(/^\/MAS@start/, async msg => {
     sendTeamMessage(teamB, TEAM_B)
     console.log("Se ha enviado el mensaje a los equipos")
 
-    // Cada 15 minutos se les pregunta a 3 personas al azar quien creen que es su amigo invisible
-    setInterval(async () => {
-        await MASQuest()
-    }, questTime)
+    // TODO: La funcion MASQuest() no funciona correctamente (no se envian los mensajes con las opciones de respuesta)
+    // TODO: Terminar la funcion MASQuest() y descomentar el setInterval. (/src/functions/MAS/startMAS.js)
+    // // Cada 15 minutos se les pregunta a 3 personas al azar quien creen que es su amigo invisible
+    // setInterval(async () => {
+    //     await MASQuest()
+    // }, questTime)
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -244,4 +226,32 @@ bot.onText(/^\/MAS@help/, async msg => {
         return
     }
     bot.sendMessage(chatID, rules)
+})
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /MAS command and sends a message with the team members of MAS.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/MAS$/, async msg => {
+    const chatID = msg.chat.id
+    // We check if the user is a preparador or an invitado
+    // If the user is not a preparador or an invitado, we send a message and cancel the function
+    if (await verifyInvitadoID(chatID)) {
+        bot.sendMessage(chatID, "No eres invitado, no puedes usar este comando")
+        return
+    }
+    // We check if MAS is already playing
+    if (!isMASPlaying) {
+        bot.sendMessage(chatID, "MAS no está jugando")
+        return
+    }
+    // We get the invitado
+    const invitado = await getInvitadoByTelegramID(chatID)
+    const name = invitado.name
+    const givesTo = invitado.recieve
+    const suggestions = (await getInvitadoByName(givesTo)).suggestion
+    let response = await MASMesssage(name)
+    response += `Te recomiendo regalarle: ${suggestions.length === 0 ? "Nada en particular" : suggestions}`
+    response += `\n\nA ti te gustaria que te regalen: ${invitado.suggestion.length === 0 ? "Nada en particular" : invitado.suggestion}`
+    response += "\n\nRecuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
+    bot.sendMessage(chatID, response)
 })
