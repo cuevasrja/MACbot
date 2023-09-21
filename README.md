@@ -40,13 +40,19 @@ docker compose build
 docker compose up -d
 ```
 
-Para ver los logs del bot puedes usar el siguiente comando:
+- Para ver los logs del bot y la bd en conjunto, puedes usar el siguiente comando:
 
 ```bash
 docker compose logs -f
 ```
+- Para ver los logs del bot y la bd por separado:
 
-Finalmente, para detener el bot puedes usar el siguiente comando:
+```bash
+docker compose logs -f macbot
+docker compose logs -f postgres
+```
+
+- Finalmente, para detener el bot puedes usar el siguiente comando:
 
 ```bash
 docker compose down
