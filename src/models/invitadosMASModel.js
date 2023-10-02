@@ -49,14 +49,14 @@ export async function verifyInvitadoName(name) {
 // ---------------------------------------------------------------------------------------------------- //
 // INSERT INTO "invitado_mas" (telegram_id, name) values ###.
 // ---------------------------------------------------------------------------------------------------- //
-export async function registerInvitado(telegramData) {
+export async function registerInvitado(telegram_id, name) {
     console.log(`**Query 'registerInvitado' in invitadosMASModel.`);
 
-    let sql = `insert into "invitado_mas" (telegram_id, name) values (${telegramData.telegram_id}, '${telegramData.name}')`;
+    let sql = `insert into "invitado_mas" (telegram_id, name) values (${telegram_id}, '${name}')`;
 
     await pool.query(sql).catch(err => {
         throw new Error(
-            `There was an error in the user registration query with the telegram_id: ${telegramData.telegram_id} - 'invitadosMASModel'`,
+            `There was an error in the user registration query with the telegram_id: ${telegram_id} - 'invitadosMASModel'`,
             err
         );
     });
@@ -100,6 +100,7 @@ export async function getInvitadoByName(name) {
     //              - team (String)
     //              - checked (Boolean)
     //              - suggestion (String)
+    //              - receive (String)
     //			 }
 
     return resultado.rows[0]
@@ -128,6 +129,7 @@ export async function getInvitadoByTelegramID(telegram_id) {
     //              - team (String)
     //              - checked (Boolean)
     //              - suggestion (String)
+    //              - receive (String)
     //			 }
 
     return resultado.rows[0]
@@ -160,6 +162,7 @@ export async function showAllInvitados() {
     //                  - team (String)
     //                  - checked (Boolean)
     //                  - suggestion (String)
+    //                  - receive (String)
     //              }
     //			 }
     return resultado.rows;
@@ -192,6 +195,7 @@ export async function getInvitadosByTeam(team) {
     //                  - team (String). The same as the parameter.
     //                  - checked (Boolean)
     //                  - suggestion (String)
+    //                  - receive (String)
     //              }
     //			 }
     return resultado.rows;
@@ -230,68 +234,47 @@ export async function updateTeamByName(name, team) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
-// UPDATE "invitado_mas" SET recieve = ### WHERE telegram_id = ###.
+// UPDATE "invitado_mas" SET receive = ###, team = ### WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
-export async function updateRecieve(telegram_id, recieve) {
-    console.log(`**Query 'updateRecieve' in invitadosMASModel.`);
+export async function updateRecord(id, receiveValue, teamValue) {
+    console.log(`**Query 'updateRecord' in invitadosMASModel.`);
+    // get a connection from the pool
+    const client = await pool.connect();
 
-    let sql = `update "invitado_mas" set recieve = ${recieve} where telegram_id = ${telegram_id}`;
-
-    await pool.query(sql).catch(err => {
+    try {
+        // update the record with the given id
+        await client.query('UPDATE "invitado_mas" SET receive = $1, team = $2 WHERE telegram_id  = $3', [receiveValue, teamValue, id]);
+    } catch (err) {
         throw new Error(
-            `There was an error in the user registration query with the telegram_id: ${telegram_id} - 'invitadosMASModel'`,
+            `There was an error in the user registration query with the id: ${id} - 'invitadosMASModel'`,
             err
         );
-    });
+    } finally {
+        // release the connection back to the pool
+        client.release();
+    }
 }
-
-// ---------------------------------------------------------------------------------------------------- //
-// UPDATE "invitado_mas" SET recieve = ### WHERE name = ###.
-// ---------------------------------------------------------------------------------------------------- //
-export async function updateRecieveByName(name, recieve) {
-    console.log(`**Query 'updateRecieveByName' in invitadosMASModel.`);
-
-    let sql = `update "invitado_mas" set recieve = ${recieve} where name = '${name}'`;
-
-    await pool.query(sql).catch(err => {
-        throw new Error(
-            `There was an error in the user registration query with the name: ${name} - 'invitadosMASModel'`,
-            err
-        );
-    });
-}
-
-// ---------------------------------------------------------------------------------------------------- //
-// UPDATE "invitado_mas" SET recieve = ###, team = ### WHERE name = ###.
-// ---------------------------------------------------------------------------------------------------- //
-export async function updateRecieveAndTeamByName(name, recieve, team) {
-    console.log(`**Query 'updateRecieveAndTeamByName' in invitadosMASModel.`);
-
-    let sql = `update "invitado_mas" set recieve = ${recieve}, team = '${team}' where name = '${name}'`;
-
-    await pool.query(sql).catch(err => {
-        throw new Error(
-            `There was an error in the user registration query with the name: ${name} - 'invitadosMASModel'`,
-            err
-        );
-    });
-}
-
 
 // ---------------------------------------------------------------------------------------------------- //
 // UPDATE "invitado_mas" SET checked = not checked WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function switchChecked(telegram_id) {
     console.log(`**Query 'switchChecked' in invitadosMASModel.`);
+    // get a connection from the pool
+    const client = await pool.connect();
 
-    let sql = `update "invitado_mas" set checked = not checked where telegram_id = ${telegram_id}`;
-
-    await pool.query(sql).catch(err => {
+    try {
+        // update the record with the given id
+        await client.query('UPDATE "invitado_mas" SET checked = not checked WHERE telegram_id  = $1', [telegram_id]);
+    } catch (err) {
         throw new Error(
             `There was an error in the user registration query with the telegram_id: ${telegram_id} - 'invitadosMASModel'`,
             err
         );
-    });
+    } finally {
+        // release the connection back to the pool
+        client.release();
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -299,47 +282,21 @@ export async function switchChecked(telegram_id) {
 // ---------------------------------------------------------------------------------------------------- //
 export async function switchCheckedByName(name) {
     console.log(`**Query 'switchCheckedByName' in invitadosMASModel.`);
+    // get a connection from the pool
+    const client = await pool.connect();
 
-    let sql = `update "invitado_mas" set checked = not checked where name = '${name}'`;
-
-    await pool.query(sql).catch(err => {
+    try {
+        // update the record with the given id
+        await client.query('UPDATE "invitado_mas" SET checked = not checked WHERE name  = $1', [name]);
+    } catch (err) {
         throw new Error(
             `There was an error in the user registration query with the name: ${name} - 'invitadosMASModel'`,
             err
         );
-    });
-}
-
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "invitado_mas" WHERE checked = ###.
-// ---------------------------------------------------------------------------------------------------- //
-export async function getCheckedInvitados(checked) {
-    console.log(`**Query 'getCheckedInvitados' in invitadosMASModel.`);
-
-    let sql = `select * from "invitado_mas" where checked = ${checked}`;
-
-    let resultado = await pool.query(sql).catch(err => {
-        throw new Error(
-            `There was an error in the user registration query with the checked: ${checked} - 'invitadosMASModel'`,
-            err
-        );
-    });
-
-    // The function 'getCheckedInvitados' must return: 
-    // [Array] {
-    //				- Each position of the array is a user.
-    //				- Each user is an object.
-    //				- Each object has the following properties:
-    //              [Object] {
-    //					- telegram_id (Int)
-    //					- user_id (Int)
-    //					- name (String)
-    //                  - team (String)
-    //                  - checked (Boolean). The same as the parameter.
-    //                  - suggestion (String)
-    //              }
-    //			 }
-    return resultado.rows;
+    } finally {
+        // release the connection back to the pool
+        client.release();
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -347,15 +304,21 @@ export async function getCheckedInvitados(checked) {
 // ---------------------------------------------------------------------------------------------------- //
 export async function updateSuggestion(telegram_id, suggestion) {
     console.log(`**Query 'updateSuggestion' in invitadosMASModel.`);
+    // get a connection from the pool
+    const client = await pool.connect();
 
-    let sql = `update "invitado_mas" set suggestion = '${suggestion}' where telegram_id = ${telegram_id}`;
-
-    await pool.query(sql).catch(err => {
+    try {
+        // update the record with the given id
+        await client.query('UPDATE "invitado_mas" SET suggestion = $1 WHERE telegram_id  = $2', [suggestion, telegram_id]);
+    } catch (err) {
         throw new Error(
             `There was an error in the user registration query with the telegram_id: ${telegram_id} - 'invitadosMASModel'`,
             err
         );
-    });
+    } finally {
+        // release the connection back to the pool
+        client.release();
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -363,15 +326,21 @@ export async function updateSuggestion(telegram_id, suggestion) {
 // ---------------------------------------------------------------------------------------------------- //
 export async function updateSuggestionByName(name, suggestion) {
     console.log(`**Query 'updateSuggestionByName' in invitadosMASModel.`);
+    // get a connection from the pool
+    const client = await pool.connect();
 
-    let sql = `update "invitado_mas" set suggestion = '${suggestion}' where name = '${name}'`;
-
-    await pool.query(sql).catch(err => {
+    try {
+        // update the record with the given id
+        await client.query('UPDATE "invitado_mas" SET suggestion = $1 WHERE name  = $2', [suggestion, name]);
+    } catch (err) {
         throw new Error(
             `There was an error in the user registration query with the name: ${name} - 'invitadosMASModel'`,
             err
         );
-    });
+    } finally {
+        // release the connection back to the pool
+        client.release();
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------- //

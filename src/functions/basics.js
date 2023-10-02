@@ -74,7 +74,7 @@ bot.onText(/^\/hostname/, async msg => {
 bot.onText(/^\/help/, msg => {
 	const chatID = msg.chat.id;
 	// ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
-	bot.sendMessage(chatID, commandsHelp)
+	bot.sendMessage(chatID, commandsHelp, { parse_mode: PARSE });
 })
 
 // bot.onText(/^\/taquilla/, msg => {

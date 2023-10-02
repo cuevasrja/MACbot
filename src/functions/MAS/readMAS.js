@@ -10,7 +10,7 @@ import { getInvitadoByName, getInvitadosByTeam, showAllInvitados } from "../../m
 export const MASMesssage = async (name) => {
     const invitado = await getInvitadoByName(name)
     const teamMembers = (await getInvitadosByTeam(invitado.team)).map(invitado => invitado.name)
-    const givesTo = invitado.recieve
+    const givesTo = invitado.receive
     let response = `El equipo de ${name} está conformado por: ${teamMembers.join(", ")}. \n`
     response += `${name}, te toca regalarle a: ${givesTo} \n`
     return response
