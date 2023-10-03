@@ -33,8 +33,8 @@ bot.onText(/^\/MAS@start/, async msg => {
     const teamB = teams[1]
     isMASPlaying = true
     console.log("Se ha iniciado el sorteo de MAS")
-    sendTeamMessage(teamA, TEAM_A)
-    sendTeamMessage(teamB, TEAM_B)
+    await sendTeamMessage(teamA, TEAM_A)
+    await sendTeamMessage(teamB, TEAM_B)
     console.log("Se ha enviado el mensaje a los equipos")
 
     // Every ${questTime} milliseconds, we send a message to the jefe with the number of participants in MAS.
@@ -123,6 +123,11 @@ bot.onText(/^\/MAS@switch/, async msg => {
 // ---------------------------------------------------------------------------------------------------- //
 bot.onText(/^\/MAS@add (.+)/, async (msg, match) => {
     const chatID = msg.chat.id
+    // We check if MAS is already playing
+    if (isMASPlaying) {
+        bot.sendMessage(chatID, "MAS ya está jugando")
+        return
+    }
     // We check if MAS registration is active
     if (!isMASActive) {
         bot.sendMessage(chatID, "El registro de MAS está inactivo")
@@ -161,6 +166,11 @@ bot.onText(/^\/MAS@add (.+)/, async (msg, match) => {
 // ---------------------------------------------------------------------------------------------------- //
 bot.onText(/^\/MAS@remove/, async msg => {
     const chatID = msg.chat.id
+    // We check if MAS is already playing
+    if (isMASPlaying) {
+        bot.sendMessage(chatID, "MAS ya está jugando")
+        return
+    }
     // We check if MAS registration is active
     if (!isMASActive) {
         bot.sendMessage(chatID, "El registro de MAS está inactivo")
@@ -304,6 +314,19 @@ bot.onText(/^\/MAS@clean/, async msg => {
 
 
 // // ---------------------------------------------------------------------------------------------------- //
+// // The bot listens to the /MAS@prueba command and insert preparadores in the database.
+// // ---------------------------------------------------------------------------------------------------- //
+// bot.onText(/^\/MAS@prueba/, async msg => {
+//     const chatID = msg.chat.id
+//     const preparadores = await getAllPreparadores()
+//     const preparadoresToInsert = preparadores.filter(preparador => preparador.initials === 'JZ' || preparador.initials === 'JC' || preparador.initials === 'IC' || preparador.initials === 'CW')
+//     preparadoresToInsert.forEach(async preparador => {
+//         await registerInvitado(preparador.telegram_id, preparador.initials)
+//     })
+//     bot.sendMessage(chatID, "Se han insertado los preparadores en la base de datos")
+// })
+
+// // ---------------------------------------------------------------------------------------------------- //
 // // The bot listens to the /MAS@dev command and sends a message with the team members of MAS. (Command for development, please comment this command if it's not necessary)
 // // ---------------------------------------------------------------------------------------------------- //
 // bot.onText(/^\/MAS@dev/, async msg => {
@@ -320,8 +343,8 @@ bot.onText(/^\/MAS@clean/, async msg => {
 //     const teamB = teams[1]
 //     isMASPlaying = true
 //     console.log("Se ha iniciado el sorteo de MAS")
-//     sendTeamMessage(teamA, TEAM_A)
-//     sendTeamMessage(teamB, TEAM_B)
+//     await sendTeamMessage(teamA, TEAM_A)
+//     await sendTeamMessage(teamB, TEAM_B)
 //     console.log("Se ha enviado el mensaje a los equipos")
 // })
 

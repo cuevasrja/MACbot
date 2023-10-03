@@ -94,7 +94,7 @@ export const sendTeamMessage = async (team, teamName) => {
     team.forEach(async (member) => {
         const memberID = (await getInvitadoByName(member)).telegram_id
         let response = `Bienvenido al equipo ${teamName} de MAS. \n\n`
-        response += await MASMesssage(member) + "\n\n"
+        response += (await MASMesssage(member)) + "\n\n"
         response += "Recuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
         bot.sendMessage(memberID, response)
     })
