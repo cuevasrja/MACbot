@@ -13,8 +13,14 @@ const taquillaScheduleMessage = async () => {
     const schedule = await taquillaSchedule()
     // We build the response
     let response = `El horario de taquilla hoy (${weekDays[day - 1]}) es: \n`
+    let reunion = ""
     // We iterate over the schedule. First, we take each preparer and their blocks
     for (const [preparer, block] of Object.entries(schedule)) {
+        // We check if the block is a meeting
+        if (preparer === "REUNION") {
+            reunion += `Hoy hay reunión a las ${BLOCKS_HOURS[block[0] - 1]}\n`
+            continue
+        }
         // We iterate over the blocks
         block.forEach((time, index) => {
             // We convert time to a int
@@ -26,7 +32,8 @@ const taquillaScheduleMessage = async () => {
             }
         })
     }
-    response += "Recuerda que si no puedes ir a taquilla, debes avisar con tiempo"
+    response += "\n" + reunion
+    response += "\n Recuerda que si no puedes ir a taquilla, debes avisar con tiempo"
     return response
 }
 
