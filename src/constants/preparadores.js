@@ -15,6 +15,8 @@ const LP_ID = process.env.LP_ID || undefined;
 const MO_ID = process.env.MO_ID || undefined;
 const RL_ID = process.env.RL_ID || undefined;
 const KIM_ID = process.env.KIM_ID || undefined;
+const AH_ID = process.env.AH_ID || undefined;
+const NG_ID = process.env.NG_ID || undefined;
 
 // Create a map of the preparadores.
 export const PREPARADORES = new Map([
@@ -28,7 +30,9 @@ export const PREPARADORES = new Map([
 	[LP_ID, 'LP'],
 	[MO_ID, 'MO'],
 	[RL_ID, 'RL'],
-	[KIM_ID, 'KG']
+	[KIM_ID, 'KG'],
+	[AH_ID, 'AH'],
+	[NG_ID, 'NG']
 ]);
 
 export const JEFE = 'JZ';
