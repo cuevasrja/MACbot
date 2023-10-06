@@ -14,6 +14,7 @@ _----------- Comandos de admision -----------_
 _--------- Comandos de Preparadores ---------_
 /hostname - Te devuelve el hostname del servidor.
 /taquilla - Te devuelve el horario de taquilla.
+/preparadores - Te devuelve la lista de preparadores.
 
 *Solo para el jefe*
 /taquilla@switch - Activa o desactiva la taquilla.
@@ -33,6 +34,7 @@ _----------- Comandos de Invitados -----------_
 /MAS@stop - Detiene el juego de MAC Amigo Secreto.
 /MAS@switch - Activa o desactiva el periodo de registro de MAC Amigo Secreto.
 /MAS@restart - Reinicia el juego de MAC Amigo Secreto en caso de que el bot se haya reiniciado o apagado.
+/MAS@echo [[mensaje]] - Envia un mensaje a todos los miembros de MAC Amigo Secreto.
 /MAS@show - Te devuelve la lista de miembros de MAC Amigo Secreto.
 /MAS@clean - Limpia la lista de miembros de MAC Amigo Secreto.
 `

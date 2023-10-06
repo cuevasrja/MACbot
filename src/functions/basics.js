@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 import { PARSE, PRIVATE_CHAT } from '../constants/botSettings.js';
 // ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
 import commandsHelp from './commandsHelp.js';
-import { verifyPreparadorID } from '../models/preparadorModel.js';
+import { getAllPreparadores, verifyPreparadorID } from '../models/preparadorModel.js';
 dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
@@ -77,7 +77,20 @@ bot.onText(/^\/help/, msg => {
 	bot.sendMessage(chatID, commandsHelp, { parse_mode: PARSE });
 })
 
-// bot.onText(/^\/taquilla/, msg => {
-// 	const chatID = msg.chat.id;
-// 	bot.sendMessage(chatID, "Funcionalidad en desarrollo")
-// })
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /preparadores command and sends a message with the list of preparadores.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/preparadores/, async msg => {
+	const chatID = msg.chat.id;
+	// We check if the user is preparador
+	if (await verifyPreparadorID(chatID)) {
+		bot.sendMessage(chatID, 'No eres preparador, no puedes usar este comando');
+		return;
+	}
+	// We get all the preparadores
+	const preparadores = (await getAllPreparadores())
+		.map(preparador => preparador.initials)
+		.join(', ');
+	// We send the message
+	bot.sendMessage(chatID, `Los preparadores son: ${preparadores}`);
+})

@@ -312,6 +312,30 @@ bot.onText(/^\/MAS@clean/, async msg => {
     bot.sendMessage(chatID, "Se han eliminado todos los participantes de MAS")
 })
 
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /MAS@echo [message] command and sends a message with the message to all the members of MAS.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
+    const chatID = msg.chat.id
+    // We check if the user is the jefe
+    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    // // If the user is not the jefe, we send a message and cancel the function
+    // if (chatID !== jefeChatID) {
+    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+    //     return
+    // }
+    // We get the message
+    const message = match.slice(1).join(" ").trim()
+    // We get the members of the teams
+    const invitados = await showAllInvitados()
+    // We send the message to all the members of MAS
+    invitados.forEach(invitado => {
+        bot.sendMessage(invitado.telegram_id, message)
+    })
+    // We send a message to the user to confirm that the message has been sent
+    bot.sendMessage(chatID, "Se ha enviado el mensaje a todos los participantes de MAS")
+})
+
 
 // // ---------------------------------------------------------------------------------------------------- //
 // // The bot listens to the /MAS@prueba command and insert preparadores in the database.
