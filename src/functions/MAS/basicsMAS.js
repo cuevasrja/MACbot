@@ -18,11 +18,11 @@ bot.onText(/^\/MAS@start/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
     // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    // If the user is not the jefe, we send a message and cancel the function
+    if (chatID !== jefeChatID) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
     // We check if MAS is already playing
     if (isMASPlaying) {
         bot.sendMessage(chatID, "MAS ya está jugando")
@@ -49,12 +49,12 @@ bot.onText(/^\/MAS@start/, async msg => {
 bot.onText(/^\/MAS@stop/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    // If the user is not the jefe, we send a message and cancel the function
+    if (chatID !== jefeChatID) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
     // We check if MAS is already playing
     if (!isMASPlaying) {
         bot.sendMessage(chatID, "MAS no está jugando")
@@ -107,12 +107,12 @@ let isMASActive = false
 bot.onText(/^\/MAS@switch/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    // If the user is not the jefe, we send a message and cancel the function
+    if (chatID !== jefeChatID) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
     isMASActive = !isMASActive
     const message = isMASActive ? "MAS activo" : "MAS inactivo"
     bot.sendMessage(chatID, message)
@@ -217,13 +217,13 @@ bot.onText(/^\/MAS@teams/, async msg => {
 // ---------------------------------------------------------------------------------------------------- //
 bot.onText(/^\/MAS@restart/, async msg => {
     const chatID = msg.chat.id
-    // // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    // We check if the user is the jefe
+    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    // If the user is not the jefe, we send a message and cancel the function
+    if (chatID !== jefeChatID) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
     isMASPlaying = true
     bot.sendMessage(chatID, "MAS ha sido reiniciado")
     console.log("MAS ha sido reiniciado")
@@ -278,12 +278,12 @@ bot.onText(/^\/MAS@help/, async msg => {
 bot.onText(/^\/MAS@show/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    // If the user is not the jefe, we send a message and cancel the function
+    if (chatID !== jefeChatID) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
     // We get the members of the teams
     const invitados = await showAllInvitados()
     let message = "Los participantes de MAS son: \n"
@@ -301,12 +301,12 @@ bot.onText(/^\/MAS@show/, async msg => {
 bot.onText(/^\/MAS@clean/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    // If the user is not the jefe, we send a message and cancel the function
+    if (chatID !== jefeChatID) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
     // We get the members of the teams
     await deleteAllInvitados()
     bot.sendMessage(chatID, "Se han eliminado todos los participantes de MAS")
@@ -318,12 +318,12 @@ bot.onText(/^\/MAS@clean/, async msg => {
 bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    // If the user is not the jefe, we send a message and cancel the function
+    if (chatID !== jefeChatID) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
     // We get the message
     const message = match.slice(1).join(" ").trim()
     // We get the members of the teams

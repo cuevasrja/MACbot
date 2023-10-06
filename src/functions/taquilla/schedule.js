@@ -40,12 +40,12 @@ bot.onText(/^\/taquilla@switch/, async msg => {
     const chatID = msg.chat.id
     console.log("Se va a ejecutar el comando /taquilla:switch")
     // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    // If the user is not the jefe, we send a message and cancel the function
+    if (chatID !== jefeChatID) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
     isTaquillaActive = !isTaquillaActive
     const message = isTaquillaActive ? "Taquilla abierta" : "Taquilla cerrada"
     bot.sendMessage(chatID, message)
