@@ -1,5 +1,5 @@
 import { BLOCKS_HOURS, weekDays } from "../../constants/notionProps.js";
-import { JEFE } from "../../constants/preparadores.js";
+import { isJefe } from "../../constants/preparadores.js";
 import { getAllPreparadores, getPreparadorByTelegramID, verifyPreparadorID } from "../../models/preparadorModel.js";
 import { taquillaDev, taquillaSchedule } from "../../notion/readTaquilla.js";
 import bot from "../../settings/app.js";
@@ -47,9 +47,9 @@ bot.onText(/^\/taquilla@switch/, async msg => {
     const chatID = msg.chat.id
     console.log("Se va a ejecutar el comando /taquilla:switch")
     // We check if the user is the jefe
-    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    console.log(chatID)
     // If the user is not the jefe, we send a message and cancel the function
-    if (chatID !== jefeChatID) {
+    if (!isJefe(chatID)) {
         bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
         return
     }

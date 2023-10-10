@@ -35,4 +35,5 @@ export const PREPARADORES = new Map([
 	[NG_ID, 'NG']
 ]);
 
-export const JEFE = 'JZ';
+// Check if a user is the jefe with the given id.
+export const isJefe = id => id === parseInt(JZ_ID);
