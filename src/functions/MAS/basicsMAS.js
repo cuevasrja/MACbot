@@ -17,7 +17,7 @@ export const MASPlayingStatus = () => isMASPlaying
 bot.onText(/^\/MAS@start/, async msg => {
     const chatID = msg.chat.id
     // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
+    const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
     // If the user is not the jefe, we send a message and cancel the function
     if (chatID !== jefeChatID) {
         bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")

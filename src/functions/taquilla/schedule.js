@@ -133,9 +133,10 @@ const sendMessage = async () => {
         }
         console.log(`Hoy es ${weekDays[day - 1]}`)
         // If it's a weekday, we get the schedule of the day
-        const schedule = await taquillaScshedule()
+        const schedule = await taquillaSchedule()
         // We get the IDs of the preparers of the day
-        const preparers = (await getAllPreparadores())
+        const allPreparers = await getAllPreparadores()
+        const preparers = allPreparers
             .map(preparer => [preparer.telegram_id, preparer.initials])
             .filter(preparer => Object.keys(schedule).includes(preparer[1]))
         // We send the message to each preparer
@@ -181,4 +182,5 @@ if (millisecondsToStart < 0) {
 // Every day at 8:00 am, we send the message
 setInterval(() => {
     sendMessage();
+    console.log("Se ha ejecutado el setInterval")
 }, millisecondsToStart);
