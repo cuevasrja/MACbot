@@ -133,7 +133,7 @@ const sendMessage = async () => {
         }
         console.log(`Hoy es ${weekDays[day - 1]}`)
         // If it's a weekday, we get the schedule of the day
-        const schedule = await taquillaScshedule()
+        const schedule = await taquillaSchedule()
         // We get the IDs of the preparers of the day
         const preparers = (await getAllPreparadores())
             .map(preparer => [preparer.telegram_id, preparer.initials])
