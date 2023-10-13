@@ -1,6 +1,6 @@
-export const TEAM_A = "Rojo"
+export const TEAM_A = "Aldeanos"
 
-export const TEAM_B = "Azul"
+export const TEAM_B = "Lobos"
 
 // The time is in milliseconds. 
 // So, to set a new time, you have to multiply the minutes by 60 seconds and by 1000 milliseconds.
