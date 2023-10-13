@@ -1,7 +1,7 @@
 import { TEAM_A, TEAM_B, questTime } from "../../constants/infoMAS.js"
-import { PREPARADORES, isJefe } from "../../constants/preparadores.js"
+import { isJefe } from "../../constants/preparadores.js"
 import rules from "../../messages/rulesMAS.js"
-import { deleteAllInvitados, getInvitadoByName, getInvitadoByTelegramID, registerInvitado, removeInvitado, showAllInvitados, updateSuggestion, verifyInvitadoID, verifyInvitadoName } from "../../models/invitadosMASModel.js"
+import { deleteAllInvitados, getInvitadoByTelegramID, registerInvitado, removeInvitado, showAllInvitados, updateSuggestion, verifyInvitadoID, verifyInvitadoName } from "../../models/invitadosMASModel.js"
 import { getAllPreparadores } from "../../models/preparadorModel.js"
 import bot from "../../settings/app.js"
 import { MASMesssage, getTeams } from "./readMAS.js"
@@ -28,13 +28,23 @@ bot.onText(/^\/MAS@start/, async msg => {
         bot.sendMessage(chatID, "MAS ya está jugando")
         return
     }
-    const teams = await startMAS()
-    const teamA = teams[0]
-    const teamB = teams[1]
+    // We get the invitados and check if are a minimum of 8 and an even number
+    let invitados = await showAllInvitados()
+    if (invitados.length < 8) {
+        bot.sendMessage(chatID, "No hay suficientes participantes para jugar a MAS")
+        return
+    }
+    if (invitados.length % 2 !== 0) {
+        bot.sendMessage(chatID, "El número de participantes no es par")
+        return
+    }
+    invitados = await showAllInvitados()
+    const teamA = invitados.filter(invitado => invitado.team === TEAM_A)
+    const teamB = invitados.filter(invitado => invitado.team === TEAM_B)
     isMASPlaying = true
     console.log("Se ha iniciado el sorteo de MAS")
-    await sendTeamMessage(teamA, TEAM_A)
-    await sendTeamMessage(teamB, TEAM_B)
+    sendTeamMessage(TEAM_A, teamA)
+    sendTeamMessage(TEAM_B, teamB)
     console.log("Se ha enviado el mensaje a los equipos")
 
     // Every ${questTime} milliseconds, we send a message to the jefe with the number of participants in MAS.
@@ -60,6 +70,13 @@ bot.onText(/^\/MAS@stop/, async msg => {
         bot.sendMessage(chatID, "MAS no está jugando")
         return
     }
+
+    const invitadosIDs = (await showAllInvitados()).map(invitado => invitado.telegram_id)
+    // We send a message to all the members of MAS
+    invitadosIDs.forEach(invitadoID => {
+        bot.sendMessage(invitadoID, "MAS ha terminado, gracias por participar!")
+    })
+
     isMASPlaying = false
     console.log("MAS ha terminado")
     // We send a message to the user to confirm if he wants to restart the database. 
@@ -336,19 +353,34 @@ bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
     bot.sendMessage(chatID, "Se ha enviado el mensaje a todos los participantes de MAS")
 })
 
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /MAS@quest command and sends the quest to the members of MAS.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/MAS@quest/, async msg => {
+    const chatID = msg.chat.id
+    await MASQuest()
+    bot.sendMessage(chatID, "Se ha enviado la quest")
+})
 
-// // ---------------------------------------------------------------------------------------------------- //
-// // The bot listens to the /MAS@prueba command and insert preparadores in the database.
-// // ---------------------------------------------------------------------------------------------------- //
-// bot.onText(/^\/MAS@prueba/, async msg => {
-//     const chatID = msg.chat.id
-//     const preparadores = await getAllPreparadores()
-//     const preparadoresToInsert = preparadores.filter(preparador => preparador.initials === 'JZ' || preparador.initials === 'JC' || preparador.initials === 'IC' || preparador.initials === 'CW')
-//     preparadoresToInsert.forEach(async preparador => {
-//         await registerInvitado(preparador.telegram_id, preparador.initials)
-//     })
-//     bot.sendMessage(chatID, "Se han insertado los preparadores en la base de datos")
-// })
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /MAS@prueba command and insert preparadores in the database.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/MAS@prueba/, async msg => {
+    const chatID = msg.chat.id
+    // If the user is not the jefe, we send a message and cancel the function
+    if (!isJefe(chatID)) {
+        bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
+        return
+    }
+    const preparadores = await getAllPreparadores()
+    const preparadoresToInsert = preparadores.filter(preparador => preparador.initials !== 'NG')
+    preparadoresToInsert.forEach(async preparador => {
+        console.log(preparador)
+        await registerInvitado(preparador.telegram_id, preparador.initials)
+    })
+    bot.sendMessage(chatID, "Se han insertado los preparadores en la base de datos")
+})
 
 // // ---------------------------------------------------------------------------------------------------- //
 // // The bot listens to the /MAS@dev command and sends a message with the team members of MAS. (Command for development, please comment this command if it's not necessary)
@@ -388,16 +420,18 @@ bot.onText(/^\/MAS$/, async msg => {
         bot.sendMessage(chatID, "MAS no está jugando")
         return
     }
-    // We get the invitado
-    const invitado = await getInvitadoByTelegramID(chatID)
-    console.log(invitado)
-    const name = invitado.name
-    const givesTo = invitado.receive
-    const givesToInfo = await getInvitadoByName(givesTo)
-    console.log(givesToInfo)
-    const suggestions = givesToInfo.suggestion
-    let response = await MASMesssage(name)
-    response += `Te recomiendo regalarle: ${suggestions.length === 0 ? "Nada en particular" : suggestions}`
+    // We get the invitados
+    const invitados = await showAllInvitados()
+    const invitado = invitados.find(invitado => invitado.telegram_id == chatID)
+    console.log("Invitado", invitado)
+    const givesTo = invitado?.receive
+    const givesToInfo = invitados.find(invitado => invitado.name == givesTo)
+    console.log("Regala a:", givesToInfo)
+    const suggestions = givesToInfo?.suggestion
+    const team = invitados.filter(inv => inv.team === invitado.team).map(invitado => invitado.name)
+    let response = MASMesssage(invitado, team)
+
+    response += `Te recomiendo regalarle: ${suggestions?.length === 0 ? "Nada en particular" : suggestions}`
     response += `\n\nA ti te gustaria que te regalen: ${invitado.suggestion.length === 0 ? "Nada en particular" : invitado.suggestion}`
     response += "\n\nRecuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
     bot.sendMessage(chatID, response)

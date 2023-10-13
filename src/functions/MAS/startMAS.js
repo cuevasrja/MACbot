@@ -1,5 +1,5 @@
 import { TEAM_A, TEAM_B, questTime } from "../../constants/infoMAS.js";
-import { getInvitadoByName, showAllInvitados, switchCheckedByName, updateRecord } from "../../models/invitadosMASModel.js";
+import { showAllInvitados, switchCheckedByName, updateRecord } from "../../models/invitadosMASModel.js";
 import bot from "../../settings/app.js";
 import { MASPlayingStatus } from "./basicsMAS.js";
 import { MASMesssage } from "./readMAS.js";
@@ -17,7 +17,8 @@ const randomSort = (arr) => {
 /**
  * startMAS()
  * This function starts the MAS assignment.
- * @returns {String[][]} . Array of two arrays of strings, one for each team.
+ * It assigns a random participant from the opposite team to each participant (except themselves).
+ * Each participant will have a different random participant.
  */
 export const startMAS = async () => {
     try {
@@ -56,9 +57,6 @@ export const startMAS = async () => {
             // await updateRecieve(participantID, randomParticipant)
             // await updateTeam(participantID, teamName)
         })
-        // We return an array with the two teams.
-        const teams = [teamA, teamB]
-        return teams
     } catch (error) {
         console.log("Error en startMAS");
         console.error(error);
@@ -87,16 +85,18 @@ export const teamMessage = (teamA, teamB) => {
 /**
  * sendTeamMessage()
  * This function sends a message to each participant with the team they are in and the participant they have to give a gift to.
- * @param {String[]} team . Array of strings with the names of the participants in the team.
  * @param {String} teamName . String with the name of the team.
+ * @param {Object[]} teamInfo . Array of objects with the name, team and receive of each participant.
  */
-export const sendTeamMessage = async (team, teamName) => {
-    team.forEach(async (member) => {
-        const memberID = (await getInvitadoByName(member)).telegram_id
+export const sendTeamMessage = (teamName, teamInfo) => {
+    const team = teamInfo.map(invitado => invitado.name)
+    teamInfo.forEach((member) => {
+        const memberID = member.telegram_id
         let response = `Bienvenido al equipo ${teamName} de MAS. \n\n`
-        response += (await MASMesssage(member)) + "\n\n"
+        response += MASMesssage(member, team) + "\n\n"
         response += "Recuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
         bot.sendMessage(memberID, response)
+        console.log(`Mensaje enviado a ${member.name}`)
     })
 }
 
@@ -109,17 +109,24 @@ const randomTrueFalse = () => {
     return Math.random() < 0.5
 }
 
+/**
+ * MASQuest()
+ * This function sends a message to each participant with three options, one of them could be the correct answer.
+ * The correct answer is the participant they have to give a gift to.
+ */
 export const MASQuest = async () => {
+    console.log("MASQuest")
     // We check if the MAS is active
     if (!MASPlayingStatus()) return
     const invitados = await showAllInvitados()
     // We take the first three unchecked invitados
     const unchecked = invitados.filter(invitado => !invitado.checked)
     const randomsUnchecked = randomSort(unchecked).slice(0, 3)
+    console.log(randomsUnchecked)
     // We send a message to each of the three invitados, to try to guess their secret santa between 3 random invitados
     randomsUnchecked.forEach(async (invitado) => {
         const name = invitado.name
-        const givesTo = await getInvitadoByName(invitado.recieve)
+        const givesTo = invitados.find(inv => inv.name === invitado.receive)
         // We create a random boolean to decide if we show the correct answer or not. The correct answer will be a false option.
         const desition = randomTrueFalse()
         let oppositeTeam = randomSort(invitados.filter(opposite => opposite.team !== invitado.team))
@@ -163,7 +170,7 @@ export const MASQuest = async () => {
             // We get the chatID of the query.
             const chatID = query.message.chat.id
             // We check if the query is from the invitado we are looking for.
-            if (query.from.id !== invitado.telegram_id) return
+            if (query.from.id != invitado.telegram_id) return
             const nameSelected = query.data
             // We erase the listener, to avoid multiple answers.
             bot.editMessageReplyMarkup({ inline_keyboard: [] }, { chat_id: chatID, message_id: query.message.message_id })
