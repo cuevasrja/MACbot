@@ -73,8 +73,8 @@ export const startMAS = async () => {
 export const teamMessage = (teamA, teamB) => {
     try {
         let message = `Hay ${teamA.length + teamB.length} participantes distribuidos en dos equipos.`;
-        message += `\n\nEl equipo ${TEAM_A} está formado por: \n - ${teamA.join("\n - ")}`;
-        message += `\n\nEl equipo ${TEAM_B} está formado por: \n - ${teamB.join("\n - ")}`;
+        message += `\n\nEl equipo de los ${TEAM_A} está conformado por: \n - ${teamA.join("\n - ")}`;
+        message += `\n\nEl equipo de los ${TEAM_B} está conformado por: \n - ${teamB.join("\n - ")}`;
         return message;
     } catch (error) {
         console.log("Error en teamMessage");
@@ -92,9 +92,9 @@ export const sendTeamMessage = (teamName, teamInfo) => {
     const team = teamInfo.map(invitado => invitado.name)
     teamInfo.forEach((member) => {
         const memberID = member.telegram_id
-        let response = `Bienvenido al equipo ${teamName} de MAS. \n\n`
+        let response = `¡Bienvenido al equipo de los ${teamName}! \n\n`
         response += MASMesssage(member, team) + "\n\n"
-        response += "Recuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
+        response += "Recuerda que puedes usar el comando /MAS en cualquier momento para ver esta información y la sugerencia de regalo."
         bot.sendMessage(memberID, response)
         console.log(`Mensaje enviado a ${member.name}`)
     })
@@ -163,7 +163,7 @@ export const MASQuest = async () => {
             }
         }
         // We send a message to the invitado with the three options
-        bot.sendMessage(invitado.telegram_id, `¿Quién crees que es tu amigo invisible? (Selecciona una opción)`, opts)
+        bot.sendMessage(invitado.telegram_id, `¡La vidente se te ha aparecido en sueños! Es tu oportunidad de preguntarle quien crees que es tu MACamigo secreto (Selecciona una opción).`, opts)
 
         // We create a listener for the callback query, to check if the invitado has selected an option.
         bot.on("callback_query", async (query) => {
@@ -174,11 +174,11 @@ export const MASQuest = async () => {
             const nameSelected = query.data
             // We erase the listener, to avoid multiple answers.
             bot.editMessageReplyMarkup({ inline_keyboard: [] }, { chat_id: chatID, message_id: query.message.message_id })
-            let response = `Has elegido a ${nameSelected} como tu amigo invisible.\n\n`
+            let response = `Has elegido a ${nameSelected} como tu amigo secreto.\n\n`
             // We send a message to the invitado if they have selected the "correct" option or not.
             response += desition ?
-                `¡Has acertado! Tu amigo invisible es ${nameSelected}. (O te estoy mintiendo? xD)` :
-                `Tu amigo invisible no es ${nameSelected}.`
+                `¡Has acertado! (tal vez...) Tu MACamigo secreto es ${nameSelected} (o quizá no...).` :
+                `Lástima. Tu MACamigo secreto no es ${nameSelected}.`
             bot.sendMessage(invitado.telegram_id, response)
         })
 
