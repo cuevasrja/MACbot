@@ -12,8 +12,8 @@ export const MASMesssage = (member, team) => {
     const name = member.name
     const teamName = member.team
     const givesTo = member.receive
-    let response = `El equipo ${teamName} está conformado por: ${team.join(", ")}. \n\n`
-    response += `${name}, te toca regalarle a: ${givesTo} \n`
+    let response = `El equipo de los ${teamName} está conformado por: ${team.join(", ")}. \n\n`
+    response += `${name}, te toca ofrendarle a: ${givesTo} \n`
     return response
 }
 
