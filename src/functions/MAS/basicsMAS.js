@@ -370,24 +370,24 @@ bot.onText(/^\/MAS@quest/, async msg => {
 })
 
 
-// ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS@prueba command and insert preparadores in the database.
-// ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS@prueba/, async msg => {
-    const chatID = msg.chat.id
-    // If the user is not the jefe, we send a message and cancel the function
-    if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
-        return
-    }
-    const preparadores = await getAllPreparadores()
-    const preparadoresToInsert = preparadores.filter(preparador => preparador.initials !== 'NG')
-    preparadoresToInsert.forEach(async preparador => {
-        console.log(preparador)
-        await registerInvitado(preparador.telegram_id, preparador.initials)
-    })
-    bot.sendMessage(chatID, "Se han insertado los preparadores en la base de datos.")
-})
+// // ---------------------------------------------------------------------------------------------------- //
+// // The bot listens to the /MAS@prueba command and insert preparadores in the database.
+// // ---------------------------------------------------------------------------------------------------- //
+// bot.onText(/^\/MAS@prueba/, async msg => {
+//     const chatID = msg.chat.id
+//     // If the user is not the jefe, we send a message and cancel the function
+//     if (!isJefe(chatID)) {
+//         bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+//         return
+//     }
+//     const preparadores = await getAllPreparadores()
+//     const preparadoresToInsert = preparadores.filter(preparador => preparador.initials !== 'NG')
+//     preparadoresToInsert.forEach(async preparador => {
+//         console.log(preparador)
+//         await registerInvitado(preparador.telegram_id, preparador.initials)
+//     })
+//     bot.sendMessage(chatID, "Se han insertado los preparadores en la base de datos.")
+// })
 
 // // ---------------------------------------------------------------------------------------------------- //
 // // The bot listens to the /MAS@dev command and sends a message with the team members of MAS. (Command for development, please comment this command if it's not necessary)
