@@ -38,17 +38,24 @@ bot.onText(/^\/MAS@start/, async msg => {
         bot.sendMessage(chatID, "El número de participantes no es par.")
         return
     }
+    console.log("Se ha iniciado el sorteo de MAS.")
+    // We start MAS
+    await startMAS()
+    console.log("Sorteo de MAS terminado.")
+    // We get the members of the teams
     invitados = await showAllInvitados()
     const teamA = invitados.filter(invitado => invitado.team === TEAM_A)
     const teamB = invitados.filter(invitado => invitado.team === TEAM_B)
+    // We change the state of MAS to playing
     isMASPlaying = true
-    console.log("Se ha iniciado el sorteo de MAS.")
+    // We send a message to the members of the teams
     sendTeamMessage(TEAM_A, teamA)
     sendTeamMessage(TEAM_B, teamB)
     console.log("Se ha enviado el mensaje a los equipos.")
 
     // Every ${questTime} milliseconds, we send a message to the jefe with the number of participants in MAS.
     setInterval(async () => {
+        console.log("Se ejecuta MASQuest")
         await MASQuest()
     }, questTime)
 })
