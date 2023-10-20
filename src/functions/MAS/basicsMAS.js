@@ -8,13 +8,17 @@ import { MASMesssage, getTeams } from "./readMAS.js"
 import { MASQuest, sendTeamMessage, startMAS } from "./startMAS.js"
 
 let isMASPlaying = false
+let isMASQuest = true
 
 export const MASPlayingStatus = () => isMASPlaying
+export const MASQuestStatus = () => isMASQuest
+export const setMASQuestStatus = status => isMASQuest = status
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /MAS@start command and sends a message with the team members of MAS.
 // ---------------------------------------------------------------------------------------------------- //
 bot.onText(/^\/MAS@start/, async msg => {
+    console.log("Se ha ejecutado el comando /MAS@start")
     const chatID = msg.chat.id
     // We check if the user is the jefe
     console.log(chatID)
@@ -45,7 +49,9 @@ bot.onText(/^\/MAS@start/, async msg => {
     // We get the members of the teams
     invitados = await showAllInvitados()
     const teamA = invitados.filter(invitado => invitado.team === TEAM_A)
+    console.log(teamA)
     const teamB = invitados.filter(invitado => invitado.team === TEAM_B)
+    console.log(teamB)
     // We change the state of MAS to playing
     isMASPlaying = true
     // We send a message to the members of the teams
@@ -64,6 +70,7 @@ bot.onText(/^\/MAS@start/, async msg => {
 // The bot listens to the /MAS@stop command and sends a message with the team members of MAS.
 // ---------------------------------------------------------------------------------------------------- //
 bot.onText(/^\/MAS@stop/, async msg => {
+    console.log("Se ha ejecutado el comando /MAS@stop")
     const chatID = msg.chat.id
     // We check if the user is the jefe
     console.log(chatID)

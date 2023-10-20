@@ -1,7 +1,7 @@
 import { TEAM_A, TEAM_B, questTime } from "../../constants/infoMAS.js";
 import { showAllInvitados, switchCheckedByName, updateRecord } from "../../models/invitadosMASModel.js";
 import bot from "../../settings/app.js";
-import { MASPlayingStatus } from "./basicsMAS.js";
+import { MASPlayingStatus, MASQuestStatus, setMASQuestStatus } from "./basicsMAS.js";
 import { MASMesssage } from "./readMAS.js";
 
 /**
@@ -117,11 +117,16 @@ const randomTrueFalse = () => {
 export const MASQuest = async () => {
     console.log("MASQuest")
     // We check if the MAS is active
-    if (!MASPlayingStatus()) return
+    if (!MASPlayingStatus() || !MASQuestStatus) return
     const invitados = await showAllInvitados()
     // We take the first three unchecked invitados
     const unchecked = invitados.filter(invitado => !invitado.checked)
-    const randomsUnchecked = randomSort(unchecked).slice(0, 3)
+    const randomsUnchecked = unchecked.length > 3 ? randomSort(unchecked).slice(0, 3) : randomSort(unchecked)
+    if (randomsUnchecked.length === 0) {
+        console.log("No hay más invitados por comprobar")
+        setMASQuestStatus(false)
+        return
+    }
     console.log(randomsUnchecked)
     // We send a message to each of the three invitados, to try to guess their secret santa between 3 random invitados
     randomsUnchecked.forEach(async (invitado) => {
