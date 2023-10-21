@@ -300,6 +300,28 @@ export async function switchCheckedByName(name) {
 }
 
 // ---------------------------------------------------------------------------------------------------- //
+// UPDATE "invitado_mas" SET checked = false WHERE telegram_id = ###.
+// ---------------------------------------------------------------------------------------------------- //
+export async function setCheckedFalse(telegram_id) {
+    console.log(`**Query 'setCheckedFalse' in invitadosMASModel.`);
+    // get a connection from the pool
+    const client = await pool.connect();
+
+    try {
+        // update the record with the given id
+        await client.query('UPDATE "invitado_mas" SET checked = false WHERE telegram_id  = $1', [telegram_id]);
+    } catch (err) {
+        throw new Error(
+            `There was an error in the user registration query with the telegram_id: ${telegram_id} - 'invitadosMASModel'`,
+            err
+        );
+    } finally {
+        // release the connection back to the pool
+        client.release();
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------- //
 // UPDATE "invitado_mas" SET suggestion = ### WHERE telegram_id = ###.
 // ---------------------------------------------------------------------------------------------------- //
 export async function updateSuggestion(telegram_id, suggestion) {

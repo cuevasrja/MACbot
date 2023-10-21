@@ -367,18 +367,8 @@ bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
     bot.sendMessage(chatID, "Se ha enviado el mensaje a todos los participantes de MAS.")
 })
 
-// ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS@quest command and sends the quest to the members of MAS.
-// ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS@quest/, async msg => {
-    const chatID = msg.chat.id
-    await MASQuest()
-    bot.sendMessage(chatID, "Se ha enviado la quest.")
-})
-
-
 // // ---------------------------------------------------------------------------------------------------- //
-// // The bot listens to the /MAS@prueba command and insert preparadores in the database.
+// // The bot listens to the /MAS@prueba command and insert preparadores in the database. (Command for development, please comment this command if it's not necessary)
 // // ---------------------------------------------------------------------------------------------------- //
 // bot.onText(/^\/MAS@prueba/, async msg => {
 //     const chatID = msg.chat.id

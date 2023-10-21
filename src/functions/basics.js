@@ -5,9 +5,10 @@ import bot from '../settings/app.js';
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
 import dotenv from 'dotenv';
+import { sendMessage } from './sendMessage.js';
 import { PARSE, PRIVATE_CHAT } from '../constants/botSettings.js';
 // ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
-import commandsHelp from './commandsHelp.js';
+import { COMMANDS, DEV_COMMANDS } from './commandsHelp.js';
 import { getAllPreparadores, verifyPreparadorID } from '../models/preparadorModel.js';
 dotenv.config();
 
@@ -74,7 +75,21 @@ bot.onText(/^\/hostname/, async msg => {
 bot.onText(/^\/help/, msg => {
 	const chatID = msg.chat.id;
 	// ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
-	bot.sendMessage(chatID, commandsHelp, { parse_mode: PARSE });
+	sendMessage(chatID, COMMANDS);
+})
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /dev command and sends a message with the development commands.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/dev/, msg => {
+	const chatID = msg.chat.id;
+	// We check if the user is preparador
+	if (verifyPreparadorID(chatID)) {
+		bot.sendMessage(chatID, 'No eres preparador, no puedes usar este comando');
+		return;
+	}
+	// We send the message
+	sendMessage(chatID, DEV_COMMANDS);
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -92,5 +107,5 @@ bot.onText(/^\/preparadores/, async msg => {
 		.map(preparador => preparador.initials)
 		.join(', ');
 	// We send the message
-	bot.sendMessage(chatID, `Los preparadores son: ${preparadores}`);
+	sendMessage(chatID, `Los preparadores son: ${preparadores}`);
 })
