@@ -81,7 +81,7 @@ bot.onText(/^\/help/, msg => {
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /dev command and sends a message with the development commands.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/dev/, msg => {
+bot.onText(/^\/dev/, async msg => {
 	const chatID = msg.chat.id;
 	// We check if the user is preparador
 	if (await verifyPreparadorID(chatID)) {
