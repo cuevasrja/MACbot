@@ -1,5 +1,6 @@
 import { isJefe } from "../../constants/preparadores.js"
 import { setCheckedFalse, showAllInvitados } from "../../models/invitadosMASModel.js"
+import bot from "../../settings/app.js"
 
 // ! COMANDOS DE DESARROLLO (COMENTAR ANTES DE SUBIR A PRODUCCION)
 
