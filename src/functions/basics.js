@@ -84,7 +84,7 @@ bot.onText(/^\/help/, msg => {
 bot.onText(/^\/dev/, msg => {
 	const chatID = msg.chat.id;
 	// We check if the user is preparador
-	if (verifyPreparadorID(chatID)) {
+	if (await verifyPreparadorID(chatID)) {
 		bot.sendMessage(chatID, 'No eres preparador, no puedes usar este comando');
 		return;
 	}
