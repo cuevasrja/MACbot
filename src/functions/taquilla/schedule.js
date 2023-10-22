@@ -4,6 +4,11 @@ import { getAllPreparadores, getPreparadorByTelegramID, verifyPreparadorID } fro
 import { taquillaDev, taquillaSchedule } from "../../notion/readTaquilla.js";
 import bot from "../../settings/app.js";
 
+/**
+ * Organize the schedule of the day. 
+ * The schedule is an object with the initials of the preparers as keys and an array with the hours that the preparer is in taquilla as value.
+ * @returns {object} Object with the initials of the preparers of the day.
+ */
 const taquillaScheduleMessage = async () => {
     const dateI = new Date();
     const hours = dateI.getHours()
@@ -11,6 +16,7 @@ const taquillaScheduleMessage = async () => {
     const day = dateI.getDay()
     // We get the schedule of the day
     const schedule = await taquillaSchedule()
+    let isReunion = false
     // We build the response
     let response = `El horario de taquilla hoy (${weekDays[day - 1]}) es: \n`
     let reunion = ""
@@ -19,6 +25,7 @@ const taquillaScheduleMessage = async () => {
         // We check if the block is a meeting
         if (preparer === "REUNION") {
             reunion += `Hoy hay reunión a las ${BLOCKS_HOURS[block[0] - 1]}\n`
+            isReunion = true
             continue
         }
         // We iterate over the blocks
@@ -32,7 +39,7 @@ const taquillaScheduleMessage = async () => {
             }
         })
     }
-    response += "\n" + reunion
+    response += isReunion ? `\n${reunion}` : ""
     response += "\n Recuerda que si no puedes ir a taquilla, debes avisar con tiempo"
     return response
 }
