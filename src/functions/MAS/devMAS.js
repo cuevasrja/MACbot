@@ -8,7 +8,7 @@ import bot from "../../settings/app.js"
 // ------------------------------------------------------------------------------------------------ //
 // The bot listens to the /MAS@dbQuest command and set the checked value of all the invitados to false.
 // ------------------------------------------------------------------------------------------------ //
-bot.onText(/^\/MAS@dbQuest/, async msg => {
+bot.onText(/^\/MAS@dbQuest$/, async msg => {
     const chatID = msg.chat.id
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
@@ -25,7 +25,7 @@ bot.onText(/^\/MAS@dbQuest/, async msg => {
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /MAS@quest command and sends the quest to the members of MAS.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS@quest/, async msg => {
+bot.onText(/^\/MAS@quest$/, async msg => {
     const chatID = msg.chat.id
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {

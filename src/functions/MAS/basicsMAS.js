@@ -113,7 +113,7 @@ bot.onText(/^\/MAS@stop/, async msg => {
     bot.sendMessage(chatID, "MAS ha terminado. ¿Quieres reiniciar la Base de Datos? (Si/No)", opts)
 
     bot.on("callback_query", async query => {
-        const chatID = query.message.chat.id
+        if (query.message.chat.id !== chatID) return
         const data = query.data
         // We erase the buttons
         bot.editMessageReplyMarkup({ inline_keyboard: [] }, { chat_id: chatID, message_id: query.message.message_id })

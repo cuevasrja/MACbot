@@ -3,6 +3,7 @@ import { showAllInvitados, switchCheckedByName, updateRecord } from "../../model
 import bot from "../../settings/app.js";
 import { MASPlayingStatus, MASQuestStatus, setMASQuestStatus } from "./basicsMAS.js";
 import { MASMesssage } from "./readMAS.js";
+import { sendMessage } from "../sendMessage.js";
 
 /**
  * randomSort()
@@ -132,13 +133,7 @@ export const MASQuest = async () => {
     randomsUnchecked.forEach(async (invitado) => {
         const name = invitado.name
         const givesTo = invitados.find(inv => inv.name === invitado.receive)
-        // We create a random boolean to decide if we show the correct answer or not. The correct answer will be a false option.
-        const desition = randomTrueFalse()
         let oppositeTeam = randomSort(invitados.filter(opposite => opposite.team !== invitado.team))
-        // If the desition is false, we remove the correct answer from the list of options.
-        if (!desition) {
-            oppositeTeam = oppositeTeam.filter(opposite => opposite.name !== givesTo.name)
-        }
         const [first, second, third] = oppositeTeam.slice(0, 3).map(opposite => opposite.name)
 
         // We create the options for the message, with the three options. 
@@ -181,10 +176,15 @@ export const MASQuest = async () => {
             bot.editMessageReplyMarkup({ inline_keyboard: [] }, { chat_id: chatID, message_id: query.message.message_id })
             let response = `Has elegido a ${nameSelected} como tu amigo secreto.\n\n`
             // We send a message to the invitado if they have selected the "correct" option or not.
-            response += desition ?
-                `¡Has acertado! (tal vez...) Tu MACamigo secreto es ${nameSelected} (o quizá no...).` :
-                `Lástima. Tu MACamigo secreto no es ${nameSelected}.`
-            bot.sendMessage(invitado.telegram_id, response)
+            if (nameSelected == givesTo.name) {
+                response += `¡Has acertado! (tal vez...) Tu MACamigo secreto es ${nameSelected} (o quizá no...).`
+            }
+            else {
+                response += randomTrueFalse() ?
+                    `¡Has acertado! (tal vez...) Tu MACamigo secreto es ${nameSelected} (o quizá no...).` :
+                    `Lástima. Tu MACamigo secreto no es ${nameSelected}.`
+            }
+            sendMessage(chatID, response)
         })
 
         await switchCheckedByName(name)
