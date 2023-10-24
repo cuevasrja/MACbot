@@ -132,6 +132,7 @@ export const MASQuest = async () => {
     // We send a message to each of the three invitados, to try to guess their secret santa between 3 random invitados
     randomsUnchecked.forEach(async (invitado) => {
         const name = invitado.name
+        await switchCheckedByName(name)
         const givesTo = invitados.find(inv => inv.name === invitado.receive)
         let oppositeTeam = randomSort(invitados.filter(opposite => opposite.team !== invitado.team))
         const [first, second, third] = oppositeTeam.slice(0, 3).map(opposite => opposite.name)
@@ -186,8 +187,6 @@ export const MASQuest = async () => {
             }
             sendMessage(chatID, response)
         })
-
-        await switchCheckedByName(name)
     })
     setInterval(async () => {
         await MASQuest()
