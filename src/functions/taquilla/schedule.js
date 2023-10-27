@@ -160,12 +160,6 @@ const sendMessage = async () => {
             bot.sendMessage(preparer[0], msg)
         })
     }
-    // We calculate the milliseconds to the next day
-    const next24Hours = 24 * 60 * 60 * 1000;
-    // We send the message every 24 hours
-    setInterval(() => {
-        sendMessage();
-    }, next24Hours);
 }
 
 const date = new Date();
@@ -187,7 +181,13 @@ if (millisecondsToStart < 0) {
 }
 
 // Every day at 8:00 am, we send the message
-setInterval(() => {
-    sendMessage();
-    console.log("Se ha ejecutado el setInterval")
+setTimeout(() => {
+    // We calculate the milliseconds to the next day
+    const next24Hours = 24 * 60 * 60 * 1000;
+    // We send the message every 24 hours
+    setInterval(() => {
+        sendMessage();
+        console.log("Se ha ejecutado el setInterval")
+    }, next24Hours);
+
 }, millisecondsToStart);

@@ -8,6 +8,6 @@ import { PARSE } from '../constants/botSettings.js';
  * @param {Integer} chatID 
  * @param {String} message 
  */
-export const sendMessage = (chatID, message) => {
-    bot.sendMessage(chatID, message, { parse_mode: PARSE })
+export const sendMessage = async (chatID, message) => {
+    await bot.sendMessage(chatID, message, { parse_mode: PARSE })
 }

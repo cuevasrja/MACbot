@@ -118,7 +118,7 @@ const randomTrueFalse = () => {
 export const MASQuest = async () => {
     console.log("MASQuest")
     // We check if the MAS is active
-    if (!MASPlayingStatus() || !MASQuestStatus) return
+    if (!MASPlayingStatus() || !MASQuestStatus()) return
     const invitados = await showAllInvitados()
     // We take the first three unchecked invitados
     const unchecked = invitados.filter(invitado => !invitado.checked)
@@ -164,7 +164,7 @@ export const MASQuest = async () => {
             }
         }
         // We send a message to the invitado with the three options
-        bot.sendMessage(invitado.telegram_id, `¡La vidente se te ha aparecido en sueños! Es tu oportunidad de preguntarle quien crees que es tu MACamigo secreto (Selecciona una opción).`, opts)
+        await bot.sendMessage(invitado.telegram_id, `¡La vidente se te ha aparecido en sueños! Es tu oportunidad de preguntarle quien crees que es tu MACamigo secreto (Selecciona una opción).`, opts)
 
         // We create a listener for the callback query, to check if the invitado has selected an option.
         bot.on("callback_query", async (query) => {
@@ -185,10 +185,7 @@ export const MASQuest = async () => {
                     `¡Has acertado! (tal vez...) Tu MACamigo secreto es ${nameSelected} (o quizá no...).` :
                     `Lástima. Tu MACamigo secreto no es ${nameSelected}.`
             }
-            sendMessage(chatID, response)
+            await sendMessage(chatID, response)
         })
     })
-    setInterval(async () => {
-        await MASQuest()
-    }, questTime)
 }

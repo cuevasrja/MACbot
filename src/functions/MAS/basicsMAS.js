@@ -11,6 +11,8 @@ import { sendMessage } from "../sendMessage.js"
 let isMASPlaying = false
 let isMASQuest = true
 
+let intervalID = null
+
 export const MASPlayingStatus = () => isMASPlaying
 export const MASQuestStatus = () => isMASQuest
 export const setMASQuestStatus = status => isMASQuest = status
@@ -52,14 +54,20 @@ bot.onText(/^\/MAS@start/, async msg => {
     console.log(invitados)
     // We change the state of MAS to playing
     isMASPlaying = true
+    isMASQuest = true
     // We send a message to the members of the teams
     invitados.forEach(invitado => {
         sendMessage(invitado.telegram_id, BIENVENIDA)
     })
     console.log("Se ha enviado el mensaje a los equipos.")
 
+    if (intervalID !== null) {
+        clearInterval(intervalID)
+        intervalID = null
+    }
+
     // Every ${questTime} milliseconds, we send a message to the jefe with the number of participants in MAS.
-    setInterval(async () => {
+    intervalID = setInterval(async () => {
         console.log("Se ejecuta MASQuest")
         await MASQuest()
     }, questTime)
@@ -91,6 +99,9 @@ bot.onText(/^\/MAS@stop/, async msg => {
     })
 
     isMASPlaying = false
+    isMASQuest = false
+    clearInterval(intervalID)
+    intervalID = null
     console.log("MAS ha terminado")
     // We send a message to the user to confirm if he wants to restart the database. 
     // The buttons are "Si" and "No" and only can be clicked once.
@@ -255,9 +266,16 @@ bot.onText(/^\/MAS@restart/, async msg => {
         return
     }
     isMASPlaying = true
+    isMASQuest = true
     bot.sendMessage(chatID, "MAS ha sido reiniciado.")
     console.log("MAS ha sido reiniciado")
-    setInterval(async () => {
+
+    if (intervalID !== null) {
+        clearInterval(intervalID)
+        intervalID = null
+    }
+
+    intervalID = setInterval(async () => {
         await MASQuest()
     }, questTime)
 })
