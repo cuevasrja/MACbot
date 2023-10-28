@@ -7,6 +7,8 @@ import bot from "../../settings/app.js"
 import { MASMesssage, getTeams } from "./readMAS.js"
 import { MASQuest, sendTeamMessage, startMAS } from "./startMAS.js"
 import { sendMessage } from "../sendMessage.js"
+import { MAS_ALREADY_REGISTERED, MAS_FINISHED, MAS_NOT_PLAYING, MAS_NOT_REGISTERED, MAS_PLAYING, MAS_REGIST_ACTIVE, MAS_REGIST_DISABLED, MAS_REGIST_INACTIVE, MAS_RESET, NAME_TOO_LONG, NAME_USED, NOT_NAME_GIVEN, NOT_SUGGESTION_GIVEN, SUGGESTION_TOO_LONG } from "../../messages/MASMessages.js"
+import { NOT_INVITADO, NOT_JEFE } from "../../messages/permissions.js"
 
 let isMASPlaying = false
 let isMASQuest = true
@@ -27,22 +29,22 @@ bot.onText(/^\/MAS@start/, async msg => {
     console.log(chatID)
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        sendMessage(chatID, NOT_JEFE)
         return
     }
     // We check if MAS is already playing
     if (isMASPlaying) {
-        bot.sendMessage(chatID, "MAS ya está jugando.")
+        sendMessage(chatID, MAS_PLAYING)
         return
     }
     // We get the invitados and check if are a minimum of 8 and an even number
     let invitados = await showAllInvitados()
     if (invitados.length < 8) {
-        bot.sendMessage(chatID, "No hay suficientes participantes para jugar a MAS.")
+        sendMessage(chatID, "No hay suficientes participantes para jugar a MAS.")
         return
     }
     if (invitados.length % 2 !== 0) {
-        bot.sendMessage(chatID, "El número de participantes no es par.")
+        sendMessage(chatID, "El número de participantes no es par.")
         return
     }
     console.log("Se ha iniciado el sorteo de MAS.")
@@ -83,19 +85,19 @@ bot.onText(/^\/MAS@stop/, async msg => {
     console.log(chatID)
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        sendMessage(chatID, NOT_JEFE)
         return
     }
     // We check if MAS is already playing
     if (!isMASPlaying) {
-        bot.sendMessage(chatID, "MAS no está jugando.")
+        sendMessage(chatID, MAS_NOT_PLAYING)
         return
     }
 
     const invitadosIDs = (await showAllInvitados()).map(invitado => invitado.telegram_id)
     // We send a message to all the members of MAS
     invitadosIDs.forEach(invitadoID => {
-        bot.sendMessage(invitadoID, "MAS ha terminado. ¡Gracias a toda la aldea por participar!")
+        sendMessage(invitadoID, MAS_FINISHED)
     })
 
     isMASPlaying = false
@@ -131,11 +133,11 @@ bot.onText(/^\/MAS@stop/, async msg => {
         // If the user clicks "Si", we restart the database
         if (data === "yes") {
             await deleteAllInvitados()
-            bot.sendMessage(chatID, "La Base de Datos ha sido reiniciada.")
+            sendMessage(chatID, "La Base de Datos ha sido reiniciada.")
         }
         // If the user clicks "No", we send a message
         else {
-            bot.sendMessage(chatID, "La Base de Datos no ha sido reiniciada.")
+            sendMessage(chatID, "La Base de Datos no ha sido reiniciada.")
         }
     })
 })
@@ -151,12 +153,12 @@ bot.onText(/^\/MAS@switch/, async msg => {
     console.log(chatID)
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        sendMessage(chatID, NOT_JEFE)
         return
     }
     isMASActive = !isMASActive
-    const message = isMASActive ? "MAS activo" : "MAS inactivo"
-    bot.sendMessage(chatID, message)
+    const message = isMASActive ? MAS_REGIST_ACTIVE : MAS_REGIST_DISABLED
+    sendMessage(chatID, message)
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -166,16 +168,26 @@ bot.onText(/^\/MAS@add (.+)/, async (msg, match) => {
     const chatID = msg.chat.id
     // We check if MAS is already playing
     if (isMASPlaying) {
-        bot.sendMessage(chatID, "MAS ya está jugando.")
+        sendMessage(chatID, MAS_PLAYING)
         return
     }
     // We check if MAS registration is active
     if (!isMASActive) {
-        bot.sendMessage(chatID, "El registro de MAS está inactivo.")
+        sendMessage(chatID, MAS_REGIST_INACTIVE)
         return
     }
+    if (match.length < 2) {
+        sendMessage(chatID, NOT_NAME_GIVEN)
+        return
+    }
+
     // We take the name of the new member
     const name = match.slice(1).join(" ").trim()
+
+    if (name.length > 50) {
+        sendMessage(chatID, NAME_TOO_LONG)
+        return
+    }
 
     // We check if the name is already in use
     const nameNotUsed = await verifyInvitadoName(name)
@@ -184,22 +196,18 @@ bot.onText(/^\/MAS@add (.+)/, async (msg, match) => {
 
     // If the name and the telegram id are not in use, we register the new member.
     // Otherwise, we send a message to the user and cancel the function.
-    if (!nameNotUsed && !TelegramIDNotUsed) {
-        bot.sendMessage(chatID, "Ya estás registrado en MAS.")
+    if (!TelegramIDNotUsed) {
+        sendMessage(chatID, MAS_ALREADY_REGISTERED)
         return
     }
     if (!nameNotUsed) {
-        bot.sendMessage(chatID, "Ya hay alguien con ese nombre en nuestros registros.")
-        return
-    }
-    if (!TelegramIDNotUsed) {
-        bot.sendMessage(chatID, "Ya hay alguien con ese Telegram ID en nuestros registros.")
+        sendMessage(chatID, NAME_USED)
         return
     }
 
     // We register the new member in the database
     registerInvitado(chatID, name)
-    bot.sendMessage(chatID, `Se ha registrado a ${name} en el ayuntamiento para participar en el evento de MAS.`)
+    sendMessage(chatID, `Se ha registrado a ${name} en el ayuntamiento para participar en el evento de MAS.`)
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -209,24 +217,24 @@ bot.onText(/^\/MAS@remove/, async msg => {
     const chatID = msg.chat.id
     // We check if MAS is already playing
     if (isMASPlaying) {
-        bot.sendMessage(chatID, "MAS ya está jugando.")
+        sendMessage(chatID, MAS_PLAYING)
         return
     }
     // We check if MAS registration is active
     if (!isMASActive) {
-        bot.sendMessage(chatID, "El registro de MAS está inactivo.")
+        sendMessage(chatID, MAS_REGIST_INACTIVE)
         return
     }
     // We verify that the user is registered
     if (await verifyInvitadoID(chatID)) {
-        bot.sendMessage(chatID, "No estás registrado en MAS.")
+        sendMessage(chatID, MAS_NOT_REGISTERED)
         return
     }
     // We get the name of the member
     const name = (await getInvitadoByTelegramID(chatID)).name
     // We remove the member from the database
     removeInvitado(chatID)
-    bot.sendMessage(chatID, `Se ha eliminado a ${name} de la lista de participantes de MAS. Tus datos registrados en el ayuntamiento serán incinerados.`)
+    sendMessage(chatID, `Se ha eliminado a ${name} de la lista de participantes de MAS. Tus datos registrados en el ayuntamiento serán incinerados.`)
     console.log(`Se ha eliminado a ${name} de la lista de participantes de MAS`)
 })
 
@@ -237,12 +245,12 @@ bot.onText(/^\/MAS@teams/, async msg => {
     const chatID = msg.chat.id
     // We check if the usder is in MAS
     if (await verifyInvitadoID(chatID)) {
-        bot.sendMessage(chatID, "No estás registrado en MAS.")
+        sendMessage(chatID, MAS_NOT_REGISTERED)
         return
     }
     // We check if MAS is already playing
     if (!isMASPlaying) {
-        bot.sendMessage(chatID, "MAS no está jugando.")
+        sendMessage(chatID, MAS_NOT_PLAYING)
         return
     }
     // We get the members of the teams
@@ -250,7 +258,7 @@ bot.onText(/^\/MAS@teams/, async msg => {
     let message = `Hay ${teamA.length + teamB.length} participantes distribuidos en dos equipos.`
     message += `\n\nEl equipo de los ${TEAM_A} está conformado por: \n - ${teamA.join("\n - ")}`
     message += `\n\nEl equipo de los ${TEAM_B} está conformado por: \n - ${teamB.join("\n - ")}`
-    bot.sendMessage(chatID, message)
+    sendMessage(chatID, message)
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -262,12 +270,12 @@ bot.onText(/^\/MAS@restart/, async msg => {
     console.log(chatID)
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        sendMessage(chatID, NOT_JEFE)
         return
     }
     isMASPlaying = true
     isMASQuest = true
-    bot.sendMessage(chatID, "MAS ha sido reiniciado.")
+    sendMessage(chatID, MAS_RESET)
     console.log("MAS ha sido reiniciado")
 
     if (intervalID !== null) {
@@ -287,12 +295,16 @@ bot.onText(/^\/MAS@sug (.+)/, async (msg, match) => {
     const chatID = msg.chat.id
     // We check if the usder is in MAS
     if (await verifyInvitadoID(chatID)) {
-        bot.sendMessage(chatID, "No estás registrado en MAS.")
+        sendMessage(chatID, MAS_NOT_REGISTERED)
         return
     }
     // We check if MAS is already playing
     if (!isMASPlaying) {
-        bot.sendMessage(chatID, "MAS no está jugando.")
+        sendMessage(chatID, MAS_NOT_PLAYING)
+        return
+    }
+    if (match.length < 2) {
+        sendMessage(chatID, NOT_SUGGESTION_GIVEN)
         return
     }
     // We get the invitado
@@ -301,6 +313,10 @@ bot.onText(/^\/MAS@sug (.+)/, async (msg, match) => {
     const name = invitado.name
     // We get the suggestion
     const suggestion = match.slice(1).join(" ").trim()
+    if (suggestion.length > 200) {
+        sendMessage(chatID, SUGGESTION_TOO_LONG)
+        return
+    }
     // We add the suggestion to the member
     updateSuggestion(chatID, suggestion)
     console.log("Alguien ha añadido una sugerencia")
@@ -314,10 +330,10 @@ bot.onText(/^\/MAS@help/, async msg => {
     const chatID = msg.chat.id
     // We check if the usder is in MAS
     if (await verifyInvitadoID(chatID)) {
-        bot.sendMessage(chatID, "No estás registrado en MAS.")
+        sendMessage(chatID, MAS_NOT_REGISTERED)
         return
     }
-    bot.sendMessage(chatID, rules)
+    sendMessage(chatID, rules)
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -329,14 +345,14 @@ bot.onText(/^\/MAS@show/, async msg => {
     console.log(chatID)
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        sendMessage(chatID, NOT_JEFE)
         return
     }
     // We get the members of the teams
     const invitados = await showAllInvitados()
     let message = "Los participantes de MAS son: \n"
     message += invitados.map(invitado => `${invitado.name} - ${invitado.telegram_id} - ${invitado.team} - ${invitado.receive} - ${invitado.checked}`).join("\n")
-    bot.sendMessage(chatID, message)
+    sendMessage(chatID, message)
     // Show all invitados in the console
     invitados.forEach(invitado => {
         console.log(invitado)
@@ -352,12 +368,12 @@ bot.onText(/^\/MAS@clean/, async msg => {
     console.log(chatID)
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        sendMessage(chatID, NOT_JEFE)
         return
     }
     // We get the members of the teams
     await deleteAllInvitados()
-    bot.sendMessage(chatID, "Se han eliminado todos los participantes de MAS.")
+    sendMessage(chatID, "Se han eliminado todos los participantes de MAS.")
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -369,7 +385,7 @@ bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
     console.log(chatID)
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        sendMessage(chatID, NOT_JEFE)
         return
     }
     // We get the message
@@ -378,10 +394,10 @@ bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
     const invitados = await showAllInvitados()
     // We send the message to all the members of MAS
     invitados.forEach(invitado => {
-        bot.sendMessage(invitado.telegram_id, message)
+        sendMessage(invitado.telegram_id, message)
     })
     // We send a message to the user to confirm that the message has been sent
-    bot.sendMessage(chatID, "Se ha enviado el mensaje a todos los participantes de MAS.")
+    sendMessage(chatID, "Se ha enviado el mensaje a todos los participantes de MAS.")
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -391,7 +407,7 @@ bot.onText(/^\/MAS@prueba/, async msg => {
     const chatID = msg.chat.id
     // If the user is not the jefe, we send a message and cancel the function
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        sendMessage(chatID, NOT_JEFE)
         return
     }
     const preparadores = await getAllPreparadores()
@@ -400,7 +416,7 @@ bot.onText(/^\/MAS@prueba/, async msg => {
         console.log(preparador)
         await registerInvitado(preparador.telegram_id, preparador.initials)
     })
-    bot.sendMessage(chatID, "Se han insertado los preparadores en la base de datos.")
+    sendMessage(chatID, "Se han insertado los preparadores en la base de datos.")
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -409,11 +425,11 @@ bot.onText(/^\/MAS@prueba/, async msg => {
 bot.onText(/^\/MAS@dev/, async msg => {
     const chatID = msg.chat.id
     if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, "¡¡No me jodas!! ¡¡Que no eres el jefe!!")
+        bot.sendMessage(chatID, NOT_JEFE)
         return
     }
     if (isMASPlaying) {
-        bot.sendMessage(chatID, "MAS ya está jugando")
+        bot.sendMessage(chatID, MAS_PLAYING)
         return
     }
     const teams = await startMAS()
@@ -436,12 +452,12 @@ bot.onText(/^\/MAS$/, async msg => {
     // We check if the user is a preparador or an invitado
     // If the user is not a preparador or an invitado, we send a message and cancel the function
     if (await verifyInvitadoID(chatID)) {
-        bot.sendMessage(chatID, "No eres invitado. No puedes usar este comando.")
+        sendMessage(chatID, NOT_INVITADO)
         return
     }
     // We check if MAS is already playing
     if (!isMASPlaying) {
-        bot.sendMessage(chatID, "MAS no está jugando.")
+        sendMessage(chatID, MAS_NOT_PLAYING)
         return
     }
     // We get the invitados
@@ -458,5 +474,5 @@ bot.onText(/^\/MAS$/, async msg => {
     response += `Te recomiendo ofrendarle: ${suggestions?.length === 0 ? "Nada en particular" : suggestions}`
     response += `\n\nA ti te gustaria que te ofrenden: ${invitado.suggestion.length === 0 ? "Nada en particular" : invitado.suggestion}`
     response += "\n\nRecuerda que puedes usar el comando /MAS en cualquier momento para ver esta información y la sugerencia de regalo."
-    bot.sendMessage(chatID, response)
+    sendMessage(chatID, response)
 })
