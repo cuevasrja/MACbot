@@ -15,18 +15,18 @@ export const questTime = 15 * 60 * 1000
 
 export const BIENVENIDA = `¡El *MACamigo Secreto* ha comenzado en la aldea del *MAC*!
 
-> Usa el comando /MAS para saber tu *equipo* y a quien te toca ofrendarle. ¡Entérate ya de esa valiosa información!
+> Usa el comando /MAS para saber tu _equipo_ y a quien te toca ofrendarle. ¡Entérate ya de esa valiosa información!
 
-> Con /MAS@help podrás ver las *reglas del juego*. Te recomiendo que las consultes si aún no lo has hecho.
+> Con /MAS@help podrás ver las _reglas del juego_. Te recomiendo que las consultes si aún no lo has hecho.
 
 > Para añadir una _sugerencia de ofrenda_ escribe /MAS@sug [sugerencia]. El _precio_ estimado de la misma debe estar entre *5-10$*. ¡Piensa bien lo que vas a pedir!
 
 > Está atento a la visita de la _vidente_, lo que te diga puede cambiar el rumbo de la partida...
 
-> Los *anuncios importantes* los haré en este chat. Trata de no pasar por alto mis mensajes.
+> Los _anuncios importantes_ los haré en este chat. Trata de no pasar por alto mis mensajes.
 
-> Sin nada más que decir, les deseo ***mucha suerte*** a todos.
+> Sin nada más que decir, les deseo *_mucha suerte_* a todos.
 
-Att: _El alcalde_.
+Att: El alcalde.
 
 P.D.: No nos hacemos responsables por _aldeanos_ devorados y/o _lobos_ linchados.`
