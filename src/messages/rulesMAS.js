@@ -30,6 +30,6 @@ const rules = `*REGLAS DEL JUEGO*
 
 > Se continúa con el siguiente _participante_.
 
-> Las celebraciones terminan cuando todos hayan adivinado o, en el peor de los casos, cuando todos los integrantes de un _equipo_ hayan sido devorados o linchados, y se anuncia el *equipo ganador*, aquel que tuvo el _menor puntaje_.
+> Las celebraciones terminan cuando todos hayan adivinado o, en el peor de los casos, cuando todos los integrantes de un _equipo_ hayan sido devorados o linchados, y se anuncia el _equipo ganador_, aquel que tuvo el _menor puntaje_.
 `
 export default rules
