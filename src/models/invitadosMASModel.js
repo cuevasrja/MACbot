@@ -4,7 +4,7 @@ import pool from './connection.js';
  * Verify if the user is already registered in the database.
  * The SQL code is SELECT * FROM "invitado_mas" WHERE telegram_id = ###.
  * @param {Integer} telegram_id 
- * @returns {Boolean} True if the telegram_id does not exist in the database, false if it exists.
+ * @returns {Promise<Boolean>} True if the telegram_id does not exist in the database, false if it exists.
  */
 export async function verifyInvitadoID(telegram_id) {
     console.log(`**Query 'verifyInvitadoID' in invitadosMASModel.`);
@@ -30,7 +30,7 @@ export async function verifyInvitadoID(telegram_id) {
  * Verify if the user is already registered in the database using the name.
  * The SQL code is: SELECT * FROM "invitado_mas" WHERE name = ###.
  * @param {String} name 
- * @returns {Boolean} True if the name does not exist in the database, false if it exists.
+ * @returns {Promise<Boolean>} True if the name does not exist in the database, false if it exists.
  */
 export async function verifyInvitadoName(name) {
     console.log(`**Query 'verifyInvitadoName' in invitadosMASModel.`);
@@ -57,6 +57,7 @@ export async function verifyInvitadoName(name) {
  * The SQL code is: INSERT INTO "invitado_mas" (telegram_id, name) VALUES (###, ###).
  * @param {Integer} telegram_id 
  * @param {String} name 
+ * @returns {Promise<void>}
  */
 export async function registerInvitado(telegram_id, name) {
     console.log(`**Query 'registerInvitado' in invitadosMASModel.`);
@@ -75,6 +76,7 @@ export async function registerInvitado(telegram_id, name) {
  * Remove a user from the database.
  * The SQL code is: DELETE FROM "invitado_mas" WHERE telegram_id = ###.
  * @param {Integer} telegram_id 
+ * @returns {Promise<void>}
  */
 export async function removeInvitado(telegram_id) {
     console.log(`**Query 'removeInvitado' in invitadosMASModel.`);
@@ -92,7 +94,7 @@ export async function removeInvitado(telegram_id) {
  * Get the user's name from the database.
  * The SQL code is: SELECT name FROM "invitado_mas" WHERE telegram_id = ###.
  * @param {String} name 
- * @returns {object} { name: String, team: String, checked: Boolean, suggestion: String, receive: String }
+ * @returns {Promise<object>} { name: String, team: String, checked: Boolean, suggestion: String, receive: String }
 
  */
 export async function getInvitadoByName(name) {
@@ -125,7 +127,7 @@ export async function getInvitadoByName(name) {
  * Find the user's name from the database using the telegram_id.
  * The SQL code is: SELECT name FROM "invitado_mas" WHERE telegram_id = ###.
  * @param {Integer} telegram_id 
- * @returns {object} { name: String, team: String, checked: Boolean, suggestion: String, receive: String }
+ * @returns {Promise<object>} { name: String, team: String, checked: Boolean, suggestion: String, receive: String }
  */
 export async function getInvitadoByTelegramID(telegram_id) {
     console.log(`**Query 'getInvitadoByTelegramID' in invitadosMASModel.`);
@@ -156,7 +158,7 @@ export async function getInvitadoByTelegramID(telegram_id) {
 /**
  * Show all users in the database.
  * The SQL code is: SELECT * FROM "invitado_mas".
- * @returns {Array} [Object] { name: String, team: String, checked: Boolean, suggestion: String, receive: String }
+ * @returns {Promise<object[]>} { name: String, team: String, checked: Boolean, suggestion: String, receive: String }
  */
 export async function showAllInvitados() {
     console.log(`**Query 'showAllInvitados' in invitadosMASModel.`);
@@ -192,7 +194,7 @@ export async function showAllInvitados() {
  * Find all users in the database using the team.
  * The SQL code is: SELECT * FROM "invitado_mas" WHERE team = ###.
  * @param {String} team 
- * @returns {Array} [Object] { name: String, team: String, checked: Boolean, suggestion: String, receive: String }
+ * @returns {Promise<object[]>} { name: String, team: String, checked: Boolean, suggestion: String, receive: String }
  */
 export async function getInvitadosByTeam(team) {
     console.log(`**Query 'getInvitadosByTeam' in invitadosMASModel.`);
@@ -229,6 +231,7 @@ export async function getInvitadosByTeam(team) {
  * The SQL code is: UPDATE "invitado_mas" SET team = ### WHERE telegram_id = ###.
  * @param {Integer} telegram_id 
  * @param {String} team 
+ * @returns {Promise<void>}
  */
 export async function updateTeam(telegram_id, team) {
     console.log(`**Query 'updateTeam' in invitadosMASModel.`);
@@ -247,6 +250,7 @@ export async function updateTeam(telegram_id, team) {
  * Update the user's team in the database using the name.
  * @param {String} name 
  * @param {String} team 
+ * @returns {Promise<void>}
  */
 export async function updateTeamByName(name, team) {
     console.log(`**Query 'updateTeamByName' in invitadosMASModel.`);
@@ -267,6 +271,7 @@ export async function updateTeamByName(name, team) {
  * @param {Integer} id 
  * @param {String} receiveValue 
  * @param {String} teamValue 
+ * @returns {Promise<void>}
  */
 export async function updateRecord(id, receiveValue, teamValue) {
     console.log(`**Query 'updateRecord' in invitadosMASModel.`);
@@ -291,6 +296,7 @@ export async function updateRecord(id, receiveValue, teamValue) {
  * Switch the user's checked value in the database using the telegram_id.
  * The SQL code is: UPDATE "invitado_mas" SET checked = not checked WHERE telegram_id = ###.
  * @param {Integer} telegram_id 
+ * @returns {Promise<void>}
  */
 export async function switchChecked(telegram_id) {
     console.log(`**Query 'switchChecked' in invitadosMASModel.`);
@@ -314,6 +320,7 @@ export async function switchChecked(telegram_id) {
 /**
  * Switch the user's checked value in the database using the name.
  * @param {String} name 
+ * @returns {Promise<void>}
  */
 export async function switchCheckedByName(name) {
     console.log(`**Query 'switchCheckedByName' in invitadosMASModel.`);
@@ -338,6 +345,7 @@ export async function switchCheckedByName(name) {
  * Set the user's checked value to false in the database using the telegram_id.
  * The SQL code is: UPDATE "invitado_mas" SET checked = false WHERE telegram_id = ###.
  * @param {Integer} telegram_id 
+ * @returns {Promise<void>}
  */
 export async function setCheckedFalse(telegram_id) {
     console.log(`**Query 'setCheckedFalse' in invitadosMASModel.`);
@@ -362,6 +370,7 @@ export async function setCheckedFalse(telegram_id) {
  * Update the user's suggestion in the database using the telegram_id.
  * @param {Integer} telegram_id 
  * @param {String} suggestion 
+ * @returns {Promise<void>}
  */
 export async function updateSuggestion(telegram_id, suggestion) {
     console.log(`**Query 'updateSuggestion' in invitadosMASModel.`);
@@ -386,6 +395,7 @@ export async function updateSuggestion(telegram_id, suggestion) {
  * Update the user's suggestion in the database using the name.
  * @param {String} name 
  * @param {String} suggestion 
+ * @returns {Promise<void>}
  */
 export async function updateSuggestionByName(name, suggestion) {
     console.log(`**Query 'updateSuggestionByName' in invitadosMASModel.`);
@@ -409,6 +419,7 @@ export async function updateSuggestionByName(name, suggestion) {
 /**
  * Delete all users in the database.
  * The SQL code is: DELETE FROM "invitado_mas".
+ * @returns {Promise<void>}
  */
 export async function deleteAllInvitados() {
     console.log(`**Query 'deleteAllInvitados' in invitadosMASModel.`);
@@ -429,6 +440,7 @@ export async function deleteAllInvitados() {
  * Delete a user in the database using the telegram_id.
  * The SQL code is: DELETE FROM "invitado_mas" WHERE telegram_id = ###.
  * @param {Integer} telegram_id 
+ * @returns {Promise<void>}
  */
 export async function deleteInvitado(telegram_id) {
     console.log(`**Query 'deleteInvitado' in invitadosMASModel.`);

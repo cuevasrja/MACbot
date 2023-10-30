@@ -4,7 +4,7 @@ import pool from './connection.js';
  * Search the user's data in the database.
  * The SQL code is: select * from "user" where carnet = '###';
  * @param {Integer} carnet 
- * @returns {object} Object with the data of the user.
+ * @returns {Promise<object>} Object with the data of the user.
  */
 export async function searchCarnet(carnet) {
 	console.log(`**Query 'searchCarnet' in usersModel.`);
@@ -32,7 +32,7 @@ export async function searchCarnet(carnet) {
  * Verify if the telegram_id exists in the database.
  * The SQL code is: select * from "user" where telegram_id = ###;
  * @param {Integer} telegram_id 
- * @returns {Boolean} True if the telegram_id does not exist in the database, false if it exists.
+ * @returns {Promise<Boolean>} True if the telegram_id does not exist in the database, false if it exists.
  */
 export async function verifyTelegramID(telegram_id) {
 	console.log(`**Query 'verifyTelegramID' in usersModel.`);
@@ -59,6 +59,7 @@ export async function verifyTelegramID(telegram_id) {
  * Insert a new user in the database.
  * The SQL code is: insert into "user" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (###, '###', '###', '###');
  * @param {object} telegramData 
+ * @returns {Promise<void>}
  */
 export async function registerTelegramData(telegramData) {
 	console.log(`**Query 'registerTelegramID' in usersModel.`);

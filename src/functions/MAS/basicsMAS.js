@@ -15,13 +15,31 @@ let isMASQuest = true
 
 let intervalID = null
 
+/**
+ * Stop the interval of MASQuest and set the intervalID to null.
+ * @returns {void}
+ */
 export const stopMASInterval = () => {
     clearInterval(intervalID)
     intervalID = null
 }
-
+/**
+ * Check if MAS is playing.
+ * @returns {boolean} . True if MAS is playing, false otherwise.
+ */
 export const MASPlayingStatus = () => isMASPlaying
+
+/**
+ * Check if MASQuest is active.
+ * @returns {boolean} . True if MASQuest is active, false otherwise.
+ */
 export const MASQuestStatus = () => isMASQuest
+
+/**
+ * Set the value of isMASPlaying.
+ * @param {boolean} status 
+ * @returns {void}
+ */
 export const setMASQuestStatus = status => isMASQuest = status
 
 // ---------------------------------------------------------------------------------------------------- //

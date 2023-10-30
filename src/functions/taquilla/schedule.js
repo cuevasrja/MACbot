@@ -9,7 +9,7 @@ import { sendMessage } from "../sendMessage.js";
 /**
  * Organize the schedule of the day. 
  * The schedule is an object with the initials of the preparers as keys and an array with the hours that the preparer is in taquilla as value.
- * @returns {object} Object with the initials of the preparers of the day.
+ * @returns {Promise<object>} Object with the initials of the preparers of the day.
  */
 const taquillaScheduleMessage = async () => {
     const dateI = new Date();
@@ -127,6 +127,7 @@ bot.onText(/^\/taquilla$/, async msg => {
 /**
  * sendTaquillaMessage()
  * This function sends a message to each preparer with their schedule of the day.
+ * @returns {Promise<void>}
  */
 const sendTaquillaMessage = async () => {
     const dateI = new Date();

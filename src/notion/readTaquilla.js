@@ -43,7 +43,7 @@ const preparersOfTheDay = (response, day) => {
 /**
  * taquillaSchedule()
  * This function return an object with the initials of the preparers of the day.
- * @returns {object} Object with the initials of the preparers of the day.
+ * @returns {Promise<object>} Object with the initials of the preparers of the day.
  */
 export const taquillaSchedule = async () => {
     try {
@@ -70,7 +70,7 @@ export const taquillaSchedule = async () => {
 
 /**
  * Show all the taquilla schedule.
- * @returns {Array<object>} Array with all the taquilla schedule.
+ * @returns {Promise<object[]>} Array with all the taquilla schedule.
  */
 export const taquillaDev = async () => {
     try {

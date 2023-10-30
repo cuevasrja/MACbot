@@ -38,6 +38,6 @@ export const PREPARADORES = new Map([
 /**
  * Check if the given ID is jefe's ID.
  * @param {Integer} id 
- * @returns {Boolean}
+ * @returns {Boolean} True if the given ID is jefe's ID.
  */
 export const isJefe = id => id === parseInt(JZ_ID);
