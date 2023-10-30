@@ -164,7 +164,7 @@ bot.onText(/^\/MAS@switch/, async msg => {
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /MAS@add [name] command and adds a new member to the list of members of MAS.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS@add (.+)/, async (msg, match) => {
+bot.onText(/^\/MAS@add (.*)/, async (msg, match) => {
     const chatID = msg.chat.id
     // We check if MAS is already playing
     if (isMASPlaying) {
@@ -291,7 +291,7 @@ bot.onText(/^\/MAS@restart/, async msg => {
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /MAS@sug [suggestion] command and adds a suggestion to the member of MAS.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS@sug (.+)/, async (msg, match) => {
+bot.onText(/^\/MAS@sug (.*)/, async (msg, match) => {
     const chatID = msg.chat.id
     // We check if the usder is in MAS
     if (await verifyInvitadoID(chatID)) {

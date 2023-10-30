@@ -1,14 +1,14 @@
-export const MAS_PLAYING = `El **MACamigo Secreto** ya se está jugando.`
+export const MAS_PLAYING = `El *MACamigo Secreto* ya se está jugando.`
 
-export const MAS_NOT_PLAYING = `El **MACamigo Secreto** no se está jugando.`
+export const MAS_NOT_PLAYING = `El *MACamigo Secreto* no se está jugando.`
 
-export const MAS_FINISHED = `El **MACamigo Secreto** ha terminado. ¡Gracias a toda la aldea por participar!`
+export const MAS_FINISHED = `El *MACamigo Secreto* ha terminado. ¡Gracias a toda la aldea por participar!`
 
-export const MAS_RESET = `El **MACamigo Secreto ha sido reiniciado.`
+export const MAS_RESET = `El *MACamigo Secreto* ha sido reiniciado.`
 
-export const MAS_REGIST_ACTIVE = `El registro para el **MACamigo Secreto** está activo. ¡Regístrate con /MAS@add [nombre]!`
+export const MAS_REGIST_ACTIVE = `El registro para el *MACamigo Secreto* está activo. ¡Regístrate con /MAS@add \[nombre\]!`
 
-export const MAS_REGIST_INACTIVE = `El registro para el **MACamigo Secreto** está inactivo. ¡Perdiste tu oportunidad de registrarte!`
+export const MAS_REGIST_INACTIVE = `El registro para el *MACamigo Secreto* está inactivo. ¡Perdiste tu oportunidad de registrarte!`
 
 export const MAS_REGIST_DISABLED = `El registro para el **MACamigo Secreto** está desactivado.`
 

@@ -1,4 +1,4 @@
-export const PARSE = 'Markdown'
+export const PARSE = 'MarkdownV2'
 
 export const PRIVATE_CHAT = 'private'
 
