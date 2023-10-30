@@ -1,9 +1,16 @@
 import { BLOCKS_HOURS, weekDays } from "../../constants/notionProps.js";
-import { JEFE } from "../../constants/preparadores.js";
+import { isJefe } from "../../constants/preparadores.js";
+import { NOT_JEFE, NOT_PREPARADOR } from "../../messages/permissions.js";
 import { getAllPreparadores, getPreparadorByTelegramID, verifyPreparadorID } from "../../models/preparadorModel.js";
 import { taquillaDev, taquillaSchedule } from "../../notion/readTaquilla.js";
 import bot from "../../settings/app.js";
+import { sendMessage } from "../sendMessage.js";
 
+/**
+ * Organize the schedule of the day. 
+ * The schedule is an object with the initials of the preparers as keys and an array with the hours that the preparer is in taquilla as value.
+ * @returns {Promise<object>} Object with the initials of the preparers of the day.
+ */
 const taquillaScheduleMessage = async () => {
     const dateI = new Date();
     const hours = dateI.getHours()
@@ -11,14 +18,16 @@ const taquillaScheduleMessage = async () => {
     const day = dateI.getDay()
     // We get the schedule of the day
     const schedule = await taquillaSchedule()
+    let isReunion = false
     // We build the response
-    let response = `El horario de taquilla hoy (${weekDays[day - 1]}) es: \n`
+    let response = `El horario de taquilla hoy *(${weekDays[day - 1]})* es: \n`
     let reunion = ""
     // We iterate over the schedule. First, we take each preparer and their blocks
     for (const [preparer, block] of Object.entries(schedule)) {
         // We check if the block is a meeting
         if (preparer === "REUNION") {
             reunion += `Hoy hay reunión a las ${BLOCKS_HOURS[block[0] - 1]}\n`
+            isReunion = true
             continue
         }
         // We iterate over the blocks
@@ -26,13 +35,13 @@ const taquillaScheduleMessage = async () => {
             // We convert time to a int
             const i = parseInt(time) - 1
             if (index === 0) { // If it's the first block, we add the preparer
-                response += `${preparer}: ${BLOCKS_HOURS[i]}\n`
+                response += `**${preparer}**: ${BLOCKS_HOURS[i]}\n`
             } else { // If it's not the first block, we add the block with an indentation
                 response += `     ${BLOCKS_HOURS[i]}\n`
             }
         })
     }
-    response += "\n" + reunion
+    response += isReunion ? `\n${reunion}` : ""
     response += "\n Recuerda que si no puedes ir a taquilla, debes avisar con tiempo"
     return response
 }
@@ -47,15 +56,15 @@ bot.onText(/^\/taquilla@switch/, async msg => {
     const chatID = msg.chat.id
     console.log("Se va a ejecutar el comando /taquilla:switch")
     // We check if the user is the jefe
-    // const jefeChatID = (await getAllPreparadores()).find(preparador => preparador.initials === JEFE).telegram_id
-    // // If the user is not the jefe, we send a message and cancel the function
-    // if (chatID !== jefeChatID) {
-    //     bot.sendMessage(chatID, "No me jodas que no eres el jefe!!")
-    //     return
-    // }
+    console.log(chatID)
+    // If the user is not the jefe, we send a message and cancel the function
+    if (!isJefe(chatID)) {
+        sendMessage(chatID, NOT_JEFE)
+        return
+    }
     isTaquillaActive = !isTaquillaActive
     const message = isTaquillaActive ? "Taquilla abierta" : "Taquilla cerrada"
-    bot.sendMessage(chatID, message)
+    sendMessage(chatID, message)
 })
 
 // // ---------------------------------------------------------------------------------------------------- //
@@ -91,7 +100,7 @@ bot.onText(/^\/taquilla$/, async msg => {
     // If the user is not a preparador, we send a message and cancel the function
     if (await verifyPreparadorID(chatID)) {
         console.log("No es preparador")
-        bot.sendMessage(chatID, "No eres preparador!!")
+        sendMessage(chatID, NOT_PREPARADOR)
         return
     }
     // We get the initials of the preparer
@@ -102,24 +111,25 @@ bot.onText(/^\/taquilla$/, async msg => {
     const day = dateI.getDay()
     // We check if it's a weekend
     if (day === 0 || day === 6) {
-        bot.sendMessage(chatID, `No me jodas ${preparer} que es fin de semana, no hay taquilla!!`)
+        sendMessage(chatID, `No me jodas ${preparer} que es fin de semana, no hay taquilla!!`)
         return
     }
     // We check if the taquilla is active
     if (!isTaquillaActive) {
-        bot.sendMessage(chatID, `Deja de joder ${preparer}, la taquilla está cerrada`)
+        sendMessage(chatID, `Deja de joder ${preparer}, la taquilla está cerrada`)
         return
     }
     // If it's a weekday and the taquilla is active, we send the message
     const message = await taquillaScheduleMessage()
-    bot.sendMessage(chatID, message)
+    sendMessage(chatID, message)
 })
 
 /**
- * sendMessage()
+ * sendTaquillaMessage()
  * This function sends a message to each preparer with their schedule of the day.
+ * @returns {Promise<void>}
  */
-const sendMessage = async () => {
+const sendTaquillaMessage = async () => {
     const dateI = new Date();
     const hours = dateI.getHours()
     dateI.setHours(hours - 4);
@@ -135,7 +145,8 @@ const sendMessage = async () => {
         // If it's a weekday, we get the schedule of the day
         const schedule = await taquillaSchedule()
         // We get the IDs of the preparers of the day
-        const preparers = (await getAllPreparadores())
+        const allPreparers = await getAllPreparadores()
+        const preparers = allPreparers
             .map(preparer => [preparer.telegram_id, preparer.initials])
             .filter(preparer => Object.keys(schedule).includes(preparer[1]))
         // We send the message to each preparer
@@ -149,15 +160,17 @@ const sendMessage = async () => {
             })
             // We add the last message
             msg += "Recuerda que si no puedes ir a taquilla, debes avisar con tiempo"
-            bot.sendMessage(preparer[0], msg)
+            sendMessage(preparer[0], msg)
         })
+        // We check if there is a meeting
+        if (Object.keys(schedule).includes("REUNION")) {
+            const reunion = schedule["REUNION"]
+            const msg = `Recuerda que hoy hay reunión a las ${BLOCKS_HOURS[reunion[0] - 1]}`
+            allPreparers.forEach(preparer => {
+                sendMessage(preparer.telegram_id, msg)
+            })
+        }
     }
-    // We calculate the milliseconds to the next day
-    const next24Hours = 24 * 60 * 60 * 1000;
-    // We send the message every 24 hours
-    setInterval(() => {
-        sendMessage();
-    }, next24Hours);
 }
 
 const date = new Date();
@@ -179,6 +192,13 @@ if (millisecondsToStart < 0) {
 }
 
 // Every day at 8:00 am, we send the message
-setInterval(() => {
-    sendMessage();
+setTimeout(() => {
+    // We calculate the milliseconds to the next day
+    const next24Hours = 24 * 60 * 60 * 1000;
+    // We send the message every 24 hours
+    setInterval(() => {
+        sendTaquillaMessage();
+        console.log("Se ha ejecutado el setInterval")
+    }, next24Hours);
+
 }, millisecondsToStart);

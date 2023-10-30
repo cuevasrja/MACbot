@@ -1,25 +1,26 @@
 import { TEAM_A, TEAM_B } from "../../constants/infoMAS.js"
-import { getInvitadoByName, getInvitadosByTeam, showAllInvitados } from "../../models/invitadosMASModel.js"
+import { showAllInvitados } from "../../models/invitadosMASModel.js"
 
 /**
- * MASMessage()
+ * MASMessage(member, team)
  * This function returns a string with the team members and the name of the person to whom they have to give a gift.
- * @param {*} name 
+ * @param {object} member . Object with the name, team and receive of the member.
+ * @param {String[]} team . Array of strings with the names of the members of the team.
  * @returns 
  */
-export const MASMesssage = async (name) => {
-    const invitado = await getInvitadoByName(name)
-    const teamMembers = (await getInvitadosByTeam(invitado.team)).map(invitado => invitado.name)
-    const givesTo = invitado.receive
-    let response = `El equipo de ${name} está conformado por: ${teamMembers.join(", ")}. \n`
-    response += `${name}, te toca regalarle a: ${givesTo} \n`
+export const MASMesssage = (member, team) => {
+    const name = member.name
+    const teamName = member.team
+    const givesTo = member.receive
+    let response = `El equipo de los ${teamName} está conformado por: ${team.join(", ")}. \n\n`
+    response += `${name}, te toca ofrendarle a: ${givesTo} \n`
     return response
 }
 
 /**
  * getTeams()
  * This function returns an object with the two teams.
- * @returns {Object}. Object with the two teams.
+ * @returns {object}. Object with the two teams.
  */
 export const getTeams = async () => {
     const invitados = await showAllInvitados()

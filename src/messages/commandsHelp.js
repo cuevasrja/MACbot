@@ -1,6 +1,6 @@
 // ! ACTUALIZAR CADA VEZ QUE SE AÑADA UN COMANDO NUEVO
 
-const commandsHelp = `*LISTA DE COMANDOS*
+export const COMMANDS = `*LISTA DE COMANDOS*
 _------------ Comandos generales ------------_
 /help - Te devuelve la lista de comandos.
 /id - Te devuelve el ID del chat.
@@ -15,6 +15,7 @@ _--------- Comandos de Preparadores ---------_
 /hostname - Te devuelve el hostname del servidor.
 /taquilla - Te devuelve el horario de taquilla.
 /preparadores - Te devuelve la lista de preparadores.
+/dev - Muestra los comandos de desarrollo.
 
 *Solo para el jefe*
 /taquilla@switch - Activa o desactiva la taquilla.
@@ -39,4 +40,16 @@ _----------- Comandos de Invitados -----------_
 /MAS@clean - Limpia la lista de miembros de MAC Amigo Secreto.
 `
 
-export default commandsHelp
+export const DEV_COMMANDS = `*LISTA DE COMANDOS*
+_------------ MAC Amigo Secreto ------------_
+/MAS@dev - Inicia el juego de MAC Amigo Secreto.
+/MAS@prueba - Registra los preparadores en la base de datos del juego de MAC Amigo Secreto.
+/MAS@dbQuest - Vuelve a poner el checked de todos los invitados en false.
+/MAS@Quest - Realiza una pregunta a 3 invitados al azar.
+
+_---------------- Taquilla ------------------_
+/taquilla@dev - Te devuelve el horario de taquilla.
+
+Advertencia: Estos comandos son solo para desarrollo. No los uses en el grupo de admisión, MAC Amigo Secreto o en el grupo de preparadores.
+(Revisar que los comandos no estén desactivados)
+`

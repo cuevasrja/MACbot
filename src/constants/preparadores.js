@@ -35,4 +35,9 @@ export const PREPARADORES = new Map([
 	[NG_ID, 'NG']
 ]);
 
-export const JEFE = 'JZ';
+/**
+ * Check if the given ID is jefe's ID.
+ * @param {Integer} id 
+ * @returns {Boolean} True if the given ID is jefe's ID.
+ */
+export const isJefe = id => id === parseInt(JZ_ID);

@@ -5,10 +5,12 @@ import bot from '../settings/app.js';
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
 import dotenv from 'dotenv';
+import { sendMessage } from './sendMessage.js';
 import { PARSE, PRIVATE_CHAT } from '../constants/botSettings.js';
 // ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
-import commandsHelp from './commandsHelp.js';
+import { COMMANDS, DEV_COMMANDS } from '../messages/commandsHelp.js';
 import { getAllPreparadores, verifyPreparadorID } from '../models/preparadorModel.js';
+import { NOT_PREPARADOR } from '../messages/permissions.js';
 dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
@@ -58,7 +60,7 @@ bot.onText(/^\/hostname/, async msg => {
 
 	// We check if the user is preparador
 	if (await verifyPreparadorID(chatID)) {
-		bot.sendMessage(chatID, 'No eres preparador, no puedes usar este comando');
+		bot.sendMessage(chatID, NOT_PREPARADOR);
 		return;
 	}
 
@@ -74,7 +76,21 @@ bot.onText(/^\/hostname/, async msg => {
 bot.onText(/^\/help/, msg => {
 	const chatID = msg.chat.id;
 	// ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
-	bot.sendMessage(chatID, commandsHelp, { parse_mode: PARSE });
+	sendMessage(chatID, COMMANDS);
+})
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /dev command and sends a message with the development commands.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/dev/, async msg => {
+	const chatID = msg.chat.id;
+	// We check if the user is preparador
+	if (await verifyPreparadorID(chatID)) {
+		bot.sendMessage(chatID, NOT_PREPARADOR);
+		return;
+	}
+	// We send the message
+	sendMessage(chatID, DEV_COMMANDS);
 })
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -84,7 +100,7 @@ bot.onText(/^\/preparadores/, async msg => {
 	const chatID = msg.chat.id;
 	// We check if the user is preparador
 	if (await verifyPreparadorID(chatID)) {
-		bot.sendMessage(chatID, 'No eres preparador, no puedes usar este comando');
+		bot.sendMessage(chatID, NOT_PREPARADOR);
 		return;
 	}
 	// We get all the preparadores
@@ -92,5 +108,5 @@ bot.onText(/^\/preparadores/, async msg => {
 		.map(preparador => preparador.initials)
 		.join(', ');
 	// We send the message
-	bot.sendMessage(chatID, `Los preparadores son: ${preparadores}`);
+	sendMessage(chatID, `Los preparadores son: ${preparadores}`);
 })

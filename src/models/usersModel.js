@@ -1,8 +1,11 @@
 import pool from './connection.js';
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "user" WHERE carnet = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Search the user's data in the database.
+ * The SQL code is: select * from "user" where carnet = '###';
+ * @param {Integer} carnet 
+ * @returns {Promise<object>} Object with the data of the user.
+ */
 export async function searchCarnet(carnet) {
 	console.log(`**Query 'searchCarnet' in usersModel.`);
 
@@ -25,9 +28,12 @@ export async function searchCarnet(carnet) {
 	return resultado.rows[0];
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "user" WHERE telegram_id = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Verify if the telegram_id exists in the database.
+ * The SQL code is: select * from "user" where telegram_id = ###;
+ * @param {Integer} telegram_id 
+ * @returns {Promise<Boolean>} True if the telegram_id does not exist in the database, false if it exists.
+ */
 export async function verifyTelegramID(telegram_id) {
 	console.log(`**Query 'verifyTelegramID' in usersModel.`);
 
@@ -49,9 +55,12 @@ export async function verifyTelegramID(telegram_id) {
 	return resultado.rowCount === 0;
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO "user" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Insert a new user in the database.
+ * The SQL code is: insert into "user" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (###, '###', '###', '###');
+ * @param {object} telegramData 
+ * @returns {Promise<void>}
+ */
 export async function registerTelegramData(telegramData) {
 	console.log(`**Query 'registerTelegramID' in usersModel.`);
 

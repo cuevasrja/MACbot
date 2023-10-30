@@ -1,8 +1,11 @@
 import pool from './connection.js';
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "prenuevo" WHERE telegram_id = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Verify if the telegram_id exists in the database.
+ * The SQL code is: select * from "prenuevo" where telegram_id = ###;
+ * @param {Integer} telegram_id 
+ * @returns {Promise<Boolean>} True if the telegram_id does not exist in the database, false if it exists.
+ */
 export async function verifyTelegramID(telegram_id) {
 	console.log(`**Query 'verifyTelegramID' in prenuevosModel.`);
 
@@ -23,9 +26,12 @@ export async function verifyTelegramID(telegram_id) {
 	return resultado.rowCount === 0 ? true : false;
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO "prenuevo" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Register a new user in the database.
+ * The SQL code is: insert into "prenuevo" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (###, '###', '###', '###');
+ * @param {object} telegramData - Object with the data of the user to be registered.
+ * @returns {Promise<void>}
+ */
 export async function registerTelegramData(telegramData) {
 	console.log(`**Query 'registerTelegramID' in prenuevosModel.`);
 

@@ -21,9 +21,9 @@ const BLOCK = "Bloque";
  * preparersOfTheDay()
  * This fuction return an object with the initials of the preparers of the day. 
  * The value of each preparer is an array with the hours that the preparer is in taquilla.
- * @param {Object} response . Response of the query to the database of taquilla.
+ * @param {object} response . Response of the query to the database of taquilla.
  * @param {String} day . Day of the week (Lunes, Martes, Miércoles, Jueves, Viernes)
- * @returns {Object} Object with the initials of the preparers of the day.
+ * @returns {object} Object with the initials of the preparers of the day.
  */
 const preparersOfTheDay = (response, day) => {
     // We get the initials of the preparers of the day.
@@ -43,7 +43,7 @@ const preparersOfTheDay = (response, day) => {
 /**
  * taquillaSchedule()
  * This function return an object with the initials of the preparers of the day.
- * @returns {Object} Object with the initials of the preparers of the day.
+ * @returns {Promise<object>} Object with the initials of the preparers of the day.
  */
 export const taquillaSchedule = async () => {
     try {
@@ -68,6 +68,10 @@ export const taquillaSchedule = async () => {
     }
 }
 
+/**
+ * Show all the taquilla schedule.
+ * @returns {Promise<object[]>} Array with all the taquilla schedule.
+ */
 export const taquillaDev = async () => {
     try {
         const response = await notion.databases.query({

@@ -1,8 +1,9 @@
 import { TEAM_A, TEAM_B, questTime } from "../../constants/infoMAS.js";
-import { getInvitadoByName, showAllInvitados, switchCheckedByName, updateRecord } from "../../models/invitadosMASModel.js";
+import { showAllInvitados, switchCheckedByName, updateRecord } from "../../models/invitadosMASModel.js";
 import bot from "../../settings/app.js";
-import { MASPlayingStatus } from "./basicsMAS.js";
+import { MASPlayingStatus, MASQuestStatus, setMASQuestStatus, stopMASInterval } from "./basicsMAS.js";
 import { MASMesssage } from "./readMAS.js";
+import { sendMessage } from "../sendMessage.js";
 
 /**
  * randomSort()
@@ -17,7 +18,8 @@ const randomSort = (arr) => {
 /**
  * startMAS()
  * This function starts the MAS assignment.
- * @returns {String[][]} . Array of two arrays of strings, one for each team.
+ * It assigns a random participant from the opposite team to each participant (except themselves).
+ * Each participant will have a different random participant.
  */
 export const startMAS = async () => {
     try {
@@ -56,9 +58,6 @@ export const startMAS = async () => {
             // await updateRecieve(participantID, randomParticipant)
             // await updateTeam(participantID, teamName)
         })
-        // We return an array with the two teams.
-        const teams = [teamA, teamB]
-        return teams
     } catch (error) {
         console.log("Error en startMAS");
         console.error(error);
@@ -75,8 +74,8 @@ export const startMAS = async () => {
 export const teamMessage = (teamA, teamB) => {
     try {
         let message = `Hay ${teamA.length + teamB.length} participantes distribuidos en dos equipos.`;
-        message += `\n\nEl equipo ${TEAM_A} está formado por: \n - ${teamA.join("\n - ")}`;
-        message += `\n\nEl equipo ${TEAM_B} está formado por: \n - ${teamB.join("\n - ")}`;
+        message += `\n\nEl equipo de los ${TEAM_A} está conformado por: \n - ${teamA.join("\n - ")}`;
+        message += `\n\nEl equipo de los ${TEAM_B} está conformado por: \n - ${teamB.join("\n - ")}`;
         return message;
     } catch (error) {
         console.log("Error en teamMessage");
@@ -87,16 +86,18 @@ export const teamMessage = (teamA, teamB) => {
 /**
  * sendTeamMessage()
  * This function sends a message to each participant with the team they are in and the participant they have to give a gift to.
- * @param {String[]} team . Array of strings with the names of the participants in the team.
  * @param {String} teamName . String with the name of the team.
+ * @param {Object[]} teamInfo . Array of objects with the name, team and receive of each participant.
  */
-export const sendTeamMessage = async (team, teamName) => {
-    team.forEach(async (member) => {
-        const memberID = (await getInvitadoByName(member)).telegram_id
-        let response = `Bienvenido al equipo ${teamName} de MAS. \n\n`
-        response += (await MASMesssage(member)) + "\n\n"
-        response += "Recuerda que para ver esta informacion y la sugerencia de regalo en cualquier momento puedes usar el comando /MAS"
+export const sendTeamMessage = (teamName, teamInfo) => {
+    const team = teamInfo.map(invitado => invitado.name)
+    teamInfo.forEach((member) => {
+        const memberID = member.telegram_id
+        let response = `¡Bienvenido al equipo de los ${teamName}! \n\n`
+        response += MASMesssage(member, team) + "\n\n"
+        response += "Recuerda que puedes usar el comando /MAS en cualquier momento para ver esta información y la sugerencia de regalo."
         bot.sendMessage(memberID, response)
+        console.log(`Mensaje enviado a ${member.name}`)
     })
 }
 
@@ -109,24 +110,32 @@ const randomTrueFalse = () => {
     return Math.random() < 0.5
 }
 
+/**
+ * MASQuest()
+ * This function sends a message to each participant with three options, one of them could be the correct answer.
+ * The correct answer is the participant they have to give a gift to.
+ */
 export const MASQuest = async () => {
+    console.log("MASQuest")
     // We check if the MAS is active
-    if (!MASPlayingStatus()) return
+    if (!MASPlayingStatus() || !MASQuestStatus()) return
     const invitados = await showAllInvitados()
     // We take the first three unchecked invitados
     const unchecked = invitados.filter(invitado => !invitado.checked)
-    const randomsUnchecked = randomSort(unchecked).slice(0, 3)
+    const randomsUnchecked = unchecked.length > 3 ? randomSort(unchecked).slice(0, 3) : randomSort(unchecked)
+    if (randomsUnchecked.length === 0) {
+        console.log("No hay más invitados por comprobar")
+        setMASQuestStatus(false)
+        stopMASInterval()
+        return
+    }
+    console.log(randomsUnchecked)
     // We send a message to each of the three invitados, to try to guess their secret santa between 3 random invitados
     randomsUnchecked.forEach(async (invitado) => {
         const name = invitado.name
-        const givesTo = await getInvitadoByName(invitado.recieve)
-        // We create a random boolean to decide if we show the correct answer or not. The correct answer will be a false option.
-        const desition = randomTrueFalse()
+        await switchCheckedByName(name)
+        const givesTo = invitados.find(inv => inv.name === invitado.receive)
         let oppositeTeam = randomSort(invitados.filter(opposite => opposite.team !== invitado.team))
-        // If the desition is false, we remove the correct answer from the list of options.
-        if (!desition) {
-            oppositeTeam = oppositeTeam.filter(opposite => opposite.name !== givesTo.name)
-        }
         const [first, second, third] = oppositeTeam.slice(0, 3).map(opposite => opposite.name)
 
         // We create the options for the message, with the three options. 
@@ -156,28 +165,28 @@ export const MASQuest = async () => {
             }
         }
         // We send a message to the invitado with the three options
-        bot.sendMessage(invitado.telegram_id, `¿Quién crees que es tu amigo invisible? (Selecciona una opción)`, opts)
+        await bot.sendMessage(invitado.telegram_id, `¡La vidente se te ha aparecido en sueños! Es tu oportunidad de preguntarle quien crees que es tu MACamigo secreto (Selecciona una opción).`, opts)
 
         // We create a listener for the callback query, to check if the invitado has selected an option.
         bot.on("callback_query", async (query) => {
             // We get the chatID of the query.
             const chatID = query.message.chat.id
             // We check if the query is from the invitado we are looking for.
-            if (query.from.id !== invitado.telegram_id) return
+            if (query.from.id != invitado.telegram_id) return
             const nameSelected = query.data
             // We erase the listener, to avoid multiple answers.
             bot.editMessageReplyMarkup({ inline_keyboard: [] }, { chat_id: chatID, message_id: query.message.message_id })
-            let response = `Has elegido a ${nameSelected} como tu amigo invisible.\n\n`
+            let response = `Has elegido a ${nameSelected} como tu amigo secreto.\n\n`
             // We send a message to the invitado if they have selected the "correct" option or not.
-            response += desition ?
-                `¡Has acertado! Tu amigo invisible es ${nameSelected}. (O te estoy mintiendo? xD)` :
-                `Tu amigo invisible no es ${nameSelected}.`
-            bot.sendMessage(invitado.telegram_id, response)
+            if (nameSelected == givesTo.name) {
+                response += `¡Has acertado! (tal vez...) Tu MACamigo secreto es ${nameSelected} (o quizá no...).`
+            }
+            else {
+                response += randomTrueFalse() ?
+                    `¡Has acertado! (tal vez...) Tu MACamigo secreto es ${nameSelected} (o quizá no...).` :
+                    `Lástima. Tu MACamigo secreto no es ${nameSelected}.`
+            }
+            await sendMessage(chatID, response)
         })
-
-        await switchCheckedByName(name)
     })
-    setInterval(async () => {
-        await MASQuest()
-    }, questTime)
 }

@@ -1,8 +1,11 @@
 import pool from './connection.js';
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "preparador" WHERE telegram_id = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Verify if the telegram_id exists in the database.
+ * The SQL code is: select * from "preparador" where telegram_id = ###;
+ * @param {Integer} telegram_id 
+ * @returns {Promise<Boolean>} True if the telegram_id does not exist in the database, false if it exists.
+ */
 export async function verifyPreparadorID(telegram_id) {
 	console.log(`**Query 'verifyPreparadorID' in preparadoresModel.`);
 
@@ -23,9 +26,12 @@ export async function verifyPreparadorID(telegram_id) {
 	return resultado.rowCount === 0;
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO "preparador" (telegram_id, initials) values ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Insert a new preparador in the database.
+ * @param {Integer} telegram_id 
+ * @param {String} initials 
+ * @returns {Promise<void>}
+ */
 export async function registerTelegramData(telegram_id, initials) {
 	console.log(`**Query 'registerTelegramID' in preparadoresModel.`);
 
@@ -39,6 +45,12 @@ export async function registerTelegramData(telegram_id, initials) {
 	});
 }
 
+/**
+ * Insert all preparadores in the database.
+ * The SQL code is: DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM "preparador" WHERE telegram_id = ### AND initials = '###') THEN INSERT INTO "preparador" (telegram_id, initials) VALUES (###, '###'); END IF; END $$;
+ * @param {Map<String, object>} PREPARADORES - Map with the telegram_id and initials of all preparadores.
+ * @returns {Promise<void>}
+ */
 export async function registerAllPreparadores(PREPARADORES) {
 	console.log(`**Query 'registerAllPreparadores' in preparadoresModel.`);
 
@@ -62,9 +74,11 @@ export async function registerAllPreparadores(PREPARADORES) {
 	});
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "preparador"
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Get all preparadores from the database.
+ * The SQL code is: select * from "preparador";
+ * @returns {Promise<object[]>} Array with all preparadores.
+ */
 export async function getAllPreparadores() {
 	const sql = `SELECT * from "preparador"`;
 
@@ -81,9 +95,11 @@ export async function getAllPreparadores() {
 	return resultado.rows;
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "preparador" WHERE telegram_id = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Get the preparador with the telegram_id.
+ * @param {Integer} telegram_id 
+ * @returns {Promise<object>} Object with the data of the preparador.
+ */
 export async function getPreparadorByTelegramID(telegram_id) {
 	const sql = `SELECT * from "preparador" WHERE telegram_id = ${telegram_id}`;
 
@@ -103,9 +119,12 @@ export async function getPreparadorByTelegramID(telegram_id) {
 	return resultado.rows[0];
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM "preparador" WHERE initials = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Get the preparador with the initials.
+ * The SQL code is: select * from "preparador" where initials = '###';
+ * @param {String} initials 
+ * @returns {Promise<object>} Object with the data of the preparador.
+ */
 export async function getPreparadorByInitials(initials) {
 	const sql = `SELECT * from "preparador" WHERE initials = '${initials}'`;
 
