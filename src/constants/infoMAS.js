@@ -13,20 +13,20 @@ export const TEAM_B = "Lobos"
 // Actual time: 15 minutes (Update if you change the time)
 export const questTime = 15 * 60 * 1000
 
-export const BIENVENIDA = `¡El **MACamigo Secreto** ha comenzado en la aldea del **MAC**!
+export const BIENVENIDA = `¡El *MACamigo Secreto* ha comenzado en la aldea del *MAC*!
 
 > Usa el comando /MAS para saber tu *equipo* y a quien te toca ofrendarle. ¡Entérate ya de esa valiosa información!
 
-> Con /MAS@help podrás ver las **reglas del juego**. Te recomiendo que las consultes si aún no lo has hecho.
+> Con /MAS@help podrás ver las *reglas del juego*. Te recomiendo que las consultes si aún no lo has hecho.
 
-> Para añadir una *sugerencia de ofrenda* escribe /MAS@sug [sugerencia]. El **precio** estimado de la misma debe estar entre **5-10$**. ¡Piensa bien lo que vas a pedir!
+> Para añadir una _sugerencia de ofrenda_ escribe /MAS@sug [sugerencia]. El _precio_ estimado de la misma debe estar entre *5-10$*. ¡Piensa bien lo que vas a pedir!
 
-> Está atento a la visita de la *vidente*, lo que te diga puede cambiar el rumbo de la partida...
+> Está atento a la visita de la _vidente_, lo que te diga puede cambiar el rumbo de la partida...
 
 > Los *anuncios importantes* los haré en este chat. Trata de no pasar por alto mis mensajes.
 
 > Sin nada más que decir, les deseo ***mucha suerte*** a todos.
 
-Att: El *alcalde*.
+Att: _El alcalde_.
 
-P.D.: No nos hacemos responsables por *aldeanos* devorados y/o *lobos* linchados.`
+P.D.: No nos hacemos responsables por _aldeanos_ devorados y/o _lobos_ linchados.`
