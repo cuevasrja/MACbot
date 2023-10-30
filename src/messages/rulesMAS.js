@@ -14,7 +14,7 @@ const rules = `*REGLAS DEL JUEGO*
 
 > Cada cierto tiempo, la _vidente_ seleccionará a un _grupo de participantes_.
 
-> A cada _participante_ seleccionado se le dará una lista con 3 opciones de integrantes del otro _equipo_ y deberá elegir uno de ellos para intentar adivinar si él es su **MACamigo Secreto**.
+> A cada _participante_ seleccionado se le dará una lista con 3 opciones de integrantes del otro _equipo_ y deberá elegir uno de ellos para intentar adivinar si él es su *MACamigo Secreto*.
 
 > La _vidente_ contestará si el _participante_ acertó la adivinanza o no. Pero cuidado, la _vidente_ no te lo pondrá fácil, así que hay cierta probabilidad de que dé un falso positivo. De esta manera, los _participantes_ sólo pueden estar seguros si la respuesta fue negativa.
 
