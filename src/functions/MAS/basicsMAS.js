@@ -15,6 +15,11 @@ let isMASQuest = true
 
 let intervalID = null
 
+export const stopMASInterval = () => {
+    clearInterval(intervalID)
+    intervalID = null
+}
+
 export const MASPlayingStatus = () => isMASPlaying
 export const MASQuestStatus = () => isMASQuest
 export const setMASQuestStatus = status => isMASQuest = status

@@ -1,7 +1,7 @@
 import { TEAM_A, TEAM_B, questTime } from "../../constants/infoMAS.js";
 import { showAllInvitados, switchCheckedByName, updateRecord } from "../../models/invitadosMASModel.js";
 import bot from "../../settings/app.js";
-import { MASPlayingStatus, MASQuestStatus, setMASQuestStatus } from "./basicsMAS.js";
+import { MASPlayingStatus, MASQuestStatus, setMASQuestStatus, stopMASInterval } from "./basicsMAS.js";
 import { MASMesssage } from "./readMAS.js";
 import { sendMessage } from "../sendMessage.js";
 
@@ -126,6 +126,7 @@ export const MASQuest = async () => {
     if (randomsUnchecked.length === 0) {
         console.log("No hay más invitados por comprobar")
         setMASQuestStatus(false)
+        stopMASInterval()
         return
     }
     console.log(randomsUnchecked)
