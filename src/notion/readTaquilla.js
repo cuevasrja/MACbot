@@ -67,19 +67,3 @@ export const taquillaSchedule = async () => {
         console.error(error);
     }
 }
-
-/**
- * Show all the taquilla schedule.
- * @returns {Promise<object[]>} Array with all the taquilla schedule.
- */
-export const taquillaDev = async () => {
-    try {
-        const response = await notion.databases.query({
-            database_id: NOTION_DB_ID,
-        });
-        return response.results;
-    } catch (error) {
-        console.log("Error en taquillaDev");
-        console.error(error);
-    }
-}

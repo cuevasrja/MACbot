@@ -2,10 +2,9 @@ import { TEAM_A, TEAM_B, questTime, BIENVENIDA } from "../../constants/infoMAS.j
 import { isJefe } from "../../constants/preparadores.js"
 import rules from "../../messages/rulesMAS.js"
 import { deleteAllInvitados, getInvitadoByTelegramID, registerInvitado, removeInvitado, showAllInvitados, updateSuggestion, verifyInvitadoID, verifyInvitadoName } from "../../models/invitadosMASModel.js"
-import { getAllPreparadores } from "../../models/preparadorModel.js"
 import bot from "../../settings/app.js"
 import { MASMesssage, getTeams } from "./readMAS.js"
-import { MASQuest, sendTeamMessage, startMAS } from "./startMAS.js"
+import { MASQuest, startMAS } from "./startMAS.js"
 import { sendMessage } from "../sendMessage.js"
 import { MAS_ALREADY_REGISTERED, MAS_FINISHED, MAS_NOT_PLAYING, MAS_NOT_REGISTERED, MAS_PLAYING, MAS_REGIST_ACTIVE, MAS_REGIST_DISABLED, MAS_REGIST_INACTIVE, MAS_RESET, NAME_TOO_LONG, NAME_USED, NOT_NAME_GIVEN, NOT_SUGGESTION_GIVEN, SUGGESTION_TOO_LONG } from "../../messages/MASMessages.js"
 import { NOT_INVITADO, NOT_JEFE } from "../../messages/permissions.js"
@@ -421,50 +420,6 @@ bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
     })
     // We send a message to the user to confirm that the message has been sent
     sendMessage(chatID, "Se ha enviado el mensaje a todos los participantes de MAS.")
-})
-
-// ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS@prueba command and insert preparadores in the database. (Command for development, please comment this command if it's not necessary)
-// ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS@prueba/, async msg => {
-    const chatID = msg.chat.id
-    // If the user is not the jefe, we send a message and cancel the function
-    if (!isJefe(chatID)) {
-        sendMessage(chatID, NOT_JEFE)
-        return
-    }
-    const preparadores = await getAllPreparadores()
-    const preparadoresToInsert = preparadores.filter(preparador => preparador.initials !== 'NG')
-    preparadoresToInsert.forEach(async preparador => {
-        console.log(preparador)
-        await registerInvitado(preparador.telegram_id, preparador.initials)
-    })
-    sendMessage(chatID, "Se han insertado los preparadores en la base de datos.")
-})
-
-// ---------------------------------------------------------------------------------------------------- //
-// The bot listens to the /MAS@dev command and sends a message with the team members of MAS. (Command for development, please comment this command if it's not necessary)
-// ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/MAS@dev/, async msg => {
-    const chatID = msg.chat.id
-    if (!isJefe(chatID)) {
-        bot.sendMessage(chatID, NOT_JEFE)
-        return
-    }
-    if (isMASPlaying) {
-        bot.sendMessage(chatID, MAS_PLAYING)
-        return
-    }
-    const teams = await startMAS()
-    console.log("Termino startMAS");
-    console.log(teams)
-    const teamA = teams[0]
-    const teamB = teams[1]
-    isMASPlaying = true
-    console.log("Se ha iniciado el sorteo de MAS")
-    await sendTeamMessage(teamA, TEAM_A)
-    await sendTeamMessage(teamB, TEAM_B)
-    console.log("Se ha enviado el mensaje a los equipos")
 })
 
 // ---------------------------------------------------------------------------------------------------- //

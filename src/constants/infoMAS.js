@@ -10,8 +10,8 @@ export const TEAM_B = "Lobos"
 // If you want to set days, you have to multiply the days by 24 hours, by 60 minutes, by 60 seconds and by 1000 milliseconds.
 // Example: 1 day = 1 * 24 * 60 * 60 * 1000 = 86400000
 // Format: time = days * hours * minutes * seconds * milliseconds
-// Actual time: 15 minutes (Update if you change the time)
-export const questTime = 15 * 60 * 1000
+// Actual time: 3 days (Update if you change the time)
+export const questTime = 3 * 24 * 60 * 60 * 1000
 
 export const BIENVENIDA = `¡El *MACamigo Secreto* ha comenzado en la aldea del *MAC*!
 

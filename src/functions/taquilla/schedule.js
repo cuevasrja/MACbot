@@ -2,7 +2,7 @@ import { BLOCKS_HOURS, weekDays } from "../../constants/notionProps.js";
 import { isJefe } from "../../constants/preparadores.js";
 import { NOT_JEFE, NOT_PREPARADOR } from "../../messages/permissions.js";
 import { getAllPreparadores, getPreparadorByTelegramID, verifyPreparadorID } from "../../models/preparadorModel.js";
-import { taquillaDev, taquillaSchedule } from "../../notion/readTaquilla.js";
+import { taquillaSchedule } from "../../notion/readTaquilla.js";
 import bot from "../../settings/app.js";
 import { sendMessage } from "../sendMessage.js";
 
@@ -66,29 +66,6 @@ bot.onText(/^\/taquilla@switch/, async msg => {
     const message = isTaquillaActive ? "Taquilla abierta" : "Taquilla cerrada"
     sendMessage(chatID, message)
 })
-
-// // ---------------------------------------------------------------------------------------------------- //
-// // The bot listens to the /taquilla@dev command and sends a message with the schedule of the day. (Only for development)
-// // Please, comment this function before deploying to production.
-// // ---------------------------------------------------------------------------------------------------- //
-// bot.onText(/^\/taquilla@dev/, async msg => {
-//     const chatID = msg.chat.id
-//     console.log("Buscando horario de taquilla del dia")
-//     const dateI = new Date();
-//     const hours = dateI.getHours()
-//     dateI.setHours(hours - 4);
-//     const day = dateI.getDay()
-//     if (day === 0 || day === 6) return
-//     const schedule = await taquillaDev();
-//     console.log(schedule)
-//     const dia = weekDays[day - 1]
-//     console.log(dia)
-//     schedule.forEach(time => {
-//         const info = time.properties
-//         console.log(info)
-//     })
-//     bot.sendMessage(chatID, "Revise la consola")
-// })
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /taquilla command and sends a message with the schedule of the day.
