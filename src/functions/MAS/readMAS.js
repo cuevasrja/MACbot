@@ -31,3 +31,15 @@ export const getTeams = async () => {
         teamB: teamB
     }
 }
+
+/**
+ * isPlayable()
+ * This function returns a boolean indicating if the game can be played.
+ * @returns {boolean}. Boolean indicating if the game can be played.
+ */
+export const isPlayable = async () => {
+    const invitados = await showAllInvitados()
+    const teamA = invitados.filter(invitado => invitado.team === TEAM_A)
+    const teamB = invitados.filter(invitado => invitado.team === TEAM_B)
+    return teamA.length === teamB.length && teamA.length > 3 && teamA % 2 === 0
+}

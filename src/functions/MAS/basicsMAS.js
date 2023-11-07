@@ -3,7 +3,7 @@ import { isJefe } from "../../constants/preparadores.js"
 import rules from "../../messages/rulesMAS.js"
 import { deleteAllInvitados, getInvitadoByTelegramID, registerInvitado, removeInvitado, showAllInvitados, updateSuggestion, verifyInvitadoID, verifyInvitadoName } from "../../models/invitadosMASModel.js"
 import bot from "../../settings/app.js"
-import { MASMesssage, getTeams } from "./readMAS.js"
+import { MASMesssage, getTeams, isPlayable } from "./readMAS.js"
 import { MASQuest, startMAS } from "./startMAS.js"
 import { sendMessage } from "../sendMessage.js"
 import { MAS_ALREADY_REGISTERED, MAS_FINISHED, MAS_NOT_PLAYING, MAS_NOT_REGISTERED, MAS_PLAYING, MAS_REGIST_ACTIVE, MAS_REGIST_DISABLED, MAS_REGIST_INACTIVE, MAS_RESET, NAME_TOO_LONG, NAME_USED, NOT_NAME_GIVEN, NOT_SUGGESTION_GIVEN, SUGGESTION_TOO_LONG } from "../../messages/MASMessages.js"
@@ -13,6 +13,15 @@ let isMASPlaying = false
 let isMASQuest = true
 
 let intervalID = null
+
+if (await isPlayable()) {
+    console.log("El juego de MAS fue reinicado automáticamente.")
+    isMASPlaying = true
+    isMASQuest = true
+    intervalID = setInterval(async () => {
+        await MASQuest()
+    }, questTime)
+}
 
 /**
  * Stop the interval of MASQuest and set the intervalID to null.
@@ -86,8 +95,7 @@ bot.onText(/^\/MAS@start/, async msg => {
     console.log("Se ha enviado el mensaje a los equipos.")
 
     if (intervalID !== null) {
-        clearInterval(intervalID)
-        intervalID = null
+        stopMASInterval()
     }
 
     // Every ${questTime} milliseconds, we send a message to the jefe with the number of participants in MAS.
@@ -301,8 +309,7 @@ bot.onText(/^\/MAS@restart/, async msg => {
     console.log("MAS ha sido reiniciado")
 
     if (intervalID !== null) {
-        clearInterval(intervalID)
-        intervalID = null
+        stopMASInterval()
     }
 
     intervalID = setInterval(async () => {

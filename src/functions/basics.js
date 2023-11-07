@@ -11,6 +11,7 @@ import { PARSE, PRIVATE_CHAT } from '../constants/botSettings.js';
 import { COMMANDS, DEV_COMMANDS } from '../messages/commandsHelp.js';
 import { getAllPreparadores, verifyPreparadorID } from '../models/preparadorModel.js';
 import { NOT_PREPARADOR } from '../messages/permissions.js';
+import { isJefe } from '../constants/preparadores.js';
 dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
@@ -110,3 +111,7 @@ bot.onText(/^\/preparadores/, async msg => {
 	// We send the message
 	sendMessage(chatID, `Los preparadores son: ${preparadores}`);
 })
+
+const preps = await getAllPreparadores();
+const jefe = preps.find(prep => isJefe(prep.telegram_id));
+bot.sendMessage(jefe.telegram_id, 'El bot se ha reiniciado');
