@@ -112,6 +112,4 @@ bot.onText(/^\/preparadores/, async msg => {
 	sendMessage(chatID, `Los preparadores son: ${preparadores}`);
 })
 
-const preps = await getAllPreparadores();
-const jefe = preps.find(prep => isJefe(prep.telegram_id));
-bot.sendMessage(jefe.telegram_id, 'El bot se ha reiniciado');
+console.log(`Bot iniciado a las ${new Date().toLocaleString()}`)
