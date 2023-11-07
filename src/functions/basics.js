@@ -11,7 +11,6 @@ import { PARSE, PRIVATE_CHAT } from '../constants/botSettings.js';
 import { COMMANDS, DEV_COMMANDS } from '../messages/commandsHelp.js';
 import { getAllPreparadores, verifyPreparadorID } from '../models/preparadorModel.js';
 import { NOT_PREPARADOR } from '../messages/permissions.js';
-import { isJefe } from '../constants/preparadores.js';
 dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
