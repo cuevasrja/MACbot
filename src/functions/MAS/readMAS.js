@@ -41,5 +41,5 @@ export const isPlayable = async () => {
     const invitados = await showAllInvitados()
     const teamA = invitados.filter(invitado => invitado.team === TEAM_A)
     const teamB = invitados.filter(invitado => invitado.team === TEAM_B)
-    return teamA.length === teamB.length && teamA.length > 3 && teamA % 2 === 0
+    return teamA.length === teamB.length && teamA.length > 3 && teamA.length % 2 === 0
 }
