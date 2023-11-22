@@ -1,12 +1,15 @@
-import pool from './connection';
+import pool from './connection.js';
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM prenuevos WHERE telegram_id = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Verify if the telegram_id exists in the database.
+ * The SQL code is: select * from "prenuevo" where telegram_id = ###;
+ * @param {Integer} telegram_id 
+ * @returns {Promise<Boolean>} True if the telegram_id does not exist in the database, false if it exists.
+ */
 export async function verifyTelegramID(telegram_id) {
 	console.log(`**Query 'verifyTelegramID' in prenuevosModel.`);
 
-	let sql = `select * from prenuevos where telegram_id = ${telegram_id}`;
+	let sql = `select * from "prenuevo" where telegram_id = ${telegram_id}`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
@@ -23,9 +26,12 @@ export async function verifyTelegramID(telegram_id) {
 	return resultado.rowCount === 0 ? true : false;
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO prenuevos(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Register a new user in the database.
+ * The SQL code is: insert into "prenuevo" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (###, '###', '###', '###');
+ * @param {object} telegramData - Object with the data of the user to be registered.
+ * @returns {Promise<void>}
+ */
 export async function registerTelegramData(telegramData) {
 	console.log(`**Query 'registerTelegramID' in prenuevosModel.`);
 
@@ -34,7 +40,7 @@ export async function registerTelegramData(telegramData) {
 	let telegram_lastname = telegramData.last_name || undefined;
 	let telegram_username = telegramData.username || undefined;
 
-	let sql = `insert into prenuevos(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
+	let sql = `insert into "prenuevo" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
 
 	await pool.query(sql).catch(err => {
 		throw new Error(

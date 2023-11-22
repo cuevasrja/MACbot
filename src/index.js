@@ -1,31 +1,55 @@
 // ---------------------------------------------------------------------------------------------------- //
 // Bot Management.
 // ---------------------------------------------------------------------------------------------------- //
-import './settings/app';
-import './settings/log_error';
-import './settings/timezone';
+import './settings/app.js';
+import './settings/log_error.js';
+import './settings/timezone.js';
+
+// ! CADA VEZ QUE SE CREE UN ARCHIVO EN /src/functions PARA MANEJAR UNA FUNCIONALIDAD, SE TIENE QUE IMPORTAR AQUI
 
 // ---------------------------------------------------------------------------------------------------- //
 // Functionalities
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/start';
-import './functions/basics';
+import './functions/basics.js';
+import './functions/start.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Admission.
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/admission/admission';
-import './functions/admission/prenuevos';
+import './functions/admission/admission.js';
+import './functions/admission/prenuevos.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Private.
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/private/taquilla';
-import './functions/private/preparadores';
-// import './functions/private/deprecated_echo';
-import './functions/private/echo';
+import './functions/private/echo.js';
+import './functions/private/preparadores.js';
+
+// ---------------------------------------------------------------------------------------------------- //
+// Taquilla.
+// ---------------------------------------------------------------------------------------------------- //
+import './functions/taquilla/schedule.js';
+
+// ---------------------------------------------------------------------------------------------------- //
+// MAS.
+// ---------------------------------------------------------------------------------------------------- //
+import './functions/MAS/devMAS.js';
+import './functions/MAS/basicsMAS.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Development.
 // ---------------------------------------------------------------------------------------------------- //
-import './functions/dev';
+import './functions/dev.js';
+
+// ---------------------------------------------------------------------------------------------------- //
+// Intentar registrar los preparadores en la base de datos.
+// ---------------------------------------------------------------------------------------------------- //
+
+import { PREPARADORES } from './constants/preparadores.js';
+import { registerAllPreparadores } from './models/preparadorModel.js';
+
+try {
+	registerAllPreparadores(PREPARADORES);
+} catch (err) {
+	console.log(err);
+}

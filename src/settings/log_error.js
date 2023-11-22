@@ -1,4 +1,4 @@
-import bot from './app';
+import bot from './app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Display console errors related to the Telegram API.

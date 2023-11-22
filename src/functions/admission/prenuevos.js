@@ -1,10 +1,11 @@
-import bot from '../../settings/app';
-import * as prenuevosModel from '../../models/prenuevosModel';
+import * as prenuevosModel from '../../models/prenuevosModel.js';
+import bot from '../../settings/app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const ADMISION_ID = process.env.ADMISION_ID || undefined;
 

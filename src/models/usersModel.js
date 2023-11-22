@@ -1,12 +1,15 @@
-import pool from './connection';
+import pool from './connection.js';
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM users WHERE carnet = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Search the user's data in the database.
+ * The SQL code is: select * from "user" where carnet = '###';
+ * @param {Integer} carnet 
+ * @returns {Promise<object>} Object with the data of the user.
+ */
 export async function searchCarnet(carnet) {
 	console.log(`**Query 'searchCarnet' in usersModel.`);
 
-	let sql = `select * from users where carnet = '${carnet}'`;
+	let sql = `select * from "user" where carnet = '${carnet}'`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
@@ -25,13 +28,16 @@ export async function searchCarnet(carnet) {
 	return resultado.rows[0];
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// SELECT * FROM users WHERE telegram_id = ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Verify if the telegram_id exists in the database.
+ * The SQL code is: select * from "user" where telegram_id = ###;
+ * @param {Integer} telegram_id 
+ * @returns {Promise<Boolean>} True if the telegram_id does not exist in the database, false if it exists.
+ */
 export async function verifyTelegramID(telegram_id) {
 	console.log(`**Query 'verifyTelegramID' in usersModel.`);
 
-	let sql = `select * from users where telegram_id = ${telegram_id}`;
+	let sql = `select * from "user" where telegram_id = ${telegram_id}`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(
@@ -45,12 +51,16 @@ export async function verifyTelegramID(telegram_id) {
 	//				- If the row count is 0, it returns a true expression.
 	//				- If the row count is greater than or equal to 1, it returns a false expression.
 	//			 }
-	return resultado.rowCount === 0 ? true : false;
+	// It returns true if the user has not written to the bot before. By default, it returns false.
+	return resultado.rowCount === 0;
 }
 
-// ---------------------------------------------------------------------------------------------------- //
-// INSERT INTO users(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values ###.
-// ---------------------------------------------------------------------------------------------------- //
+/**
+ * Insert a new user in the database.
+ * The SQL code is: insert into "user" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (###, '###', '###', '###');
+ * @param {object} telegramData 
+ * @returns {Promise<void>}
+ */
 export async function registerTelegramData(telegramData) {
 	console.log(`**Query 'registerTelegramID' in usersModel.`);
 
@@ -59,7 +69,7 @@ export async function registerTelegramData(telegramData) {
 	let telegram_lastname = telegramData.last_name || undefined;
 	let telegram_username = telegramData.username || undefined;
 
-	let sql = `insert into users(telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
+	let sql = `insert into "user" (telegram_id, telegram_firstname, telegram_lastname, telegram_username) values (${telegram_id}, '${telegram_firstname}', '${telegram_lastname}', '${telegram_username}')`;
 
 	await pool.query(sql).catch(err => {
 		throw new Error(

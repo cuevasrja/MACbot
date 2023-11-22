@@ -1,10 +1,11 @@
-import bot from '../../settings/app';
-import * as preparadorModel from '../../models/preparadorModel';
+import * as preparadorModel from '../../models/preparadorModel.js';
+import bot from '../../settings/app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const TELEMAC_ID = process.env.TELEMAC_ID || undefined;
 

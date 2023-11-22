@@ -9,8 +9,8 @@ La estructura del MAC es lineal, todos los preparadores tenemos el mismo rango. 
 📍*¿En el MAC voy a aprender a programar?*
 Si bien no es nuestro objetivo principal, estar sumergido en el mundo de la computación siempre hará que aprendas a programar. Normalmente tenemos varios proyectos internos durante los trimestres que implican programar y sería un excelente punto para aprender a hacerlo.
 
-📍*¿Necesito ser computosti para participar en la admisión del MAC?*
-Absolutamente no. Hemos tenido numerosos miembros de varias carreras de la universidad, como estudiantes de Telecomunicaciones 📡, Matemática 🧮, Física 🔎 y, por supuesto, Computación 💻.
+📍*¿Necesito ser computista para participar en la admisión del MAC?*
+Absolutamente no. Hemos tenido numerosos miembros de varias carreras de la universidad. Actualmente contamos con estudiantes de Telecomunicaciones 📡, Matemática 🧮, Física 🔎 y, por supuesto, Computación 💻.
 
 📍*¿Necesito tener conocimientos previos para hacer admisión en el MAC?*
 No. La admisión del MAC es el mejor lugar para obtener conocimientos en el área de administración de sistemas. Si completas todo el proceso obtendrás conocimientos que no se dan ni siquiera en las materias más avanzadas de la carrera, ¡Además de ser la oportunidad perfecta para hacer nuevos amigos! 🥳`;
@@ -49,7 +49,7 @@ export const sucess = `¡Felicidades, sabes seguir indicaciones! Ahora eres ofic
 
 Eso es todo... por ahora.`;
 
-export const too_late = `Emmm, creo que llegaste un poco tarde. Algunos días/semanas/meses tarde, de hecho.
+export const too_late = `Emmm, creo que llegaste un poco tarde. Algunos días/semanas/meses tarde, de hecho. 
 
 Pero no te desanimes, amiguito. Si aún te quedan algunos trimestres por graduarte (o tirar la toalla) todavía tienes la oportunidad de formar parte del MAC. Estate atento a cualquier novedad hasta el año próximo. *¡Nos vemos allá!*`;
 

@@ -1,10 +1,17 @@
-import bot from '../settings/app';
 import fs from 'fs';
+import bot from '../settings/app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
-require('dotenv').config();
+import dotenv from 'dotenv';
+import { sendMessage } from './sendMessage.js';
+import { PARSE, PRIVATE_CHAT } from '../constants/botSettings.js';
+// ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
+import { COMMANDS, DEV_COMMANDS } from '../messages/commandsHelp.js';
+import { getAllPreparadores, verifyPreparadorID } from '../models/preparadorModel.js';
+import { NOT_PREPARADOR } from '../messages/permissions.js';
+dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
 
@@ -24,12 +31,12 @@ bot.onText(/^\/enlace/, msg => {
 	let chatType = msg.chat.type;
 	let chatID = msg.chat.id;
 
-	if (chatType !== 'private') {
+	if (chatType !== PRIVATE_CHAT) {
 		bot.sendMessage(
 			chatID,
-			`Para ingresar al grupo que te corresponde para esta admision tienes que presionar el botón de abajo.`,
+			`Para ingresar al grupo que te corresponde para esta admisión tienes que presionar el botón de abajo.`,
 			{
-				parse_mode: 'Markdown',
+				parse_mode: PARSE,
 				reply_markup: {
 					inline_keyboard: [
 						[
@@ -48,11 +55,60 @@ bot.onText(/^\/enlace/, msg => {
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /hostname command and sends a message with the hostname of the server.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/hostname/, msg => {
-	let chatID = msg.chat.id;
+bot.onText(/^\/hostname/, async msg => {
+	const chatID = msg.chat.id;
+
+	// We check if the user is preparador
+	if (await verifyPreparadorID(chatID)) {
+		bot.sendMessage(chatID, NOT_PREPARADOR);
+		return;
+	}
 
 	fs.readFile('/etc/hostname', 'utf8', (err, data) => {
 		if (err) throw err;
-		bot.sendMessage(chatID, `El servidor donde se está corriendo este bot es en ${data}.`);
+		bot.sendMessage(chatID, `El servidor donde se está corriendo este bot es en ${data}`);
 	});
 });
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /help command and sends a message with the commands.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/help/, msg => {
+	const chatID = msg.chat.id;
+	// ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
+	sendMessage(chatID, COMMANDS);
+})
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /dev command and sends a message with the development commands.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/dev/, async msg => {
+	const chatID = msg.chat.id;
+	// We check if the user is preparador
+	if (await verifyPreparadorID(chatID)) {
+		bot.sendMessage(chatID, NOT_PREPARADOR);
+		return;
+	}
+	// We send the message
+	sendMessage(chatID, DEV_COMMANDS);
+})
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /preparadores command and sends a message with the list of preparadores.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/preparadores/, async msg => {
+	const chatID = msg.chat.id;
+	// We check if the user is preparador
+	if (await verifyPreparadorID(chatID)) {
+		bot.sendMessage(chatID, NOT_PREPARADOR);
+		return;
+	}
+	// We get all the preparadores
+	const preparadores = (await getAllPreparadores())
+		.map(preparador => preparador.initials)
+		.join(', ');
+	// We send the message
+	sendMessage(chatID, `Los preparadores son: ${preparadores}`);
+})
+
+console.log(`Bot iniciado a las ${new Date().toLocaleString()}`)
