@@ -133,8 +133,11 @@ export const MASQuest = async () => {
     // We send a message to each of the three invitados, to try to guess their secret santa between 3 random invitados
     randomsUnchecked.forEach(async (invitado) => {
         const name = invitado.name
+        // We switch the checked status of the invitado
         await switchCheckedByName(name)
-        const givesTo = invitados.find(inv => inv.name === invitado.receive)
+        // We get the invitado that gives the gift to the invitado we are looking for.
+        const givesTo = invitados.find(inv => inv.receive === invitado.name)
+        // We get the opposite team of the invitado and we take the first three invitados in a random order.
         let oppositeTeam = randomSort(invitados.filter(opposite => opposite.team !== invitado.team))
         const [first, second, third] = oppositeTeam.slice(0, 3).map(opposite => opposite.name)
 

@@ -110,3 +110,5 @@ bot.onText(/^\/preparadores/, async msg => {
 	// We send the message
 	sendMessage(chatID, `Los preparadores son: ${preparadores}`);
 })
+
+console.log(`Bot iniciado a las ${new Date().toLocaleString()}`)
