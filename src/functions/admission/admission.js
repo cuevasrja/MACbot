@@ -2,7 +2,7 @@ import { PRIVATE_CHAT } from '../../constants/botSettings.js';
 import { admissionDate } from '../../constants/infoAdmision.js';
 import { ALREADY_ASSISTED, BACK, DONT_KNOW, FAQ, LOGIN, NO, YES } from '../../constants/responses.js';
 import * as messages from '../../messages/admission.js';
-import * as usersModel from '../../models/usersModel.js';
+import { verifyTelegramID, registerTelegramData } from '../../models/usersModel.js';
 import bot from '../../settings/app.js';
 import timezone from '../../settings/timezone.js';
 import * as keyboard from '../keyboards.js';
@@ -26,10 +26,10 @@ bot.onText(/^\/admision/, async msg => {
 
 	// Guard that is responsible for verifying if the person has already written to the bot before.
 	// If so, it does nothing, if it is the first time you write it, it records it in the database.
-	let guard = await usersModel.verifyTelegramID(fromID);
+	let guard = await verifyTelegramID(fromID);
 
 	if (guard) {
-		await usersModel.registerTelegramData(msg.from);
+		await registerTelegramData(msg.from);
 	}
 
 	// Check if the user writes to the bot in private, this causes the command not to work in groups.

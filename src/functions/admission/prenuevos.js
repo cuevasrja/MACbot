@@ -1,4 +1,5 @@
-import * as prenuevosModel from '../../models/prenuevosModel.js';
+import { registerTelegramData, verifyTelegramID } from '../../models/prenuevosModel.js';
+import { verifyPreparadorID } from '../../models/preparadorModel.js';
 import bot from '../../settings/app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -16,13 +17,13 @@ const ADMISION_ID = process.env.ADMISION_ID || undefined;
 bot.on('message', async msg => {
 	let chatID = msg.chat.id;
 
-	if (chatID == ADMISION_ID) {
+	if (chatID == ADMISION_ID && (await verifyPreparadorID(msg.from.id))) {
 		// Guard that is responsible for verifying if the prenuevo has already written to the group before.
 		// If so, it does nothing, if it is the first time you write it, it records it in the database.
-		let guard = await prenuevosModel.verifyTelegramID(msg.from.id);
+		let guard = await verifyTelegramID(msg.from.id);
 
 		if (guard) {
-			await prenuevosModel.registerTelegramData(msg.from);
+			await registerTelegramData(msg.from);
 			console.log(`**Telegram ID:${msg.from.id} of ${msg.from.first_name} saved.`);
 		}
 	}
