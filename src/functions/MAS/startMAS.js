@@ -1,4 +1,4 @@
-import { TEAM_A, TEAM_B, questTime } from "../../constants/infoMAS.js";
+import { TEAM_A, TEAM_B } from "../../constants/infoMAS.js";
 import { showAllInvitados, switchCheckedByName, updateRecord } from "../../models/invitadosMASModel.js";
 import bot from "../../settings/app.js";
 import { MASPlayingStatus, MASQuestStatus, setMASQuestStatus, stopMASInterval } from "./basicsMAS.js";
