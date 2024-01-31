@@ -57,6 +57,7 @@ bot.on('message', msg => {
 	if (chatType === PRIVATE_CHAT) {
 		// If the user presses Log in, the process of data verification begins
 		// (which does not verify anything anywhere xD).
+		console.log("**Listening to the button 'Iniciar sesión'.")
 		if (msg.text.toString().toLowerCase() === LOGIN.toLowerCase()) {
 			// Variables that establish the day of the week and the date corresponding to that day.
 			let tz = timezone();
@@ -72,8 +73,11 @@ bot.on('message', msg => {
 				&& hour >= `${admissionDate.hour} pm`
 				&& year >= toString(admissionDate.year)
 			) {
+				console.log('**Function "login" in admission.');
+				// The bot asks for the card of the person.
 				bot.sendMessage(fromID, messages.iniciar_sesion, keyboard.replyOpts)
 					.then(sended => {
+						console.log('**Listening to the carnet.')
 						// The bot reads the card entered by the person.
 						bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
 							let carnet = msg.text.match(/^[0-9]{2}-[0-9]{5}$/g);
@@ -84,8 +88,9 @@ bot.on('message', msg => {
 							}
 							// If the card is written correctly follow the flow.
 							else {
+								// The bot asks for the name of the user.
 								bot.sendMessage(fromID, messages.carnet_correcto, keyboard.replyOpts).then(sended => {
-									// The bot asks for the name of the user.
+									console.log('**Listening to the name.')
 									bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
 										let nombre = msg.text;
 
@@ -96,6 +101,7 @@ bot.on('message', msg => {
 										// If the name is written correctly follow the flow.
 										else {
 											bot.sendMessage(fromID, messages.auth_session, keyboard.replyOpts).then(sended => {
+												console.log('**Listening to the password.')
 												// The bot reads the key entered by the person.
 												bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
 													let checkPassword = msg.text;
