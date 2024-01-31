@@ -16,6 +16,13 @@ dotenv.config();
 
 const LOGIN_PASSWORD = process.env.LOGIN_PASSWORD || undefined;
 
+let registroState = false;
+
+export const registroSwitch = () => {
+	registroState = !registroState;
+	console.log(`**Registro: ${registroState}`);
+}
+
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the command /admision to begin with the guide to the new.
 // ---------------------------------------------------------------------------------------------------- //
@@ -66,11 +73,7 @@ bot.on('message', msg => {
 
 			console.log(`**Day: ${day} Month: ${month} Year: ${year}. Checking Date.`)
 			// Check if the date is after the day of the first meeting towards the prenuevos.
-			if (
-				day >= admissionDate.day
-				&& month >= admissionDate.month
-				&& year >= admissionDate.year
-			) {
+			if (registroState) {
 				console.log('**Function "login" in admission.');
 				// The bot asks for the card of the person.
 				bot.sendMessage(fromID, messages.iniciar_sesion, keyboard.replyOpts)
@@ -78,7 +81,7 @@ bot.on('message', msg => {
 						console.log('**Listening to the carnet.')
 						// The bot reads the card entered by the person.
 						bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
-							let carnet = msg.text.match(/^[0-9]{2}-[0-9]{5}$/g);
+							let carnet = msg.text.trim().match(/^[0-9]{2}-[0-9]{5}$/g)[0]
 							console.log(`**Carnet: ${carnet}`)
 
 							// If the card is not written in the indicated format, the bot insults the users.
@@ -107,7 +110,7 @@ bot.on('message', msg => {
 
 													// If the password is correct, the bot sends the invitation link to the admission group.
 													if (checkPassword == LOGIN_PASSWORD) {
-														await registerPrenuevo(fromID, nombre, carnet[0]);
+														await registerPrenuevo(fromID, nombre, carnet);
 														bot.sendMessage(fromID, messages.success, keyboard.inlineURL);
 													}
 													// If this is incorrect, it tells you that it is stupid.
@@ -133,7 +136,7 @@ bot.on('message', msg => {
 			}
 			// If the person tries to log in before the meeting, the bot tells them to hold on.
 			else {
-				bot.sendMessage(fromID, messages.holdOn, keyboard.preLogin);
+				bot.sendMessage(fromID, messages.liar, keyboard.preLogin);
 			}
 		}
 
@@ -172,7 +175,10 @@ bot.on('message', msg => {
 
 			})
 
-			opt.reply_markup.inline_keyboard = msgs
+			opt.reply_markup = {
+				...opt.reply_markup,
+				inline_keyboard: msgs
+			}
 
 			bot.sendMessage(fromID, messages.faq.title, opt);
 

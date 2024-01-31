@@ -1,9 +1,10 @@
-import { deletePrenuevo, getAllPrenuevos, verifyPrenuevoCarnet } from '../../models/prenuevosModel.js';
+import { deleteAllPrenuevos, deletePrenuevo, getAllPrenuevos, verifyPrenuevoCarnet } from '../../models/prenuevosModel.js';
 import { verifyPreparadorID } from '../../models/preparadorModel.js';
 import { replyOpts } from '../keyboards.js';
 import bot from '../../settings/app.js';
 import { removeFromAdmission } from './groupAdmin.js';
 import { sendMessage } from '../sendMessage.js';
+import { registroSwitch } from './admission.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the command /admision@remove to remove a prenuevo from the database.
@@ -57,4 +58,33 @@ bot.onText(/^\/admision@show/, async msg => {
 	});
 	// We send the list of prenuevos.
 	sendMessage(chatID, prenuevosList);
+});
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the command /admision@clean to remove all the prenuevos from the database.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/admision@clean/, async msg => {
+	let chatID = msg.chat.id;
+	// We check if the user is preparador.
+	if (await verifyPreparadorID(chatID)) {
+		bot.sendMessage(chatID, `No tienes permisos para realizar esta acción.`);
+		return;
+	}
+	// We remove all the prenuevos from the database.
+	await deleteAllPrenuevos()
+	bot.sendMessage(chatID, `Lista de prenuevos eliminada correctamente.`);
+});
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the command /admision@switch to change the status of the admision register.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/admision@switch/, async msg => {
+	let chatID = msg.chat.id;
+	// We check if the user is preparador.
+	if (await verifyPreparadorID(chatID)) {
+		bot.sendMessage(chatID, `No tienes permisos para realizar esta acción.`);
+		return;
+	}
+	// We change the state of the admission register.
+	registroSwitch();
 });
