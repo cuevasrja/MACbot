@@ -418,12 +418,13 @@ bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
         return
     }
     // We get the message
-    const message = match.slice(1).join(" ").trim()
+    const message = match.slice(1).join(" ").trim().replace(/\\n/g, "\n").replace(/\\t/g, " ").replace(/ +/g, " ")
     // We get the members of the teams
     const invitados = await showAllInvitados()
     // We send the message to all the members of MAS
     invitados.forEach(invitado => {
-        sendMessage(invitado.telegram_id, message)
+        const id = invitado.telegram_id
+        if (!isJefe(id)) sendMessage(id, message)
     })
     // We send a message to the user to confirm that the message has been sent
     sendMessage(chatID, "Se ha enviado el mensaje a todos los participantes de MAS.")

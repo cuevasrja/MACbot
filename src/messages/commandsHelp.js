@@ -7,6 +7,7 @@ _------------ Comandos generales ------------_
 
 _----------- Comandos de admision -----------_
 /start - Te devuelve el mensaje de bienvenida a la admision.
+/admision - Inicias tu registro en la admision.
 
 *Solo para prenuevos*
 /enlace - Te devuelve el enlace al grupo de admision.
@@ -16,6 +17,8 @@ _--------- Comandos de Preparadores ---------_
 /taquilla - Te devuelve el horario de taquilla.
 /preparadores - Te devuelve la lista de preparadores.
 /dev - Muestra los comandos de desarrollo.
+/admision@remove - Elimina un prenuevo de la admision.
+/admision@show - Te devuelve la lista de prenuevos.
 
 *Solo para el jefe*
 /taquilla@switch - Activa o desactiva la taquilla.
