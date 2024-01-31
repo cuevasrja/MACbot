@@ -3,6 +3,7 @@ import { verifyPreparadorID } from '../../models/preparadorModel.js';
 import { replyOpts } from '../keyboards.js';
 import bot from '../../settings/app.js';
 import { removeFromAdmission } from './groupAdmin.js';
+import { sendMessage } from '../sendMessage.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the command /admision@remove to remove a prenuevo from the database.
@@ -55,5 +56,5 @@ bot.onText(/^\/admision@show/, async msg => {
 		prenuevosList += `*${prenuevo.name}* - ${prenuevo.carnet} \n`;
 	});
 	// We send the list of prenuevos.
-	bot.sendMessage(chatID, prenuevosList);
+	sendMessage(chatID, prenuevosList);
 });

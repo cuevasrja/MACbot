@@ -4,7 +4,6 @@ import { ALREADY_ASSISTED, BACK, DONT_KNOW, FAQ, LOGIN, NO, YES } from '../../co
 import * as messages from '../../messages/admission.js';
 import { verifyTelegramID, registerTelegramData } from '../../models/usersModel.js';
 import bot from '../../settings/app.js';
-import timezone from '../../settings/timezone.js';
 import * as keyboard from '../keyboards.js';
 import { sendMessage } from '../sendMessage.js';
 import { registerPrenuevo } from '../../models/prenuevosModel.js';
@@ -60,18 +59,17 @@ bot.on('message', msg => {
 		console.log("**Listening to the button 'Iniciar sesión'.")
 		if (msg.text.toString().toLowerCase() === LOGIN.toLowerCase()) {
 			// Variables that establish the day of the week and the date corresponding to that day.
-			let tz = timezone();
-			let day = tz.format('DD');
-			let month = tz.format('MM');
-			let year = tz.format('YYYY');
-			let hour = tz.format('h a');
+			let tz = new Date()
+			let day = tz.getDate();
+			let month = tz.getMonth() + 1;
+			let year = tz.getFullYear()
 
+			console.log(`**Day: ${day} Month: ${month} Year: ${year}. Checking Date.`)
 			// Check if the date is after the day of the first meeting towards the prenuevos.
 			if (
-				day >= toString(admissionDate.day).padStart(2, '0')
-				&& month >= toString(admissionDate.month).padStart(2, '0')
-				&& hour >= `${admissionDate.hour} pm`
-				&& year >= toString(admissionDate.year)
+				day >= admissionDate.day
+				&& month >= admissionDate.month
+				&& year >= admissionDate.year
 			) {
 				console.log('**Function "login" in admission.');
 				// The bot asks for the card of the person.
@@ -81,6 +79,7 @@ bot.on('message', msg => {
 						// The bot reads the card entered by the person.
 						bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
 							let carnet = msg.text.match(/^[0-9]{2}-[0-9]{5}$/g);
+							console.log(`**Carnet: ${carnet}`)
 
 							// If the card is not written in the indicated format, the bot insults the users.
 							if (carnet === null) {
