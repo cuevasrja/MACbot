@@ -57,7 +57,7 @@ bot.on('message', msg => {
 	if (chatType === PRIVATE_CHAT) {
 		// If the user presses Log in, the process of data verification begins
 		// (which does not verify anything anywhere xD).
-		if (msg.text.indexOf(LOGIN) === 0) {
+		if (msg.text.toString().toLowerCase() === LOGIN.toLowerCase()) {
 			// Variables that establish the day of the week and the date corresponding to that day.
 			let tz = timezone();
 			let day = tz.format('DD');

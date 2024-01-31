@@ -1,5 +1,5 @@
-import { getPrenuevo } from '../../models/prenuevosModel';
-import bot from '../../settings/app';
+import { getPrenuevo } from '../../models/prenuevosModel.js';
+import bot from '../../settings/app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
