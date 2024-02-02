@@ -6,7 +6,7 @@ import { verifyTelegramID, registerTelegramData } from '../../models/usersModel.
 import bot from '../../settings/app.js';
 import * as keyboard from '../keyboards.js';
 import { sendMessage } from '../sendMessage.js';
-import { deleteAllPrenuevos, deletePrenuevo, getAllPrenuevos, registerPrenuevo, verifyPrenuevoCarnet } from '../../models/prenuevosModel.js';
+import { deleteAllPrenuevos, getAllPrenuevos, registerPrenuevo, verifyPrenuevoCarnet } from '../../models/prenuevosModel.js';
 import { verifyPreparadorID } from '../../models/preparadorModel.js';
 import { removeFromAdmission } from './groupAdmin.js';
 
@@ -49,7 +49,7 @@ bot.onText(/^\/admision@remove/, async msg => {
 			if (!(await verifyPrenuevoCarnet(carnet[0]))) {
 				// We remove the prenuevo from the database.
 				await removeFromAdmission(carnet[0]);
-				await deletePrenuevo(carnet[0]);
+				// await deletePrenuevo(carnet[0]);
 				bot.sendMessage(chatID, `Prenuevo eliminado correctamente.`);
 			} else {
 				bot.sendMessage(chatID, `El prenuevo no se encuentra registrado.`);
