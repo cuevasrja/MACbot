@@ -20,6 +20,7 @@ _--------- Comandos de Preparadores ---------_
 /admision@remove - Elimina un prenuevo de la admision.
 /admision@show - Te devuelve la lista de prenuevos.
 /admision@clean - Limpia la lista de prenuevos.
+/admision@switch - Activa o desactiva el periodo de registro de prenuevos.
 
 *Solo para el jefe*
 /taquilla@switch - Activa o desactiva la taquilla.
