@@ -4,6 +4,7 @@ import { ALREADY_ASSISTED, BACK, DONT_KNOW, FAQ, JOIN_GROUP, LOGIN, NO, YES } fr
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
 import dotenv from 'dotenv';
+import { faq } from '../messages/admission.js';
 dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
@@ -67,3 +68,18 @@ export const inlineURL = {
 		],
 	},
 };
+
+export const faqsOpts = {
+	parse_mode: 'HTML',
+	reply_markup: {
+		inline_keyboard: faq.content.map((message, i) => {
+			return [
+				{
+					text: message.title,
+					callback_data: i.toString()
+				}
+			]
+
+		})
+	}
+}

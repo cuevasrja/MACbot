@@ -48,8 +48,8 @@ bot.onText(/^\/admision@remove/, async msg => {
 			// We check if the prenuevo is registered.
 			if (!(await verifyPrenuevoCarnet(carnet[0]))) {
 				// We remove the prenuevo from the database.
-				await deletePrenuevo(carnet[0]);
 				await removeFromAdmission(carnet[0]);
+				await deletePrenuevo(carnet[0]);
 				bot.sendMessage(chatID, `Prenuevo eliminado correctamente.`);
 			} else {
 				bot.sendMessage(chatID, `El prenuevo no se encuentra registrado.`);
@@ -73,8 +73,10 @@ bot.onText(/^\/admision@show/, async msg => {
 	let prenuevos = await getAllPrenuevos();
 	let prenuevosList = `*Lista de prenuevos*\n\n`;
 	prenuevos.forEach(prenuevo => {
+		console.log(prenuevo)
 		prenuevosList += `*${prenuevo.name}* - ${prenuevo.carnet} \n`;
 	});
+	prenuevosList += `\n*Total:* ${prenuevos.length}`;
 	// We send the list of prenuevos.
 	sendMessage(chatID, prenuevosList);
 });
@@ -106,12 +108,13 @@ bot.onText(/^\/admision@switch/, async msg => {
 	}
 	// We change the state of the admission register.
 	registroSwitch();
+	sendMessage(chatID, `Registro de admisión: *${registroState}*`);
 });
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the command /admision to begin with the guide to the new.
 // ---------------------------------------------------------------------------------------------------- //
-bot.onText(/^\/admision/, async msg => {
+bot.onText(/^\/admision$/, async msg => {
 	let chatID = msg.chat.id;
 	let chatType = msg.chat.type;
 	let fromID = msg.from.id;
@@ -140,7 +143,7 @@ bot.onText(/^\/admision/, async msg => {
 });
 
 // El bot escucha los botones que el usuario presiona para enviar el mensaje asociado con ese botón.
-bot.on('message', msg => {
+bot.on('message', async msg => {
 	let fromID = msg.from.id;
 	let chatType = msg.chat.type;
 
@@ -166,11 +169,11 @@ bot.on('message', msg => {
 						console.log('**Listening to the carnet.')
 						// The bot reads the card entered by the person.
 						bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
-							let carnet = msg.text.trim()
+							let carnet = msg.text.trim().match(/[0-9]{2}-[0-9]{5}/g)[0]
 							console.log(`**Carnet: ${carnet}`)
 
 							// If the card is not written in the indicated format, the bot insults the users.
-							if (carnet.match(/[0-9]{2}-[0-9]{5}/g) === null) {
+							if (carnet === null) {
 								bot.sendMessage(fromID, messages.fallback_iniciar_session, keyboard.login);
 							}
 							// If the card is written correctly follow the flow.
@@ -248,24 +251,7 @@ bot.on('message', msg => {
 		}
 
 		if (msg.text.indexOf(FAQ) === 0) {
-			let opt = keyboard.preLogin
-
-			const msgs = messages.faq.content.map((message, i) => {
-				return [
-					{
-						text: message.title,
-						callback_data: i.toString()
-					}
-				]
-
-			})
-
-			opt.reply_markup = {
-				...opt.reply_markup,
-				inline_keyboard: msgs
-			}
-
-			bot.sendMessage(fromID, messages.faq.title, opt);
+			await bot.sendMessage(fromID, messages.faq.title, keyboard.faqsOpts);
 
 			// We create a listener for the callback query, to check if the invitado has selected an option.
 			bot.on("callback_query", async (query) => {
@@ -273,11 +259,15 @@ bot.on('message', msg => {
 				const chatID = query.message.chat.id
 				// We check if the query is from the invitado we are looking for.
 				if (query.from.id != fromID) return
+
+				// // We delete the message with the options.
+				// await bot.deleteMessage(chatID, query.message.message_id)
+
 				// We take the answer (Query Data)
 				const i = parseInt(query.data)
 				const answer = messages.faq.content[i]
-				const text = `**${answer.title}** \n\n${answer.text}`
-				await sendMessage(chatID, text)
+				const text = `<b>${answer.title}</b> \n${answer.text}`
+				await bot.sendMessage(chatID, text, { parse_mode: 'HTML' })
 			})
 		}
 	}

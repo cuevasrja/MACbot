@@ -93,13 +93,13 @@ export async function deletePrenuevo(carnet) {
 
 /**
  * Get the information of all the users in the database.
- * The SQL code is: select name from "prenuevo";
- * @returns {Promise<Array<Object>>} An array of objects with the information of all the users.
+ * The SQL code is: select * from "prenuevo";
+ * @returns {Promise<Array<object>>} An array of objects with the information of all the users.
  */
 export async function getAllPrenuevos() {
 	console.log(`**Query 'getAllPrenuevos' in prenuevosModel.`);
 
-	let sql = `select name from "prenuevo"`;
+	let sql = `select * from "prenuevo"`;
 
 	let resultado = await pool.query(sql).catch(err => {
 		throw new Error(`There was an error getting all the users - 'prenuevosModel'`, err);
@@ -114,6 +114,7 @@ export async function getAllPrenuevos() {
 			{name: 'Pedro', carnet: '12-34567', telegram_id: 123456789}
 		]
 	*/
+	console.log(resultado.rows);
 	return resultado.rows;
 }
 
@@ -121,7 +122,7 @@ export async function getAllPrenuevos() {
  * Get the information of a user in the database using the carnet.
  * The SQL code is: select * from "prenuevo" where carnet = '###';
  * @param {String} carnet
- * @returns {Promise<Object>} An object with the information of the user.
+ * @returns {Promise<object>} An object with the information of the user.
  */
 export async function getPrenuevo(carnet) {
 	console.log(`**Query 'getPrenuevo' in prenuevosModel.`);
