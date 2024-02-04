@@ -224,7 +224,7 @@ bot.on('message', async msg => {
 			}
 			// If the person tries to log in before the meeting, the bot tells them to hold on.
 			else {
-				bot.sendMessage(fromID, messages.liar, keyboard.preLogin);
+				bot.sendMessage(fromID, messages.liar, keyboard.badLogin);
 			}
 		}
 

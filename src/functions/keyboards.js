@@ -17,7 +17,7 @@ const ADMISION_URL = process.env.ADMISION_URL || undefined;
 export const preLogin = {
 	parse_mode: PARSE,
 	reply_markup: {
-		keyboard: [[YES, NO], [FAQ]],
+		keyboard: [[LOGIN, DONT_KNOW], [FAQ]],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
@@ -36,7 +36,7 @@ export const yes_preLogin = {
 export const login = {
 	parse_mode: PARSE,
 	reply_markup: {
-		keyboard: [[LOGIN], [BACK]],
+		keyboard: [[LOGIN, BACK], [FAQ]],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
