@@ -36,7 +36,7 @@ export const yes_preLogin = {
 export const login = {
 	parse_mode: PARSE,
 	reply_markup: {
-		keyboard: [[LOGIN], [BACK]],
+		keyboard: [[LOGIN, BACK], [FAQ]],
 		resize_keyboard: true,
 		one_time_keyboard: false,
 	},
