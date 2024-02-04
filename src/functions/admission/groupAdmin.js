@@ -1,5 +1,5 @@
-import { getPrenuevo } from '../../models/prenuevosModel';
-import bot from '../../settings/app';
+import { getPrenuevo } from '../../models/prenuevosModel.js';
+import bot from '../../settings/app.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
@@ -18,8 +18,10 @@ export const removeFromAdmission = async carnet => {
 
     // We get the chatID of the prenuevo.
     const prenuevo = await getPrenuevo(carnet);
+    console.log("**Removing prenuevo from the group.");
+    console.log(prenuevo);
     const chatID = prenuevo.telegram_id;
 
     // We remove the prenuevo from the group.
-    bot.kickChatMember(ADMISION_ID, chatID);
+    bot.banChatMember(ADMISION_ID, chatID);
 }
