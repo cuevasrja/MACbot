@@ -12,6 +12,8 @@ const ADMISION_URL = process.env.ADMISION_URL || undefined;
 // ---------------------------------------------------------------------------------------------------- //
 // This file stores all the keyboards shown on the telegram board.
 // ---------------------------------------------------------------------------------------------------- //
+
+// ! Deprecated
 export const preLogin = {
 	parse_mode: PARSE,
 	reply_markup: {
@@ -21,6 +23,7 @@ export const preLogin = {
 	},
 };
 
+// ! Deprecated
 export const yes_preLogin = {
 	parse_mode: PARSE,
 	reply_markup: {

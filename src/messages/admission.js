@@ -71,6 +71,7 @@ export const faq = {
     ],
 }
 
+// ! Deprecated
 export const yes = `*¡Perfectisísimo!*
 
 Ahora solo toca esperar relajadamente hasta el día de la primera reunión que será el miércoles de semana 4 *(29/01/2020)* en hora 7 *(14:00)*.
@@ -79,6 +80,7 @@ Si por alguna razón que se te escapa de la manos no puedes asistir, comunícalo
 
 PD: Recuerda llegar temprano y ponerte ropa interior limpia.`;
 
+// ! Deprecated
 export const no = `*¡¿Cómo que no mi lind@?! ¡¿Qué estás esperando?!*
 
 No seas tímido y acércate a *MYS-018* para que podamos conocerte a profundidad ( ͡° ͜ʖ ͡°).

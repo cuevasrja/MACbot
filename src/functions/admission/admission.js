@@ -133,7 +133,7 @@ bot.onText(/^\/admision$/, async msg => {
 		bot.sendMessage(
 			chatID,
 			`Hola ${chatFirstName}, bienvenido al proceso de admisión del MAC ${admissionDate.getFullYear()}. ¿Ya sabes que hacer?`,
-			keyboard.preLogin
+			keyboard.login
 		);
 	}
 	// If they try to place the command in the main group (teleMAC) the bot will warn them that it cannot be given that it is only available in private chat.
@@ -229,10 +229,11 @@ bot.on('message', async msg => {
 		}
 
 		// Other buttons and their actions (Needless to explain, it's quite intuitive).
+		// ! Deprecated.
 		if (msg.text.toString().toLowerCase() === YES.toLowerCase()) {
 			bot.sendMessage(fromID, messages.yes_tooLate, keyboard.login);
 		}
-
+		// ! Deprecated.
 		if (msg.text.toString().toLowerCase() === NO.toLowerCase()) {
 			bot.sendMessage(fromID, messages.too_late, keyboard.preLogin);
 		}
@@ -242,10 +243,10 @@ bot.on('message', async msg => {
 		}
 
 		if (msg.text.toString().toLowerCase() === DONT_KNOW.toLowerCase()) {
-			bot.sendMessage(fromID, messages.idk, keyboard.badLogin);
+			bot.sendMessage(fromID, registroState ? messages.ahora_que : messages.too_late, keyboard.badLogin);
 		}
 
-		// Deprecated.
+		// ! Deprecated.
 		if (msg.text.indexOf(ALREADY_ASSISTED) === 0) {
 			bot.sendMessage(fromID, messages.ahora_que, keyboard.login);
 		}
