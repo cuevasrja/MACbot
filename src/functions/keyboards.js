@@ -1,5 +1,5 @@
 import { PARSE } from '../constants/botSettings.js';
-import { ALREADY_ASSISTED, BACK, DONT_KNOW, FAQ, JOIN_GROUP, LOGIN, NO, YES } from '../constants/responses.js';
+import { ALREADY_ASSISTED, DONT_KNOW, FAQ, JOIN_GROUP, LOGIN, NO } from '../constants/responses.js';
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
 // ---------------------------------------------------------------------------------------------------- //
@@ -34,15 +34,6 @@ export const yes_preLogin = {
 };
 
 export const login = {
-	parse_mode: PARSE,
-	reply_markup: {
-		keyboard: [[LOGIN, BACK], [FAQ]],
-		resize_keyboard: true,
-		one_time_keyboard: false,
-	},
-};
-
-export const badLogin = {
 	parse_mode: PARSE,
 	reply_markup: {
 		keyboard: [[LOGIN, DONT_KNOW], [FAQ]],

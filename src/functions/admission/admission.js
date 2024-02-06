@@ -224,7 +224,7 @@ bot.on('message', async msg => {
 			}
 			// If the person tries to log in before the meeting, the bot tells them to hold on.
 			else {
-				bot.sendMessage(fromID, messages.liar, keyboard.badLogin);
+				bot.sendMessage(fromID, messages.liar, keyboard.login);
 			}
 		}
 
@@ -237,13 +237,13 @@ bot.on('message', async msg => {
 		if (msg.text.toString().toLowerCase() === NO.toLowerCase()) {
 			bot.sendMessage(fromID, messages.too_late, keyboard.preLogin);
 		}
-
+		// ! Deprecated.
 		if (msg.text.toString().toLowerCase() === BACK.toLowerCase()) {
-			bot.sendMessage(fromID, '... Ok ...\n\nEspero no estés perdido.', keyboard.badLogin);
+			bot.sendMessage(fromID, '... Ok ...\n\nEspero no estés perdido.', keyboard.login);
 		}
 
 		if (msg.text.toString().toLowerCase() === DONT_KNOW.toLowerCase()) {
-			bot.sendMessage(fromID, registroState ? messages.ahora_que : messages.too_late, keyboard.badLogin);
+			bot.sendMessage(fromID, registroState ? messages.ahora_que : messages.too_late, keyboard.login);
 		}
 
 		// ! Deprecated.
