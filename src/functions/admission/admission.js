@@ -17,6 +17,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const LOGIN_PASSWORD = process.env.LOGIN_PASSWORD || undefined;
+const ADMISION_ID = process.env.ADMISION_ID || undefined;
 
 let registroState = false;
 
@@ -85,6 +86,27 @@ bot.onText(/^\/admision@kick/, async msg => {
 			} else {
 				bot.sendMessage(chatID, `El prenuevo no se encuentra registrado.`);
 			}
+		});
+	})
+});
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the command /admision@echo to send a message to the admission group.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/admision@echo/, async msg => {
+	let chatID = msg.chat.id;
+	// We check if the user is preparador.
+	if (await verifyPreparadorID(msg.from.id)) {
+		bot.sendMessage(chatID, `No tienes permisos para realizar esta acción.`);
+		return;
+	}
+	// We ask the message to be sent to the admission group.
+	bot.sendMessage(chatID, `Escribe el mensaje que deseas enviar al grupo de admisión.`, keyboard.replyOpts).then(sended => {
+		// We listen to the message with the text.
+		bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
+			let text = msg.text;
+			// We send the message to the admission group.
+			sendMessage(ADMISION_ID, text, { parse_mode: 'HTML' });
 		});
 	})
 });

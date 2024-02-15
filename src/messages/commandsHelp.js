@@ -17,10 +17,11 @@ _--------- Comandos de Preparadores ---------_
 /taquilla - Te devuelve el horario de taquilla.
 /preparadores - Te devuelve la lista de preparadores.
 /dev - Muestra los comandos de desarrollo.
+/admision@clean - Limpia la lista de prenuevos.
 /admision@remove - Elimina un prenuevo de la base de datos.
 /admision@kick - Elimina un prenuevo del grupo de admision.
+/admision@echo - Envia un mensaje a todos los prenuevos.
 /admision@show - Te devuelve la lista de prenuevos.
-/admision@clean - Limpia la lista de prenuevos.
 /admision@switch - Activa o desactiva el periodo de registro de prenuevos.
 
 *Solo para el jefe*
