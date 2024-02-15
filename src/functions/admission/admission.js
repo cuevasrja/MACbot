@@ -6,7 +6,7 @@ import { verifyTelegramID, registerTelegramData } from '../../models/usersModel.
 import bot from '../../settings/app.js';
 import * as keyboard from '../keyboards.js';
 import { sendMessage } from '../sendMessage.js';
-import { deleteAllPrenuevos, getAllPrenuevos, registerPrenuevo, verifyPrenuevoCarnet } from '../../models/prenuevosModel.js';
+import { deleteAllPrenuevos, deletePrenuevo, getAllPrenuevos, registerPrenuevo, verifyPrenuevoCarnet } from '../../models/prenuevosModel.js';
 import { verifyPreparadorID } from '../../models/preparadorModel.js';
 import { removeFromAdmission } from './groupAdmin.js';
 
@@ -48,15 +48,45 @@ bot.onText(/^\/admision@remove/, async msg => {
 			// We check if the prenuevo is registered.
 			if (!(await verifyPrenuevoCarnet(carnet[0]))) {
 				// We remove the prenuevo from the database.
-				await removeFromAdmission(carnet[0]);
-				// await deletePrenuevo(carnet[0]);
+				await deletePrenuevo(carnet[0]);
 				bot.sendMessage(chatID, `Prenuevo eliminado correctamente.`);
 			} else {
 				bot.sendMessage(chatID, `El prenuevo no se encuentra registrado.`);
 			}
 		});
 	})
+});
 
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the command /admision@kick to remove a prenuevo from the admission group.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/admision@kick/, async msg => {
+	let chatID = msg.chat.id;
+	// We check if the user is preparador.
+	if (await verifyPreparadorID(msg.from.id)) {
+		bot.sendMessage(chatID, `No tienes permisos para realizar esta acción.`);
+		return;
+	}
+	// We ask the carnet of the prenuevo to be removed.
+	bot.sendMessage(chatID, `Escribe el carnet del prenuevo que deseas eliminar. *(XX-XXXXX)*`, keyboard.replyOpts).then(sended => {
+		// We listen to the message with the carnet.
+		bot.onReplyToMessage(sended.chat.id, sended.message_id, async msg => {
+			let carnet = msg.text.match(/^[0-9]{2}-[0-9]{5}$/g);
+			// We check if the carnet is valid.
+			if (carnet == null) {
+				bot.sendMessage(chatID, `El carnet no es válido.`);
+				return;
+			}
+			// We check if the prenuevo is registered.
+			if (!(await verifyPrenuevoCarnet(carnet[0]))) {
+				// We remove the prenuevo from the admission group.
+				await removeFromAdmission(carnet[0]);
+				bot.sendMessage(chatID, `Prenuevo eliminado del grupo de admisión correctamente`);
+			} else {
+				bot.sendMessage(chatID, `El prenuevo no se encuentra registrado.`);
+			}
+		});
+	})
 });
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -91,9 +121,41 @@ bot.onText(/^\/admision@clean/, async msg => {
 		bot.sendMessage(chatID, `No tienes permisos para realizar esta acción.`);
 		return;
 	}
-	// We remove all the prenuevos from the database.
-	await deleteAllPrenuevos()
-	bot.sendMessage(chatID, `Lista de prenuevos eliminada correctamente.`);
+	// We send a message to the user to confirm if he wants to restart the database. 
+	// The buttons are "Si" and "No" and only can be clicked once.
+	const opts = {
+		reply_markup: {
+			inline_keyboard: [
+				[
+					{
+						text: "Si",
+						callback_data: "yes"
+					},
+					{
+						text: "No",
+						callback_data: "no"
+					}
+				]
+			]
+		}
+	}
+	await bot.sendMessage(chatID, "¿Estás seguro de que quieres eliminar la lista de prenuevos?", opts)
+	bot.on("callback_query", async query => {
+		if (query.message.chat.id !== chatID) return
+		const data = query.data
+		// We erase the buttons
+		bot.editMessageReplyMarkup({ inline_keyboard: [] }, { chat_id: chatID, message_id: query.message.message_id })
+		// If the user clicks "Si", we restart the database
+		if (data === "yes") {
+			// We remove all the prenuevos from the database.
+			await deleteAllPrenuevos()
+			bot.sendMessage(chatID, `Lista de prenuevos eliminada correctamente.`);
+		}
+		// If the user clicks "No", we send a message
+		else {
+			sendMessage(chatID, "La Base de Datos no ha sido reiniciada.")
+		}
+	})
 });
 
 // ---------------------------------------------------------------------------------------------------- //
