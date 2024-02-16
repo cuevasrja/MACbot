@@ -59,6 +59,7 @@ export async function registerAllPreparadores(PREPARADORES) {
 	for (const [key, value] of Object.entries(PREPARADORES)) {
 		// Comprobamos que el telegram_id no sea undefined
 		if (key == undefined) continue;
+		console.log(`Registering preparador: ${key} with telegram_id: ${value}`);
 
 		// Comprobar si el registro ya existe
 		sql += `IF NOT EXISTS (SELECT 1 FROM "preparador" WHERE telegram_id = ${value} AND initials = '${key}') THEN `;
@@ -91,6 +92,8 @@ export async function getAllPreparadores() {
 	//	 			telegram_id: #intValue,
 	//				initials: #stringValue,
 	//	 		 }'
+
+	console.log(resultado.rows);
 
 	return resultado.rows;
 }
