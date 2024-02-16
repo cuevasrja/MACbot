@@ -48,7 +48,7 @@ export async function registerTelegramData(telegram_id, initials) {
 /**
  * Insert all preparadores in the database.
  * The SQL code is: DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM "preparador" WHERE telegram_id = ### AND initials = '###') THEN INSERT INTO "preparador" (telegram_id, initials) VALUES (###, '###'); END IF; END $$;
- * @param {Map<String, object>} PREPARADORES - Map with the telegram_id and initials of all preparadores.
+ * @param {object{String, Integer}} PREPARADORES An object with the initials as key and the telegram_id as value.
  * @returns {Promise<void>}
  */
 export async function registerAllPreparadores(PREPARADORES) {
@@ -56,14 +56,14 @@ export async function registerAllPreparadores(PREPARADORES) {
 
 	let sql = 'DO $$ BEGIN ';
 
-	for (let [key, value] of PREPARADORES) {
+	for (const [key, value] of Object.entries(PREPARADORES)) {
 		// Comprobamos que el telegram_id no sea undefined
-		if (key === undefined) continue;
+		if (key == undefined) continue;
 
 		// Comprobar si el registro ya existe
-		sql += `IF NOT EXISTS (SELECT 1 FROM "preparador" WHERE telegram_id = ${key} AND initials = '${value}') THEN `;
+		sql += `IF NOT EXISTS (SELECT 1 FROM "preparador" WHERE telegram_id = ${value} AND initials = '${key}') THEN `;
 		// Insertar el registro si no existe
-		sql += `INSERT INTO "preparador" (telegram_id, initials) VALUES (${key}, '${value}'); `;
+		sql += `INSERT INTO "preparador" (telegram_id, initials) VALUES (${value}, '${key}'); `;
 		sql += 'END IF; ';
 	}
 

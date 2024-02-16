@@ -1,4 +1,4 @@
-import { PRIVATE_CHAT } from '../../constants/botSettings.js';
+import { PARSE, PRIVATE_CHAT } from '../../constants/botSettings.js';
 import { admissionDate } from '../../constants/infoAdmision.js';
 import { ALREADY_ASSISTED, BACK, DONT_KNOW, FAQ, LOGIN, NO, YES } from '../../constants/responses.js';
 import * as messages from '../../messages/admission.js';
@@ -7,8 +7,9 @@ import bot from '../../settings/app.js';
 import * as keyboard from '../keyboards.js';
 import { sendMessage } from '../sendMessage.js';
 import { deleteAllPrenuevos, deletePrenuevo, getAllPrenuevos, registerPrenuevo, verifyPrenuevoCarnet } from '../../models/prenuevosModel.js';
-import { verifyPreparadorID } from '../../models/preparadorModel.js';
+import { getPreparadorByTelegramID, verifyPreparadorID } from '../../models/preparadorModel.js';
 import { removeFromAdmission } from './groupAdmin.js';
+import { isAdmin } from '../../constants/preparadores.js';
 
 // ---------------------------------------------------------------------------------------------------- //
 // Environment variables.
@@ -34,6 +35,13 @@ bot.onText(/^\/admision@remove/, async msg => {
 	// We check if the user is preparador.
 	if (await verifyPreparadorID(msg.from.id)) {
 		bot.sendMessage(chatID, `No tienes permisos para realizar esta acción.`);
+		return;
+	}
+	// We get the preparador
+	const preparador = (await getPreparadorByTelegramID(chatID)).initials
+	// We check if the usar is admin.
+	if (!isAdmin(chatID)) {
+		bot.sendMessage(chatID, `${preparador}, te falta calle para poder hacer esto.`);
 		return;
 	}
 	// We ask the carnet of the prenuevo to be removed.
@@ -66,6 +74,13 @@ bot.onText(/^\/admision@kick/, async msg => {
 	// We check if the user is preparador.
 	if (await verifyPreparadorID(msg.from.id)) {
 		bot.sendMessage(chatID, `No tienes permisos para realizar esta acción.`);
+		return;
+	}
+	// We get the preparador
+	const preparador = (await getPreparadorByTelegramID(chatID)).initials
+	// We check if the usar is admin.
+	if (!isAdmin(chatID)) {
+		bot.sendMessage(chatID, `${preparador}, te falta calle para poder hacer esto.`);
 		return;
 	}
 	// We ask the carnet of the prenuevo to be removed.
@@ -143,6 +158,15 @@ bot.onText(/^\/admision@clean/, async msg => {
 		bot.sendMessage(chatID, `No tienes permisos para realizar esta acción.`);
 		return;
 	}
+	// We get the preparador
+	const preparador = (await getPreparadorByTelegramID(chatID)).initials
+	// We check if the usar is admin.
+	if (!isAdmin(chatID)) {
+		bot.sendMessage(chatID, `${preparador}, te falta calle para poder hacer esto.`);
+		return;
+	}
+	// We send a warning message to the user.
+	bot.sendMessage(chatID, `**WARNING** : Cuidado ${preparador} que si borras la BD por accidente vamos a tener un peo tu y yo`, { parse_mode: PARSE })
 	// We send a message to the user to confirm if he wants to restart the database. 
 	// The buttons are "Si" and "No" and only can be clicked once.
 	const opts = {
