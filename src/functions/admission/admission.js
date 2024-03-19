@@ -167,6 +167,7 @@ bot.onText(/^\/admision@clean/, async msg => {
 	}
 	// We send a warning message to the user.
 	bot.sendMessage(chatID, `**WARNING** : Cuidado ${preparador} que si borras la BD por accidente vamos a tener un peo tu y yo`, { parse_mode: PARSE })
+	console.log(`**WARNING** : ${preparador} quiere borrar la BD de prenuevos.`);
 	// We send a message to the user to confirm if he wants to restart the database. 
 	// The buttons are "Si" and "No" and only can be clicked once.
 	const opts = {
@@ -196,10 +197,12 @@ bot.onText(/^\/admision@clean/, async msg => {
 			// We remove all the prenuevos from the database.
 			await deleteAllPrenuevos()
 			bot.sendMessage(chatID, `Lista de prenuevos eliminada correctamente.`);
+			console.log(`**WARNING** : ${preparador} ha eliminado la BD de prenuevos.`);
 		}
 		// If the user clicks "No", we send a message
 		else {
 			sendMessage(chatID, "La Base de Datos no ha sido reiniciada.")
+			console.log(`${preparador} no ha eliminado la BD de prenuevos.`);
 		}
 	})
 });

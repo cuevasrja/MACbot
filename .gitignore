@@ -114,3 +114,7 @@ credentials/
 
 # Package-lock
 package-lock.json
+
+# Database
+db.sqlite
+pgdata/
