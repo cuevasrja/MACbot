@@ -4,6 +4,7 @@ export const COMMANDS = `*LISTA DE COMANDOS*
 _------------ Comandos generales ------------_
 /help - Te devuelve la lista de comandos.
 /id - Te devuelve el ID del chat.
+/ping - Envía un mensaje aleatorio.
 
 _----------- Comandos de admision -----------_
 /start - Te devuelve el mensaje de bienvenida a la admision.
@@ -45,7 +46,7 @@ _----------- Comandos de Invitados -----------_
 /MAS@echo [[mensaje]] - Envia un mensaje a todos los miembros de MAC Amigo Secreto.
 /MAS@show - Te devuelve la lista de miembros de MAC Amigo Secreto.
 /MAS@clean - Limpia la lista de miembros de MAC Amigo Secreto.
-`
+`;
 
 export const DEV_COMMANDS = `*LISTA DE COMANDOS*
 _------------ MAC Amigo Secreto ------------_
@@ -59,4 +60,4 @@ _---------------- Taquilla ------------------_
 
 Advertencia: Estos comandos son solo para desarrollo. No los uses en el grupo de admisión, MAC Amigo Secreto o en el grupo de preparadores.
 (Revisar que los comandos no estén desactivados)
-`
+`;

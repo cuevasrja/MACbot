@@ -11,6 +11,7 @@ import { PARSE, PRIVATE_CHAT } from '../constants/botSettings.js';
 import { COMMANDS, DEV_COMMANDS } from '../messages/commandsHelp.js';
 import { getAllPreparadores, verifyPreparadorID } from '../models/preparadorModel.js';
 import { NOT_PREPARADOR } from '../messages/permissions.js';
+import { randomMsgs } from '../messages/pingRandom.js';
 dotenv.config();
 
 const ADMISION_URL = process.env.ADMISION_URL || undefined;
@@ -22,6 +23,16 @@ bot.onText(/^\/id/, msg => {
 	let chatID = msg.chat.id;
 
 	bot.sendMessage(chatID, chatID);
+});
+
+// ---------------------------------------------------------------------------------------------------- //
+// The bot listens to the /ping command and sends a random message.
+// ---------------------------------------------------------------------------------------------------- //
+bot.onText(/^\/ping/, msg => {
+	let chatID = msg.chat.id;
+	let randomMsg = randomMsgs[Math.floor(Math.random() * randomMsgs.length)];
+
+	sendMessage(chatID, randomMsg);
 });
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -77,7 +88,7 @@ bot.onText(/^\/help/, msg => {
 	const chatID = msg.chat.id;
 	// ! SI SE AGREGA UN COMANDO NUEVO, SE TIENE QUE AGREGAR AL ARCHIVO commandsHelp.js
 	sendMessage(chatID, COMMANDS);
-})
+});
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /dev command and sends a message with the development commands.
@@ -91,7 +102,7 @@ bot.onText(/^\/dev/, async msg => {
 	}
 	// We send the message
 	sendMessage(chatID, DEV_COMMANDS);
-})
+});
 
 // ---------------------------------------------------------------------------------------------------- //
 // The bot listens to the /preparadores command and sends a message with the list of preparadores.
@@ -104,13 +115,11 @@ bot.onText(/^\/preparadores/, async msg => {
 		return;
 	}
 	// We get all the preparadores
-	const preparadores = (await getAllPreparadores())
-		.map(preparador => preparador.initials)
-		.join(', ');
+	const preparadores = (await getAllPreparadores()).map(preparador => preparador.initials).join(', ');
 	// We send the message
 	sendMessage(chatID, `Los preparadores son: ${preparadores}`);
-})
+});
 
 const now = new Date();
 now.setHours(now.getHours() - 4);
-console.log(`Bot iniciado a las ${now.toLocaleString()}`)
+console.log(`Bot iniciado a las ${now.toLocaleString()}`);
