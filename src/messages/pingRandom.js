@@ -6,4 +6,7 @@ export const randomMsgs = [
 	`Juan el negro Moran`,
 	`Eterno respeto a Kobe Bryant`,
 	`El que se mueva es gay`,
+	`Lo que no te mata te emborracha`,
+	`Solo se que no se nada`,
+	`Te falta odio`,
 ];
