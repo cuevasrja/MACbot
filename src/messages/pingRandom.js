@@ -1,21 +1,4 @@
 export const randomMsgs = [
 	`Pong`,
-	`Crees que tengo 5 años para estar respondiendo "Pong"?... Pong`,
-	`Pastilla perico popper papel`,
-	`Juanito tiene un lapiz, se le cayo y se le partio, Juanito lloro, y yo tambien`,
-	`Quieres conocer a Juan el negro Moran?`,
-	`Eterno respeto a Kobe Bryant`,
-	`El que se mueva es gay`,
-	`Lo que no te mata te emborracha`,
-	`Solo se que no se nada`,
-	`Te falta odio`,
-	`Ohana significa metanfetamina`,
-	`Bueno, aquí estoy ¿Cuáles eran tus otros 2 deseos?`,
-	`Cuando la vida te da limones, haz agua de pera y confunde a todos`,
-	`Todo es divertido siempre y cuando le ocurra a otra persona`,
-	`Trabajar nunca mató a nadie, pero no hay que tentar a la suerte`,
-	`No renuncies a tus sueños, sigue durmiendo`,
-	`A veces, cuando cierro los ojos, no puedo ver`,
-	`Hay dos palabras que te abrirán muchas puertas: "Hale" y "Empuje"`,
-	`Mi cartera es como una cebolla; abrirla me hace llorar`,
+	`Pong`
 ];
