@@ -5,7 +5,7 @@ dotenv.config();
 
 const NOTION_DB_ID = process.env.NOTION_TAQUILLA_DB_ID;
 
-const BLOCK = "Bloque";
+const BLOCK = "Hora";
 
 /**
     Formato de la base de datos:
@@ -34,7 +34,7 @@ const preparersOfTheDay = (response, day) => {
     preparers.forEach(preparer => preparersOfTheDay[preparer] = []);
     response.results.forEach(result => {
         const preparer = result.properties[day]?.rich_text[0]?.plain_text;
-        const hour = result.properties[BLOCK]?.rich_text[0]?.plain_text;
+        const hour = result.properties[BLOCK]?.title[0]?.plain_text;
         preparersOfTheDay[preparer].push(hour);
     });
     return preparersOfTheDay;
