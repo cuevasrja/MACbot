@@ -33,8 +33,8 @@ const preparersOfTheDay = (response, day) => {
     // We fill the array with the hours that the preparer is in taquilla.
     preparers.forEach(preparer => preparersOfTheDay[preparer] = []);
     response.results.forEach(result => {
-        const preparer = result.properties[day].rich_text[0].plain_text;
-        const hour = result.properties[BLOCK].title[0].plain_text;
+        const preparer = result.properties[day]?.rich_text[0]?.plain_text;
+        const hour = result.properties[BLOCK]?.rich_text[0]?.plain_text;
         preparersOfTheDay[preparer].push(hour);
     });
     return preparersOfTheDay;
@@ -56,7 +56,7 @@ export const taquillaSchedule = async () => {
             database_id: NOTION_DB_ID,
             filter: {
                 property: day,
-                title: {
+                rich_text: {
                     is_not_empty: true
                 },
             },
