@@ -7,6 +7,17 @@ import bot from "../../settings/app.js";
 import { sendMessage } from "../sendMessage.js";
 
 /**
+ * Converts the time of a string in format "HH am/pm" to an integer index of the BLOCKS_HOURS array.
+ * @param {string} time 
+ * @returns {number} Index of the BLOCKS_HOURS array.
+ */
+const convertTime = (time) => {
+    const [hour, p] = time.split(" ")
+    const i = parseInt(hour)
+    return p.includes("am") ? i - 8 : i === 12 ? 4 : i + 4
+}
+
+/**
  * Organize the schedule of the day. 
  * The schedule is an object with the initials of the preparers as keys and an array with the hours that the preparer is in taquilla as value.
  * @returns {Promise<object>} Object with the initials of the preparers of the day.
@@ -33,7 +44,7 @@ const taquillaScheduleMessage = async () => {
         // We iterate over the blocks
         block.forEach((time, index) => {
             // We convert time to a int
-            const i = parseInt(time) - 1
+            const i = convertTime(time)
             if (index === 0) { // If it's the first block, we add the preparer
                 response += `**${preparer}**: ${BLOCKS_HOURS[i]}\n`
             } else { // If it's not the first block, we add the block with an indentation
