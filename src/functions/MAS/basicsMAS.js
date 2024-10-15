@@ -424,7 +424,7 @@ bot.onText(/^\/MAS@echo (.+)/, async (msg, match) => {
     // We send the message to all the members of MAS
     invitados.forEach(invitado => {
         const id = invitado.telegram_id
-        if (!isJefe(id)) sendMessage(id, message)
+        if (!isJefe(id)) bot.sendMessage(id, message, { parse_mode: "HTML" })
     })
     // We send a message to the user to confirm that the message has been sent
     sendMessage(chatID, "Se ha enviado el mensaje a todos los participantes de MAS.")
