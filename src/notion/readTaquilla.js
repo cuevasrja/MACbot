@@ -8,6 +8,17 @@ const NOTION_DB_ID = process.env.NOTION_TAQUILLA_DB_ID;
 const BLOCK = "Hora";
 
 /**
+ * Converts the time of a string in format "HH am/pm" to an integer index of the BLOCKS_HOURS array.
+ * @param {string} time 
+ * @returns {number} Index of the BLOCKS_HOURS array.
+ */
+export const convertTime = (time) => {
+    const [hour, p] = time.split(" ")
+    const i = parseInt(hour)
+    return p.includes("am") ? i - 8 : i === 12 ? 4 : i + 4
+}
+
+/**
     Formato de la base de datos:
     - Bloque horario: Titulo
     - Lunes: rich_text, iniciales del preparador
@@ -43,7 +54,8 @@ const preparersOfTheDay = (response, day) => {
 /**
  * taquillaSchedule()
  * This function return an object with the initials of the preparers of the day.
- * @returns {Promise<object>} Object with the initials of the preparers of the day.
+ * @returns {Promise<object>} Object with the initials of the preparers of the day. 
+ * And the value of each preparer is an array with the hours that the preparer is in taquilla.
  */
 export const taquillaSchedule = async () => {
     try {

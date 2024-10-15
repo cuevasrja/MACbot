@@ -2,20 +2,9 @@ import { BLOCKS_HOURS, weekDays } from "../../constants/notionProps.js";
 import { isJefe } from "../../constants/preparadores.js";
 import { NOT_JEFE, NOT_PREPARADOR } from "../../messages/permissions.js";
 import { getAllPreparadores, getPreparadorByTelegramID, verifyPreparadorID } from "../../models/preparadorModel.js";
-import { taquillaSchedule } from "../../notion/readTaquilla.js";
+import { convertTime, taquillaSchedule } from "../../notion/readTaquilla.js";
 import bot from "../../settings/app.js";
 import { sendMessage } from "../sendMessage.js";
-
-/**
- * Converts the time of a string in format "HH am/pm" to an integer index of the BLOCKS_HOURS array.
- * @param {string} time 
- * @returns {number} Index of the BLOCKS_HOURS array.
- */
-const convertTime = (time) => {
-    const [hour, p] = time.split(" ")
-    const i = parseInt(hour)
-    return p.includes("am") ? i - 8 : i === 12 ? 4 : i + 4
-}
 
 /**
  * Organize the schedule of the day. 
@@ -143,7 +132,7 @@ const sendTaquillaMessage = async () => {
             let msg = `Hola ${preparer[1]}, recuerda que hoy ${weekDays[day - 1]} tienes taquilla. Tu horario es: \n`
             // We iterate over the blocks
             schedule[preparer[1]].forEach(time => {
-                const i = parseInt(time) - 1
+                const i = convertTime(time)
                 msg += `     ${BLOCKS_HOURS[i]}\n`
             })
             // We add the last message
