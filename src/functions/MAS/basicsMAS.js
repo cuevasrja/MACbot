@@ -1,7 +1,7 @@
 import { TEAM_A, TEAM_B, questTime, BIENVENIDA } from "../../constants/infoMAS.js"
 import { isJefe } from "../../constants/preparadores.js"
 import rules from "../../messages/rulesMAS.js"
-import { deleteAllInvitados, getInvitadoByTelegramID, registerInvitado, removeInvitado, showAllInvitados, updateSuggestion, verifyInvitadoID, verifyInvitadoName } from "../../models/invitadosMASModel.js"
+import { deleteAllInvitados, getGifterByName, getInvitadoByTelegramID, registerInvitado, removeInvitado, showAllInvitados, updateSuggestion, verifyInvitadoID, verifyInvitadoName } from "../../models/invitadosMASModel.js"
 import bot from "../../settings/app.js"
 import { MASMesssage, getTeams, isPlayable } from "./readMAS.js"
 import { MASQuest, startMAS } from "./startMAS.js"
@@ -9,12 +9,14 @@ import { sendMessage } from "../sendMessage.js"
 import { MAS_ALREADY_REGISTERED, MAS_FINISHED, MAS_NOT_PLAYING, MAS_NOT_REGISTERED, MAS_PLAYING, MAS_REGIST_ACTIVE, MAS_REGIST_DISABLED, MAS_REGIST_INACTIVE, MAS_RESET, NAME_TOO_LONG, NAME_USED, NOT_NAME_GIVEN, NOT_SUGGESTION_GIVEN, SUGGESTION_TOO_LONG } from "../../messages/MASMessages.js"
 import { NOT_INVITADO, NOT_JEFE } from "../../messages/permissions.js"
 
+// Variables to control the state of MAS
 let isMASPlaying = false
 let isMASQuest = true
 
+// Variable to control the interval of MASQuest
 let intervalID = null
 
-if (await isPlayable()) {
+if (isPlayable()) {
     console.log("El juego de MAS fue reinicado automáticamente.")
     isMASPlaying = true
     isMASQuest = true
@@ -350,6 +352,14 @@ bot.onText(/^\/MAS@sug (.*)/, async (msg, match) => {
     updateSuggestion(chatID, suggestion)
     console.log("Alguien ha añadido una sugerencia")
     bot.sendMessage(chatID, `${name}, se ha añadido la sugerencia: ${suggestion}`)
+
+    // We get the name of the member to send the message
+    const gifter = await getGifterByName(name)
+    const gifterID = gifter?.telegram_id
+    // We send a message to the member who has to give the gift
+    if (gifterID) {
+        bot.sendMessage(gifterID, `${name} ha añadido la sugerencia: ${suggestion}`)
+    }
 })
 
 // ---------------------------------------------------------------------------------------------------- //

@@ -227,6 +227,80 @@ export async function getInvitadosByTeam(team) {
 }
 
 /**
+ * Get gifter from user in the database using the name.
+ * The SQL code is:
+ * SELECT
+ *     g.name AS name, g.telegram_id AS telegram_id
+ *    FROM "invitado_mas" u
+ *    JOIN "invitado_mas" g ON g.receive = u.name
+ *    WHERE u.name = ###.
+ * @param {String} name
+ * @returns {Promise<object>} { name: String, telegram_id: Integer }
+ */
+export async function getGifterByName(name) {
+    console.log(`**Query 'getGifterByName' in invitadosMASModel.`);
+
+    let sql = `select 
+                    g.name as name, 
+                    g.telegram_id as telegram_id 
+                from "invitado_mas" 
+                u join "invitado_mas" g on g.receive = u.name
+                where u.name = '${name}'`;
+
+    let resultado = await pool.query(sql).catch(err => {
+        throw new Error(
+            `There was an error in the user registration query with the name: ${name} - 'invitadosMASModel'`,
+            err
+        );
+    });
+
+    // The function 'getGifterByName' must return: 
+    // [Object] {
+    //				- name (String)
+    //				- telegram_id (Int)
+    //			 }
+
+    return resultado?.rows?.[0]
+}
+
+/**
+ * Get gifter from user in the database using the telegram_id.
+ * The SQL code is: 
+ * SELECT 
+ *      g.name AS name, g.telegram_id AS telegram_id 
+ *      FROM "invitado_mas" u 
+ *      JOIN "invitado_mas" g ON g.receive = u.name 
+ *      WHERE u.telegram_id = ###.
+ * @param {Integer} telegram_id
+ * @returns {Promise<object>} { name: String, telegram_id: Integer }
+ */
+export async function getGifterByTelegramID(telegram_id) {
+    console.log(`**Query 'getGifterByTelegramID' in invitadosMASModel.`);
+
+    let sql = `select 
+                    g.name as name, 
+                    g.telegram_id as telegram_id 
+                from "invitado_mas" 
+                u join "invitado_mas" g on g.receive = u.name
+                where u.telegram_id = ${telegram_id}`;
+
+    let resultado = await pool.query(sql).catch(err => {
+        throw new Error(
+            `There was an error in the user registration query with the telegram_id: ${telegram_id} - 'invitadosMASModel'`,
+            err
+        );
+    });
+
+    // The function 'getGifterByTelegramID' must return: 
+    // [Object] {
+    //				- name (String)
+    //				- telegram_id (Int)
+    //			 }
+
+    return resultado?.rows?.[0]
+}
+
+/**
  * Update the user's team in the database using the telegram_id.
  * The SQL code is: UPDATE "invitado_mas" SET team = ### WHERE telegram_id = ###.
  * @param {Integer} telegram_id 
